@@ -1,2 +1,2 @@
 # TEXTOIR
-Integrate State-of-the-art Open Intent Detection and Discovery Methods
+An Extensible Platform Integrating State-of-the-art methods for Text Open Intent Recognition (Detection and Discovery)
