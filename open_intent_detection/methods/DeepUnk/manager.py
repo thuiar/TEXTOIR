@@ -11,9 +11,7 @@ from sklearn.metrics import confusion_matrix, accuracy_score
 from tqdm import trange, tqdm
 
 from losses import loss_map
-from utils.functions import save_model
 from utils.metrics import F_measure
-from utils.functions import restore_model
 
 from sklearn.neighbors import LocalOutlierFactor
 
@@ -39,7 +37,10 @@ class DeepUnkManager:
 
         else:
             
-            restore_model(self.model, args.model_output_dir)
+            model_file = os.path.join(args.model_output_dir, 'pytorch_model.bin')
+            self.model.load_state_dict(torch.load(model_file))
+            self.model.to(self.device)
+            
             self.best_features = np.load(os.path.join(args.method_output_dir, 'features.npy'))
 
     def train(self, args, data):     

@@ -3,7 +3,6 @@ import os
 import torch
 import numpy as np
 import pandas as pd
-from pytorch_pretrained_bert.modeling import WEIGHTS_NAME, CONFIG_NAME
 
 
 class Storage(dict):
@@ -37,20 +36,6 @@ def load_npy(path, file_name):
     npy_path = os.path.join(path, file_name)
     npy_file = np.load(npy_path)
     return npy_file
-
-def save_model(model, model_dir):
-
-    save_model = model.module if hasattr(model, 'module') else model  
-    model_file = os.path.join(model_dir, WEIGHTS_NAME)
-    model_config_file = os.path.join(model_dir, CONFIG_NAME)
-    torch.save(save_model.state_dict(), model_file)
-    with open(model_config_file, "w") as f:
-        f.write(save_model.config.to_json_string())
-
-def restore_model(model, model_dir):
-    output_model_file = os.path.join(model_dir, WEIGHTS_NAME)
-    model.load_state_dict(torch.load(output_model_file))
-    return model
 
 def save_results(args, test_results):
     

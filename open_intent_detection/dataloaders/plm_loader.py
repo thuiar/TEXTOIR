@@ -21,7 +21,6 @@ class PLM_Loader:
         self.eval_examples = get_examples(args, base_attrs, 'eval')
         self.test_examples = get_examples(args, base_attrs, 'test')
         
-        self.tokenizer = tokenizers_map[args.backbone]
         self.train_labeled_loader = get_loader(self.train_labeled_examples, args, base_attrs['label_list'], 'train_labeled')
         self.train_unlabeled_loader = get_loader(self.train_unlabeled_examples, args, base_attrs['label_list'], 'train_unlabeled')
         self.eval_loader = get_loader(self.eval_examples, args, base_attrs['label_list'], 'eval')

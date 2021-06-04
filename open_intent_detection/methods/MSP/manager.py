@@ -10,9 +10,7 @@ from sklearn.metrics import confusion_matrix, accuracy_score
 from tqdm import trange, tqdm
 
 from losses import loss_map
-from utils.functions import save_model
 from utils.metrics import F_measure
-from utils.functions import restore_model
 
 TIMESTAMP = "{0:%Y-%m-%dT%H-%M-%S/}".format(datetime.now())
 train_log_dir = 'logs/train/' + TIMESTAMP
@@ -35,7 +33,10 @@ class MSPManager:
         self.loss_fct = loss_map[args.loss_fct]
         
         if not args.train:
-            restore_model(self.model, args.model_output_dir)
+
+            model_file = os.path.join(args.model_output_dir, 'pytorch_model.bin')
+            self.model.load_state_dict(torch.load(model_file))
+            self.model.to(self.device)
 
 
     def get_outputs(self, args, data, dataloader, get_feats = False):
@@ -141,7 +142,7 @@ class MSPManager:
         self.model = best_model 
 
         if args.save_model:
-            save_model(self.model, args.model_output_dir)
+            self.model.save_pretrained(args.model_output_dir, save_config=True)
 
 
     

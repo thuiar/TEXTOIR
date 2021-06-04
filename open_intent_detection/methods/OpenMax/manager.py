@@ -9,9 +9,7 @@ from sklearn.metrics import confusion_matrix, accuracy_score
 from tqdm import trange, tqdm
 
 from .openmax_utils import recalibrate_scores, weibull_tailfitting, compute_distance
-from utils.functions import save_model
 from utils.metrics import F_measure
-from utils.functions import restore_model
 from losses import loss_map
 
 TIMESTAMP = "{0:%Y-%m-%dT%H-%M-%S/}".format(datetime.now())
@@ -38,7 +36,9 @@ class OpenMaxManager:
             self.weibull_model = None
             
         else:
-            restore_model(self.model, args.model_output_dir)
+            model_file = os.path.join(args.model_output_dir, 'pytorch_model.bin')
+            self.model.load_state_dict(torch.load(model_file))
+            self.model.to(self.device)
 
 
     def train(self, args, data):     
@@ -89,7 +89,7 @@ class OpenMaxManager:
         self.model = best_model
         
         if args.save_model: 
-            save_model(self.model, args.model_output_dir)
+            self.model.save_pretrained(args.model_output_dir, save_config=True)
 
 
     def get_outputs(self, args, data, dataloader, get_feats = False, compute_centroids=False):

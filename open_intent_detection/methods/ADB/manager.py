@@ -11,9 +11,7 @@ from tqdm import trange, tqdm
 
 from losses import loss_map, BoundaryLoss
 from losses.utils import euclidean_metric
-from utils.functions import save_model
 from utils.metrics import F_measure
-from utils.functions import restore_model
 
 TIMESTAMP = "{0:%Y-%m-%dT%H-%M-%S/}".format(datetime.now())
 train_log_dir = 'logs/train/' + TIMESTAMP
@@ -27,6 +25,7 @@ class ADBManager:
         self.optimizer = model.optimizer
         self.scheduler = model.scheduler
         self.device = model.device
+        
         
         self.data = data
         self.train_dataloader = data.dataloader.train_labeled_loader
@@ -43,7 +42,10 @@ class ADBManager:
 
         else:
 
-            self.model = restore_model(self.model, args.model_output_dir)
+            model_file = os.path.join(args.model_output_dir, 'pytorch_model.bin')
+            self.model.load_state_dict(torch.load(model_file))
+            self.model.to(self.device)
+
             self.delta = np.load(os.path.join(args.method_output_dir, 'deltas.npy'))
             self.delta = torch.from_numpy(self.delta).to(self.device)
             self.centroids = np.load(os.path.join(args.method_output_dir, 'centroids.npy'))
@@ -102,7 +104,7 @@ class ADBManager:
         self.model = best_model
 
         if args.save_model:
-            save_model(self.model, args.model_output_dir)
+            self.model.save_pretrained(args.model_output_dir, save_config=True)
 
         print('Pre-training finished...')
 
