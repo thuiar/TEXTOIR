@@ -9,7 +9,11 @@ from .OpenMax import OpenMax_Param
 from utils.functions import Storage
 
 param_map = {
-    'ADB': ADB_Param, 'MSP': MSP_Param, 'DeepUnk': DeepUnk_Param, 'DOC': DOC_Param, 'OpenMax': OpenMax_Param
+    'ADB': ADB_Param, 
+    'MSP': MSP_Param,
+    'DeepUnk': DeepUnk_Param,
+    'DOC': DOC_Param, 
+    'OpenMax': OpenMax_Param
 }
 
 
@@ -49,7 +53,7 @@ class ParamManager:
 
         parser.add_argument("--save_model", action="store_true", help="save trained-model for open intent detection")
 
-        parser.add_argument("--backbone", type=str, default='roberta', help="which model to use")
+        parser.add_argument("--backbone", type=str, default='bert-base-uncased', help="which model to use")
 
         parser.add_argument("--num_train_epochs", type=int, default=100, help = "The number of training epochs.")
 
@@ -62,7 +66,7 @@ class ParamManager:
         parser.add_argument("--data_dir", default=sys.path[0]+'/../data', type=str,
                             help="The input data dir. Should contain the .csv files (or other data files) for the task.")
  
-        parser.add_argument("--output_dir", default= '/home/sharing/disk2/zhouqianrui/TEXTOIR/outputs', type=str, 
+        parser.add_argument("--output_dir", default= '/home/sharing/disk2/zhanghanlei/TEXTOIR/outputs', type=str, 
                             help="The output directory where all train data will be written.") 
 
         parser.add_argument("--model_dir", default='models', type=str, 

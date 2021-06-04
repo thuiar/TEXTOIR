@@ -64,7 +64,7 @@ class BERT(BertPreTrainedModel):
 
 class RobertaPreTrainedModel(PreTrainedModel):
     config_class = RobertaConfig
-    base_model_prefix = "roberta"
+    # base_model_prefix = "roberta"
 
     def _init_weights(self, module):
         if isinstance(module, nn.Linear):
@@ -116,7 +116,7 @@ class Roberta(RobertaPreTrainedModel):
 
 class XLNetPreTrainedModel(PreTrainedModel):
     config_class = XLNetConfig
-    base_model_prefix = "xlnet"
+    # base_model_prefix = "xlnet"
 
     def _init_weights(self, module):
         if isinstance(module, nn.Linear):

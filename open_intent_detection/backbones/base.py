@@ -3,7 +3,11 @@ import torch
 from transformers import AdamW, get_linear_schedule_with_warmup
 from .PLM import BERT, Roberta, XLNet, freeze_parameters
 
-backbones_map = {'bert':BERT, 'roberta':Roberta, 'xlnet': XLNet}
+backbones_map = {
+                    'bert-base-uncased':BERT, 
+                    'roberta-base':Roberta, 
+                    'xlnet-base-cased': XLNet
+                }
 
 
 class ModelManager:
@@ -17,14 +21,8 @@ class ModelManager:
     def set_model(self, args, data):
 
         backbone = backbones_map[args.backbone]
+        model = backbone.from_pretrained(args.backbone, num_labels=data.num_labels)
 
-        if args.backbone == 'bert':
-            model = backbone.from_pretrained('bert-base-uncased', num_labels=data.num_labels, cache_dir="cache")
-        elif args.backbone == 'roberta':
-            model = backbone.from_pretrained('roberta-base', num_labels=data.num_labels, cache_dir="cache")
-        elif args.backbone == 'xlnet':
-            model = backbone.from_pretrained('xlnet-base-cased', num_labels=data.num_labels, cache_dir="cache")
-            
         if args.freeze_bert_parameters:
             model = freeze_parameters(model, args.backbone)
             
