@@ -1,5 +1,4 @@
 from importlib import import_module
-import logging
 import torch
 import torch.nn.functional as F
 import numpy as np
@@ -11,7 +10,9 @@ from sklearn.metrics import confusion_matrix, accuracy_score
 from tqdm import trange, tqdm
 
 from losses import loss_map
+from utils.functions import save_model
 from utils.metrics import F_measure
+from utils.functions import restore_model
 
 TIMESTAMP = "{0:%Y-%m-%dT%H-%M-%S/}".format(datetime.now())
 train_log_dir = 'logs/train/' + TIMESTAMP
@@ -21,8 +22,6 @@ test_log_dir = 'logs/test/'   + TIMESTAMP
 class MSPManager:
     
     def __init__(self, args, data, model):
-
-        self.logger = logging.getLogger('Detection')
 
         self.model = model.model 
         self.optimizer = model.optimizer
@@ -36,10 +35,7 @@ class MSPManager:
         self.loss_fct = loss_map[args.loss_fct]
         
         if not args.train:
-
-            model_file = os.path.join(args.model_output_dir, 'pytorch_model.bin')
-            self.model.load_state_dict(torch.load(model_file))
-            self.model.to(self.device)
+            restore_model(self.model, args.model_output_dir)
 
 
     def get_outputs(self, args, data, dataloader, get_feats = False):
@@ -89,8 +85,8 @@ class MSPManager:
         test_results['Acc'] = acc
         
         if show:
-            self.logger.info(f'cm {cm}')
-            self.logger.info(f'results {test_results}')
+            print('cm',cm)
+            print('results', test_results)
 
         return test_results
 
@@ -124,28 +120,21 @@ class MSPManager:
                     nb_tr_steps += 1
 
             loss = tr_loss / nb_tr_steps
-            self.logger.info(f'train_loss {loss}')
+            print('train_loss',loss)
             
             y_true, y_pred = self.get_outputs(args, data, self.eval_dataloader)
             eval_score = accuracy_score(y_true, y_pred)
-            self.logger.info(f'eval_score {eval_score}')
+            print('eval_score', eval_score)
             
             
             if eval_score > best_eval_score:
-                wait = 0
                 best_model = copy.deepcopy(self.model)
                 best_eval_score = eval_score 
-
-            elif eval_score > 0:
-
-                wait += 1
-                if wait >= args.wait_patient:
-                    break
     
         self.model = best_model 
 
         if args.save_model:
-            self.model.save_pretrained(args.model_output_dir, save_config=True)
+            save_model(self.model, args.model_output_dir)
 
 
     

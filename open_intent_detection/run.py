@@ -9,8 +9,8 @@ import sys
 import os
 import datetime
 
-
 def parse_arguments():
+
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--type', type=str, default='open_intent_detection', help="Type for methods")
@@ -54,6 +54,7 @@ def parse_arguments():
 
 
 def set_logger(save_path):
+
     if not os.path.exists(save_path):
         os.makedirs(save_path)
     time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
@@ -76,7 +77,6 @@ def set_logger(save_path):
 
     return logger
 
-
 def run(args, data, model):
 
     method_manager = method_map[args.method]
@@ -96,17 +96,14 @@ def run(args, data, model):
 
 
 if __name__ == '__main__':
-
+    
     args = parse_arguments()
     logger = set_logger(os.path.join(args.result_dir, 'logs'))
-    
+
     logger.info('Open Intent Classification Begin...')
     logger.info('Parameters Initialization...')
     param = ParamManager(args)
     args = param.args
-
-    logger.debug(args)
-    
 
     logger.info('Data and Model Preparation...')     
     data = DataManager(args)

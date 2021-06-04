@@ -1,3 +1,4 @@
+import argparse
 import sys
 import os
 from .ADB import ADB_Param
@@ -8,11 +9,7 @@ from .OpenMax import OpenMax_Param
 from utils.functions import Storage
 
 param_map = {
-    'ADB': ADB_Param, 
-    'MSP': MSP_Param,
-    'DeepUnk': DeepUnk_Param,
-    'DOC': DOC_Param, 
-    'OpenMax': OpenMax_Param
+    'ADB': ADB_Param, 'MSP': MSP_Param, 'DeepUnk': DeepUnk_Param, 'DOC': DOC_Param, 'OpenMax': OpenMax_Param
 }
 
 

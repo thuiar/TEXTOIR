@@ -2,24 +2,11 @@ import numpy as np
 import os   
 import random
 import torch
-from .plm_loader import PLM_Loader
+from .bert_loader import BERT_Loader
 
-max_seq_lengths = {
-                        'clinc':30, 
-                        'stackoverflow':45,
-                        'banking':55, 
-                        'oos':30, 
-                        'dbpedia':55, 
-                        'atis':50, 
-                        'snips':35
-                   }
+max_seq_lengths = {'clinc':30, 'stackoverflow':45,'banking':55, 'oos':30, 'dbpedia':55, 'atis':50, 'snips':35}
+loader_map = {'bert': BERT_Loader}
 
-loader_map = {
-                'bert-base-uncased': PLM_Loader, 
-                'roberta-base': PLM_Loader, 
-                'xlnet-base-cased': PLM_Loader
-             }
- 
 def set_seed(seed):
     random.seed(seed)
     np.random.seed(seed)

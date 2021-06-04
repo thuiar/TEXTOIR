@@ -1,34 +1,34 @@
-from importlib import import_module
 import torch
 import torch.nn.functional as F
 import numpy as np
 import os
 import copy
+import logging
+
 from torch import nn
 from datetime import datetime
 from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
 from tqdm import trange, tqdm
-import logging
 
 from losses import loss_map, BoundaryLoss
 from losses.utils import euclidean_metric
+from utils.functions import save_model
 from utils.metrics import F_measure
+from utils.functions import restore_model
 
 TIMESTAMP = "{0:%Y-%m-%dT%H-%M-%S/}".format(datetime.now())
 train_log_dir = 'logs/train/' + TIMESTAMP
 test_log_dir = 'logs/test/'   + TIMESTAMP
-        
+
+logger = logging.getLogger('Detection')
+
 class ADBManager:
     
     def __init__(self, args, data, model):
-
-        self.logger = logging.getLogger('Detection')
         
         self.model = model.model
         self.optimizer = model.optimizer
-        self.scheduler = model.scheduler
         self.device = model.device
-        
         
         self.data = data
         self.train_dataloader = data.dataloader.train_labeled_loader
@@ -45,10 +45,7 @@ class ADBManager:
 
         else:
 
-            model_file = os.path.join(args.model_output_dir, 'pytorch_model.bin')
-            self.model.load_state_dict(torch.load(model_file))
-            self.model.to(self.device)
-
+            self.model = restore_model(self.model, args.model_output_dir)
             self.delta = np.load(os.path.join(args.method_output_dir, 'deltas.npy'))
             self.delta = torch.from_numpy(self.delta).to(self.device)
             self.centroids = np.load(os.path.join(args.method_output_dir, 'centroids.npy'))
@@ -56,7 +53,7 @@ class ADBManager:
 
     def pre_train(self, args, data):
         
-        self.logger.info('Pre-training Start...')
+        logger.info('Pre-training Start...')
         wait = 0
         best_model = None
         best_eval_score = 0
@@ -78,19 +75,24 @@ class ADBManager:
 
                     loss.backward()
                     self.optimizer.step()
-                    self.scheduler.step()
                     
                     tr_loss += loss.item()
                     nb_tr_examples += input_ids.size(0)
                     nb_tr_steps += 1
             
             loss = tr_loss / nb_tr_steps
-            self.logger.info(f'train_loss {loss}')
             
             y_true, y_pred = self.get_outputs(args, data, self.eval_dataloader, pre_train=True)
             eval_score = accuracy_score(y_true, y_pred)
 
-            self.logger.info(f'eval_score {eval_score}')
+            eval_results = {
+                'train_loss': loss,
+                'eval_acc': eval_score,
+                'best_acc':best_eval_score,
+            }
+            logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
+            for key in sorted(eval_results.keys()):
+                logger.info("  %s = %s", key, str(eval_results[key]))
             
             if eval_score > best_eval_score:
                 
@@ -107,9 +109,9 @@ class ADBManager:
         self.model = best_model
 
         if args.save_model:
-            self.model.save_pretrained(args.model_output_dir, save_config=True)
+            save_model(self.model, args.model_output_dir)
 
-        self.logger.info('Pre-training finished...')
+        logger.info('Pre-training finished...')
 
 
     def train(self, args, data):  
@@ -150,11 +152,11 @@ class ADBManager:
             self.delta_points.append(self.delta)
 
             loss = tr_loss / nb_tr_steps
-            self.logger.info(f'train_loss {loss}')
+            logger.info(f'train_loss {loss}')
             
             y_true, y_pred = self.get_outputs(args, data, self.eval_dataloader)
             eval_score = f1_score(y_true, y_pred, average='macro')
-            self.logger.info(f'eval_score {eval_score}')
+            logger.info(f'eval_score {eval_score}')
             
             if eval_score >= best_eval_score:
 
@@ -239,8 +241,8 @@ class ADBManager:
         test_results['Acc'] = acc
         
         if show:
-            self.logger.info(f'cm {cm}')
-            self.logger.info(f'results {test_results}')
+            print('cm',cm)
+            print('results', test_results)
 
         return test_results
 

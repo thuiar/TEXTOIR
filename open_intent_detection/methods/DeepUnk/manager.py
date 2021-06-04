@@ -1,5 +1,4 @@
 from importlib import import_module
-import logging
 import torch
 import torch.nn.functional as F
 import numpy as np
@@ -12,7 +11,9 @@ from sklearn.metrics import confusion_matrix, accuracy_score
 from tqdm import trange, tqdm
 
 from losses import loss_map
+from utils.functions import save_model
 from utils.metrics import F_measure
+from utils.functions import restore_model
 
 from sklearn.neighbors import LocalOutlierFactor
 
@@ -20,8 +21,6 @@ from sklearn.neighbors import LocalOutlierFactor
 class DeepUnkManager:
     
     def __init__(self, args, data, model):
-
-        self.logger = logging.getLogger('Detection')
 
         self.model = model.model 
         self.optimizer = model.optimizer
@@ -40,10 +39,7 @@ class DeepUnkManager:
 
         else:
             
-            model_file = os.path.join(args.model_output_dir, 'pytorch_model.bin')
-            self.model.load_state_dict(torch.load(model_file))
-            self.model.to(self.device)
-            
+            restore_model(self.model, args.model_output_dir)
             self.best_features = np.load(os.path.join(args.method_output_dir, 'features.npy'))
 
     def train(self, args, data):     
@@ -76,13 +72,13 @@ class DeepUnkManager:
                     nb_tr_steps += 1
 
             loss = tr_loss / nb_tr_steps
-            self.logger.info(f'train_loss, loss')
+            print('train_loss',loss)
 
             train_feats = self.get_outputs(args, data, self.train_dataloader, get_feats = True)
 
             y_true, y_pred = self.get_outputs(args, data, self.eval_dataloader, train_feats = train_feats)
             eval_score = round(accuracy_score(y_true, y_pred) * 100, 2)
-            self.logger.info(f'eval_score {eval_score}')
+            print('eval_score', eval_score)
             
             if eval_score >= best_eval_score:
                 
@@ -160,8 +156,8 @@ class DeepUnkManager:
         test_results['Acc'] = acc
         
         if show:
-            self.logger.info(f'cm {cm}')
-            self.logger.info(f'results {test_results}')
+            print('cm',cm)
+            print('results', test_results)
 
         return test_results
     

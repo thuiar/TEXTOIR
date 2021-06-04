@@ -1,9 +1,9 @@
 
-import logging
 import os
 import torch
 import numpy as np
 import pandas as pd
+from pytorch_pretrained_bert.modeling import WEIGHTS_NAME, CONFIG_NAME
 
 
 class Storage(dict):
@@ -38,6 +38,20 @@ def load_npy(path, file_name):
     npy_file = np.load(npy_path)
     return npy_file
 
+def save_model(model, model_dir):
+
+    save_model = model.module if hasattr(model, 'module') else model  
+    model_file = os.path.join(model_dir, WEIGHTS_NAME)
+    model_config_file = os.path.join(model_dir, CONFIG_NAME)
+    torch.save(save_model.state_dict(), model_file)
+    with open(model_config_file, "w") as f:
+        f.write(save_model.config.to_json_string())
+
+def restore_model(model, model_dir):
+    output_model_file = os.path.join(model_dir, WEIGHTS_NAME)
+    model.load_state_dict(torch.load(output_model_file))
+    return model
+
 def save_results(args, test_results):
     
     if not os.path.exists(args.result_dir):
@@ -50,8 +64,7 @@ def save_results(args, test_results):
     keys = list(results.keys())
     values = list(results.values())
     
-    result_file = 'results_final.csv'
-    results_path = os.path.join(args.result_dir, result_file)
+    results_path = os.path.join(args.result_dir, args.result_file_name)
     
     if not os.path.exists(results_path):
         ori = []
@@ -65,9 +78,7 @@ def save_results(args, test_results):
         df1.to_csv(results_path,index=False)
     data_diagram = pd.read_csv(results_path)
     
-    # print(data_diagram.tail())
-    logger = logging.getLogger("Detection")
-    logger.info(f'results:\n{data_diagram.tail()}')
+    print('test_results', data_diagram)
 
 # def debug(outputs, data, manager, args):
 

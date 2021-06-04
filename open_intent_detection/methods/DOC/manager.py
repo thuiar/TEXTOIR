@@ -1,5 +1,4 @@
 from importlib import import_module
-import logging
 import torch
 import numpy as np
 import os
@@ -10,7 +9,9 @@ from sklearn.metrics import confusion_matrix, accuracy_score
 from tqdm import trange, tqdm
 
 from losses import loss_map
+from utils.functions import save_model
 from utils.metrics import F_measure
+from utils.functions import restore_model
 from scipy.stats import norm as dist_model
 
 TIMESTAMP = "{0:%Y-%m-%dT%H-%M-%S/}".format(datetime.now())
@@ -21,8 +22,6 @@ test_log_dir = 'logs/test/'   + TIMESTAMP
 class DOCManager:
     
     def __init__(self, args, data, model):
-
-        self.logger = logging.getLogger('Detection')
         
         self.model = model.model 
         self.optimizer = model.optimizer
@@ -39,9 +38,7 @@ class DOCManager:
             self.best_mu_stds = None
 
         else:
-            model_file = os.path.join(args.model_output_dir, 'pytorch_model.bin')
-            self.model.load_state_dict(torch.load(model_file))
-            self.model.to(self.device)
+            restore_model(self.model, args.model_output_dir)
         
     def train(self, args, data):     
         best_model = None
@@ -70,13 +67,13 @@ class DOCManager:
                     nb_tr_steps += 1
 
             loss = tr_loss / nb_tr_steps
-            self.logger.info(f'train_loss {loss}')
+            print('train_loss',loss)
             
             mu_stds = self.get_outputs(args, data, self.train_dataloader, get_mu_stds = True)
             y_true, y_pred = self.get_outputs(args, data, self.eval_dataloader, mu_stds = mu_stds)
 
             eval_score = accuracy_score(y_true, y_pred)
-            self.logger.info(f'eval_score {eval_score}')
+            print('eval_score', eval_score)
             
             if eval_score >= best_eval_score:
                 best_model = copy.deepcopy(self.model)
@@ -84,7 +81,7 @@ class DOCManager:
                 best_eval_score = eval_score 
                 self.best_mu_stds = mu_stds
             else:
-                self.logger.info(wait)
+                print(wait)
                 wait += 1
                 if wait >= args.wait_patient:
                     break
@@ -94,7 +91,7 @@ class DOCManager:
         self.model = best_model 
 
         if args.save_model:
-            self.model.save_pretrained(args.model_output_dir, save_config=True)
+            save_model(self.model, args.model_output_dir)
             np.save(os.path.join(args.method_output_dir, 'mu_stds.npy'), self.best_mu_stds)
 
     def test(self, args, data, show=False):
@@ -107,8 +104,8 @@ class DOCManager:
         test_results['Acc'] = acc
         
         if show:
-            self.logger.info(f'cm {cm}')
-            self.logger.info(f'results {test_results}')
+            print('cm',cm)
+            print('results', test_results)
 
         return test_results
 
@@ -168,7 +165,7 @@ class DOCManager:
             label = data.known_label_list[col]
             thresholds[label] = threshold
 
-        self.logger.info(f'DOC_thresholds {thresholds}')
+        print('DOC_thresholds', thresholds)
         
         y_pred = []
         for p in y_prob:

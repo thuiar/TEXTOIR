@@ -21,6 +21,7 @@ class ADB_Param():
         """
         hyper_parameters = {
 
+            'bert_model': "/home/sharing/disk1/pretrained_embedding/bert/uncased_L-12_H-768_A-12/",
             'max_seq_length': None, 
             'freeze_bert_parameters': True,
             'feat_dim': 768,
@@ -29,8 +30,8 @@ class ADB_Param():
             'lr': 2e-5, 
             'loss_fct': 'cross_entropy',
             'train_batch_size': 128,
-            'eval_batch_size': 64,
-            'test_batch_size': 64,
+            'eval_batch_size': 128,
+            'test_batch_size': 128,
             'wait_patient': 10
 
         }
