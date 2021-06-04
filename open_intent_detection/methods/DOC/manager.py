@@ -1,4 +1,5 @@
 from importlib import import_module
+import logging
 import torch
 import numpy as np
 import os
@@ -20,6 +21,8 @@ test_log_dir = 'logs/test/'   + TIMESTAMP
 class DOCManager:
     
     def __init__(self, args, data, model):
+
+        self.logger = logging.getLogger('Detection')
         
         self.model = model.model 
         self.optimizer = model.optimizer
@@ -67,13 +70,13 @@ class DOCManager:
                     nb_tr_steps += 1
 
             loss = tr_loss / nb_tr_steps
-            print('train_loss',loss)
+            self.logger.info(f'train_loss {loss}')
             
             mu_stds = self.get_outputs(args, data, self.train_dataloader, get_mu_stds = True)
             y_true, y_pred = self.get_outputs(args, data, self.eval_dataloader, mu_stds = mu_stds)
 
             eval_score = accuracy_score(y_true, y_pred)
-            print('eval_score', eval_score)
+            self.logger.info(f'eval_score {eval_score}')
             
             if eval_score >= best_eval_score:
                 best_model = copy.deepcopy(self.model)
@@ -81,7 +84,7 @@ class DOCManager:
                 best_eval_score = eval_score 
                 self.best_mu_stds = mu_stds
             else:
-                print(wait)
+                self.logger.info(wait)
                 wait += 1
                 if wait >= args.wait_patient:
                     break
@@ -104,8 +107,8 @@ class DOCManager:
         test_results['Acc'] = acc
         
         if show:
-            print('cm',cm)
-            print('results', test_results)
+            self.logger.info(f'cm {cm}')
+            self.logger.info(f'results {test_results}')
 
         return test_results
 
@@ -165,7 +168,7 @@ class DOCManager:
             label = data.known_label_list[col]
             thresholds[label] = threshold
 
-        print('DOC_thresholds', thresholds)
+        self.logger.info(f'DOC_thresholds {thresholds}')
         
         y_pred = []
         for p in y_prob:

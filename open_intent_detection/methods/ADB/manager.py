@@ -8,6 +8,7 @@ from torch import nn
 from datetime import datetime
 from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
 from tqdm import trange, tqdm
+import logging
 
 from losses import loss_map, BoundaryLoss
 from losses.utils import euclidean_metric
@@ -20,6 +21,8 @@ test_log_dir = 'logs/test/'   + TIMESTAMP
 class ADBManager:
     
     def __init__(self, args, data, model):
+
+        self.logger = logging.getLogger('Detection')
         
         self.model = model.model
         self.optimizer = model.optimizer
@@ -53,7 +56,7 @@ class ADBManager:
 
     def pre_train(self, args, data):
         
-        print('Pre-training Start...')
+        self.logger.info('Pre-training Start...')
         wait = 0
         best_model = None
         best_eval_score = 0
@@ -82,12 +85,12 @@ class ADBManager:
                     nb_tr_steps += 1
             
             loss = tr_loss / nb_tr_steps
-            print('train_loss',loss)
+            self.logger.info(f'train_loss {loss}')
             
             y_true, y_pred = self.get_outputs(args, data, self.eval_dataloader, pre_train=True)
             eval_score = accuracy_score(y_true, y_pred)
 
-            print('eval_score',eval_score)
+            self.logger.info(f'eval_score {eval_score}')
             
             if eval_score > best_eval_score:
                 
@@ -106,7 +109,7 @@ class ADBManager:
         if args.save_model:
             self.model.save_pretrained(args.model_output_dir, save_config=True)
 
-        print('Pre-training finished...')
+        self.logger.info('Pre-training finished...')
 
 
     def train(self, args, data):  
@@ -147,11 +150,11 @@ class ADBManager:
             self.delta_points.append(self.delta)
 
             loss = tr_loss / nb_tr_steps
-            print('train_loss',loss)
+            self.logger.info(f'train_loss {loss}')
             
             y_true, y_pred = self.get_outputs(args, data, self.eval_dataloader)
             eval_score = f1_score(y_true, y_pred, average='macro')
-            print('eval_score', eval_score)
+            self.logger.info(f'eval_score {eval_score}')
             
             if eval_score >= best_eval_score:
 
@@ -236,8 +239,8 @@ class ADBManager:
         test_results['Acc'] = acc
         
         if show:
-            print('cm',cm)
-            print('results', test_results)
+            self.logger.info(f'cm {cm}')
+            self.logger.info(f'results {test_results}')
 
         return test_results
 

@@ -1,4 +1,5 @@
 from importlib import import_module
+import logging
 import torch
 import torch.nn.functional as F
 import numpy as np
@@ -19,6 +20,8 @@ from sklearn.neighbors import LocalOutlierFactor
 class DeepUnkManager:
     
     def __init__(self, args, data, model):
+
+        self.logger = logging.getLogger('Detection')
 
         self.model = model.model 
         self.optimizer = model.optimizer
@@ -73,13 +76,13 @@ class DeepUnkManager:
                     nb_tr_steps += 1
 
             loss = tr_loss / nb_tr_steps
-            print('train_loss',loss)
+            self.logger.info(f'train_loss, loss')
 
             train_feats = self.get_outputs(args, data, self.train_dataloader, get_feats = True)
 
             y_true, y_pred = self.get_outputs(args, data, self.eval_dataloader, train_feats = train_feats)
             eval_score = round(accuracy_score(y_true, y_pred) * 100, 2)
-            print('eval_score', eval_score)
+            self.logger.info(f'eval_score {eval_score}')
             
             if eval_score >= best_eval_score:
                 
@@ -157,8 +160,8 @@ class DeepUnkManager:
         test_results['Acc'] = acc
         
         if show:
-            print('cm',cm)
-            print('results', test_results)
+            self.logger.info(f'cm {cm}')
+            self.logger.info(f'results {test_results}')
 
         return test_results
     
