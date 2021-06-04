@@ -152,11 +152,18 @@ class ADBManager:
             self.delta_points.append(self.delta)
 
             loss = tr_loss / nb_tr_steps
-            logger.info(f'train_loss {loss}')
             
             y_true, y_pred = self.get_outputs(args, data, self.eval_dataloader)
             eval_score = f1_score(y_true, y_pred, average='macro')
-            logger.info(f'eval_score {eval_score}')
+
+            eval_results = {
+                'train_loss': loss,
+                'eval_acc': eval_score,
+                'best_acc':best_eval_score,
+            }
+            logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
+            for key in sorted(eval_results.keys()):
+                logger.info("  %s = %s", key, str(eval_results[key]))
             
             if eval_score >= best_eval_score:
 
