@@ -4,7 +4,7 @@ import torch
 import os
 import csv
 import sys
-from pytorch_pretrained_bert.tokenization import BertTokenizer
+from transformers import BertTokenizer, RobertaTokenizer, XLNetTokenizer
 from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler, TensorDataset)
 
 
@@ -63,7 +63,12 @@ def get_examples(args, base_attrs, mode):
 
 def get_loader(examples, args, label_list, mode):
 
-    tokenizer = BertTokenizer.from_pretrained(args.bert_model, do_lower_case=True)    
+    if args.backbone == "bert":
+        tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
+    elif args.backbone == "roberta":
+        tokenizer = RobertaTokenizer.from_pretrained('roberta-base', do_lower_case=True) 
+    elif  args.backbone == "xlnet":
+        tokenizer = XLNetTokenizer.from_pretrained('xlnet-base-cased', do_lower_case=True) 
     features = convert_examples_to_features(examples, label_list, args.max_seq_length, tokenizer)
     input_ids = torch.tensor([f.input_ids for f in features], dtype=torch.long)
     input_mask = torch.tensor([f.input_mask for f in features], dtype=torch.long)

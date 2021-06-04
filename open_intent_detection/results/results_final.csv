@@ -3090,3 +3090,5 @@ F1-known,F1-open,F1,Acc,dataset,method,known_cls_ratio,labeled_ratio,seed
 89.5022,50.1961,82.9511,80.43,snips,OpenMax,0.75,0.6,9
 89.5203,48.6056,82.7012,80.14,snips,OpenMax,0.75,0.8,9
 89.4827,34.2105,80.2706,77.29,snips,OpenMax,0.75,1.0,9
+29.6482,7.8803,26.0202,18.57,stackoverflow,ADB,0.25,0.2,1
+23.0816,1.1892,19.4329,12.37,stackoverflow,ADB,0.25,0.2,1
