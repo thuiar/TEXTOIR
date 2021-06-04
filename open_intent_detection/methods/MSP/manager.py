@@ -1,4 +1,5 @@
 from importlib import import_module
+import logging
 import torch
 import torch.nn.functional as F
 import numpy as np
@@ -20,6 +21,8 @@ test_log_dir = 'logs/test/'   + TIMESTAMP
 class MSPManager:
     
     def __init__(self, args, data, model):
+
+        self.logger = logging.getLogger('Detection')
 
         self.model = model.model 
         self.optimizer = model.optimizer
@@ -86,8 +89,8 @@ class MSPManager:
         test_results['Acc'] = acc
         
         if show:
-            print('cm',cm)
-            print('results', test_results)
+            self.logger.info(f'cm {cm}')
+            self.logger.info(f'results {test_results}')
 
         return test_results
 
@@ -121,11 +124,11 @@ class MSPManager:
                     nb_tr_steps += 1
 
             loss = tr_loss / nb_tr_steps
-            print('train_loss',loss)
+            self.logger.info(f'train_loss {loss}')
             
             y_true, y_pred = self.get_outputs(args, data, self.eval_dataloader)
             eval_score = accuracy_score(y_true, y_pred)
-            print('eval_score', eval_score)
+            self.logger.info(f'eval_score {eval_score}')
             
             
             if eval_score > best_eval_score:

@@ -1,4 +1,5 @@
 
+import logging
 import os
 import torch
 import numpy as np
@@ -64,7 +65,9 @@ def save_results(args, test_results):
         df1.to_csv(results_path,index=False)
     data_diagram = pd.read_csv(results_path)
     
-    print('test_results', data_diagram)
+    # print(data_diagram.tail())
+    logger = logging.getLogger("Detection")
+    logger.info(f'results:\n{data_diagram.tail()}')
 
 # def debug(outputs, data, manager, args):
 
