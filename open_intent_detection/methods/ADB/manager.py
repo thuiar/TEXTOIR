@@ -10,7 +10,8 @@ from datetime import datetime
 from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
 from tqdm import trange, tqdm
 
-from losses import loss_map, BoundaryLoss
+from losses import loss_map
+from .loss import BoundaryLoss
 from losses.utils import euclidean_metric
 from utils.functions import save_model
 from utils.metrics import F_measure
@@ -56,6 +57,9 @@ class ADBManager:
         best_eval_score = 0
 
         for epoch in trange(int(args.num_train_epochs), desc="Epoch"):
+            
+            if args.backbone == 'bert_disaware':
+                self.centroids = self.centroids_cal(args, data)  
 
             self.model.train()
             tr_loss = 0
@@ -67,7 +71,11 @@ class ADBManager:
 
                 with torch.set_grad_enabled(True):
 
-                    loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct = self.loss_fct)
+                    if args.backbone == 'bert_disaware':
+                        loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct = self.loss_fct, centroids = self.centroids)
+                    else:    
+                        loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct = self.loss_fct)
+
                     self.optimizer.zero_grad()
 
                     loss.backward()
@@ -185,7 +193,7 @@ class ADBManager:
             
 
     def get_outputs(self, args, data, dataloader, get_feats = False, \
-                                    pre_train= False, delta = None, centroids = None):
+                                    pre_train= False, delta = None):
     
         self.model.eval()
 
@@ -195,13 +203,16 @@ class ADBManager:
         total_features = torch.empty((0,args.feat_dim)).to(self.device)
         total_logits = torch.empty((0, data.num_labels)).to(self.device)
         
-
         for batch in tqdm(dataloader, desc="Iteration"):
 
             batch = tuple(t.to(self.device) for t in batch)
             input_ids, input_mask, segment_ids, label_ids = batch
             with torch.set_grad_enabled(False):
-                pooled_output, logits = self.model(input_ids, segment_ids, input_mask)
+
+                if self.centroids is not None:
+                    pooled_output, logits = self.model(input_ids, segment_ids, input_mask, centroids = self.centroids)
+                else:
+                    pooled_output, logits = self.model(input_ids, segment_ids, input_mask)
                 
                 if not pre_train:
                     preds = self.open_classify(data, pooled_output)
@@ -238,7 +249,7 @@ class ADBManager:
     
     def test(self, args, data, show=False):
         
-        y_true, y_pred = self.get_outputs(args, data, self.test_dataloader, delta = self.delta, centroids = self.centroids)
+        y_true, y_pred = self.get_outputs(args, data, self.test_dataloader)
         cm = confusion_matrix(y_true, y_pred)
         test_results = F_measure(cm)
 
@@ -263,6 +274,8 @@ class ADBManager:
         return class_data_num
 
     def centroids_cal(self, args, data):
+        
+        self.model.eval()
         centroids = torch.zeros(data.num_labels, args.feat_dim).to(self.device)
         total_labels = torch.empty(0, dtype=torch.long).to(self.device)
 

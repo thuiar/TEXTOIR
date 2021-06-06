@@ -17,3 +17,4 @@ def freeze_bert_parameters(model):
         if "encoder.layer.11" in name or "pooler" in name:
             param.requires_grad = True
     return model
+

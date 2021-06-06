@@ -27,7 +27,7 @@ def parse_arguments():
 
     parser.add_argument("--save_model", action="store_true", help="save trained-model for open intent detection")
 
-    parser.add_argument("--backbone", type=str, default='bert', help="which model to use")
+    parser.add_argument("--backbone", type=str, default='bert', help="which backbone to use")
 
     parser.add_argument("--num_train_epochs", type=int, default=100, help = "The number of training epochs.")
 

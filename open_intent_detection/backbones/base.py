@@ -1,14 +1,14 @@
 import os 
 import torch
 from pytorch_pretrained_bert.optimization import BertAdam
-from .PLM import BERT, BERT_DeepUnk
+from .bert import BERT, BERT_DeepUnk, BERT_Disaware
 from .utils import freeze_bert_parameters
 
 backbones_map = {
                     'bert': BERT, 
-                    'bert_deepunk': BERT_DeepUnk
+                    'bert_deepunk': BERT_DeepUnk,
+                    'bert_disaware': BERT_Disaware
                 }
-
 
 class ModelManager:
 
@@ -19,7 +19,7 @@ class ModelManager:
         self.model, self.optimizer = self.set_model(args, data)
     
     def set_model(self, args, data):
-
+        
         backbone = backbones_map[args.backbone]
 
         if args.backbone[:4] == 'bert':
