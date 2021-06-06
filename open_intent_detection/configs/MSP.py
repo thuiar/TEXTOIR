@@ -1,4 +1,4 @@
-class MSP_Param():
+class Param():
     
     def __init__(self):
         

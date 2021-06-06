@@ -1,4 +1,4 @@
-class OpenMax_Param():
+class Param():
     
     def __init__(self):
         

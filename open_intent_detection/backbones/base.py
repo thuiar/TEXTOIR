@@ -1,9 +1,13 @@
 import os 
 import torch
 from pytorch_pretrained_bert.optimization import BertAdam
-from .PLM import BERT, freeze_bert_parameters
+from .PLM import BERT, BERT_DeepUnk
+from .utils import freeze_bert_parameters
 
-backbones_map = {'bert':BERT}
+backbones_map = {
+                    'bert': BERT, 
+                    'bert_deepunk': BERT_DeepUnk
+                }
 
 
 class ModelManager:
@@ -18,7 +22,7 @@ class ModelManager:
 
         backbone = backbones_map[args.backbone]
 
-        if args.backbone == 'bert':
+        if args.backbone[:4] == 'bert':
 
             model = backbone.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.num_labels)    
             model.to(self.device)

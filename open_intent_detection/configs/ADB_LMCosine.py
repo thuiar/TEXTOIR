@@ -1,3 +1,4 @@
+
 class Param():
     
     def __init__(self):
@@ -14,7 +15,6 @@ class Param():
             warmup_proportion (float): The warmup ratio for learning rate.
             lr (float): The learning rate of backbone.
             loss_fct (str): The loss function for training.
-            scale (float): The scale factor of DOC.
             train_batch_size (int): The batch size for training.
             eval_batch_size (int): The batch size for evaluation. 
             wait_patient (int): Patient steps for Early Stop.
@@ -27,8 +27,7 @@ class Param():
             'feat_dim': 768,
             'warmup_proportion': 0.1,
             'lr': 2e-5, 
-            'loss_fct': 'cross_entropy',
-            'scale': 2,
+            'loss_fct': 'LargeMarginCosineLoss',
             'train_batch_size': 128,
             'eval_batch_size': 64,
             'test_batch_size': 64,

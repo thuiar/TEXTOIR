@@ -1,17 +1,8 @@
 import argparse
 import sys
 import os
-from .ADB import ADB_Param
-from .MSP import MSP_Param
-from .DeepUnk import DeepUnk_Param
-from .DOC import DOC_Param
-from .OpenMax import OpenMax_Param
+import importlib
 from utils.functions import Storage
-
-param_map = {
-    'ADB': ADB_Param, 'MSP': MSP_Param, 'DeepUnk': DeepUnk_Param, 'DOC': DOC_Param, 'OpenMax': OpenMax_Param
-}
-
 
 class ParamManager:
     
@@ -30,8 +21,15 @@ class ParamManager:
                             )
 
     def get_method_param(self, args):
+        
+        if args.config_file_name.endswith('.py'):
+            module_name = '.' + args.config_file_name[:-3]
+        else:
+            module_name = '.' + args.config_file_name
 
-        method_param = param_map[args.method]
+        config = importlib.import_module(module_name, 'configs')
+
+        method_param = config.Param
         method_args = method_param()
 
         return method_args.hyper_param

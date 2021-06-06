@@ -31,13 +31,15 @@ def parse_arguments():
 
     parser.add_argument("--num_train_epochs", type=int, default=100, help = "The number of training epochs.")
 
+    parser.add_argument("--config_file_name", type=str, default='ADB.py', help = "The name of the config file.")
+
     parser.add_argument('--seed', type=int, default=0, help="random seed for initialization")
 
     parser.add_argument("--gpu_id", type=str, default='1', help="Select the GPU id")
 
     parser.add_argument("--pipe_results_path", type=str, default='pipe_results', help="the path to save results of pipeline methods")
     
-    parser.add_argument("--data_dir", default=sys.path[0]+'/../data', type=str,
+    parser.add_argument("--data_dir", default = sys.path[0]+'/../data', type=str,
                         help="The input data dir. Should contain the .csv files (or other data files) for the task.")
 
     parser.add_argument("--output_dir", default= '/home/sharing/disk2/zhanghanlei/TEXTOIR/outputs', type=str, 
@@ -47,7 +49,9 @@ def parse_arguments():
                         help="The output directory where the model predictions and checkpoints will be written.") 
 
     parser.add_argument("--result_dir", type=str, default = 'results', help="The path to save results")
-    
+
+    parser.add_argument("--result_file_name", type=str, default = 'results.csv', help="The file name of all the results.")
+
     args = parser.parse_args()
 
     return args

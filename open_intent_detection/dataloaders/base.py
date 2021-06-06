@@ -5,7 +5,7 @@ import torch
 from .bert_loader import BERT_Loader
 
 max_seq_lengths = {'clinc':30, 'stackoverflow':45,'banking':55, 'oos':30, 'dbpedia':55, 'atis':50, 'snips':35}
-loader_map = {'bert': BERT_Loader}
+loader_map = {'bert': BERT_Loader, 'bert_deepunk': BERT_Loader}
 
 def set_seed(seed):
     random.seed(seed)

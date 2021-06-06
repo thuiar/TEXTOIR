@@ -165,7 +165,7 @@ class ADBManager:
             for key in sorted(eval_results.keys()):
                 logger.info("  %s = %s", key, str(eval_results[key]))
             
-            if eval_score >= best_eval_score:
+            if eval_score > best_eval_score:
 
                 wait = 0
                 best_delta = self.delta 
@@ -173,9 +173,10 @@ class ADBManager:
                 best_eval_score = eval_score
 
             else:
-                wait += 1
-                if wait >= args.wait_patient:
-                    break
+                if best_eval_score > 0:
+                    wait += 1
+                    if wait >= args.wait_patient:
+                        break
 
         self.delta = best_delta
         self.centroids = best_centroids
@@ -247,9 +248,13 @@ class ADBManager:
         acc = round(accuracy_score(y_true, y_pred) * 100, 2)
         test_results['Acc'] = acc
         
-        if show:
-            print('cm',cm)
-            print('results', test_results)
+        logger.info
+        logger.info("***** Test: Confusion Matrix *****")
+        logger.info("%s", str(cm))
+        logger.info("***** Test results *****")
+        
+        for key in sorted(test_results.keys()):
+            logger.info("  %s = %s", key, str(test_results[key]))
 
         return test_results
 
