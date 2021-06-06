@@ -2,7 +2,7 @@ import argparse
 import sys
 import os
 import importlib
-from utils.functions import Storage
+from easydict import EasyDict
 
 class ParamManager:
     
@@ -12,7 +12,7 @@ class ParamManager:
 
         method_param = self.get_method_param(args)
 
-        self.args = Storage(
+        self.args = EasyDict(
                                 dict(
                                         vars(args),
                                         **output_path_param,
