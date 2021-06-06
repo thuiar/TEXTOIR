@@ -41,7 +41,7 @@ def save_results(args, test_results):
     keys = list(results.keys())
     values = list(results.values())
     
-    results_path = os.path.join(args.result_dir, 'results_final.csv')
+    results_path = os.path.join(args.result_dir, args.results_file_name)
     
     if not os.path.exists(results_path):
         ori = []

@@ -27,6 +27,7 @@ class Param():
             'feat_dim': 768,
             'warmup_proportion': 0.1,
             'lr': 2e-5, 
+            'lr_boundary': 0.05,
             'loss_fct': 'LargeMarginCosineLoss',
             'train_batch_size': 128,
             'eval_batch_size': 64,

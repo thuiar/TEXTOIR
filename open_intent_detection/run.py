@@ -50,7 +50,9 @@ def parse_arguments():
 
     parser.add_argument("--result_dir", type=str, default = 'results', help="The path to save results")
 
-    parser.add_argument("--result_file_name", type=str, default = 'results.csv', help="The file name of all the results.")
+    parser.add_argument("--results_file_name", type=str, default = 'results.csv', help="The file name of all the results.")
+
+    parser.add_argument("--save_results", action="store_true", help="save final results for open intent detection")
 
     args = parser.parse_args()
 
@@ -96,7 +98,9 @@ def run(args, data, model):
     outputs = method.test(args, data)
     logger.info('Testing finished...')
 
-    save_results(args, outputs)
+    if args.save_results:
+        logger.info('Results saved in %s', str(os.path.join(args.result_dir, args.results_file_name)))
+        save_results(args, outputs)
 
 
 if __name__ == '__main__':
