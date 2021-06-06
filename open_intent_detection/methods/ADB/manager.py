@@ -16,9 +16,6 @@ from utils.functions import save_model
 from utils.metrics import F_measure
 from utils.functions import restore_model
 
-TIMESTAMP = "{0:%Y-%m-%dT%H-%M-%S/}".format(datetime.now())
-train_log_dir = 'logs/train/' + TIMESTAMP
-test_log_dir = 'logs/test/'   + TIMESTAMP
 
 logger = logging.getLogger('Detection')
 

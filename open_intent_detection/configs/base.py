@@ -6,7 +6,7 @@ from .MSP import MSP_Param
 from .DeepUnk import DeepUnk_Param
 from .DOC import DOC_Param
 from .OpenMax import OpenMax_Param
-from utils.functions import Storage
+from easydict import EasyDict
 
 param_map = {
     'ADB': ADB_Param, 'MSP': MSP_Param, 'DeepUnk': DeepUnk_Param, 'DOC': DOC_Param, 'OpenMax': OpenMax_Param
@@ -21,7 +21,7 @@ class ParamManager:
 
         method_param = self.get_method_param(args)
 
-        self.args = Storage(
+        self.args = EasyDict(
                                 dict(
                                         vars(args),
                                         **output_path_param,

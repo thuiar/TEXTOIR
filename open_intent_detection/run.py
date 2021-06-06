@@ -27,7 +27,7 @@ def parse_arguments():
 
     parser.add_argument("--save_model", action="store_true", help="save trained-model for open intent detection")
 
-    parser.add_argument("--backbone", type=str, default='bert-base-uncased', help="which model to use")
+    parser.add_argument("--backbone", type=str, default='bert', help="which model to use")
 
     parser.add_argument("--num_train_epochs", type=int, default=100, help = "The number of training epochs.")
 
@@ -105,7 +105,12 @@ if __name__ == '__main__':
     param = ParamManager(args)
     args = param.args
 
-    logger.info('Data and Model Preparation...')     
+    logger.debug("="*30+" Params "+"="*30)
+    for k in args.keys():
+        logger.debug(f"{k}:\t{args[k]}")
+    logger.debug("="*30+" End Params "+"="*30)
+
+    logger.info('Data and Model Preparation...')
     data = DataManager(args)
     model = ModelManager(args, data)
 
