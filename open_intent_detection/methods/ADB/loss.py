@@ -14,7 +14,7 @@ class BoundaryLoss(nn.Module):
         self.delta = nn.Parameter(torch.randn(num_labels).cuda())
         nn.init.normal_(self.delta)
         
-    def forward(self, pooled_output, centroids, labels):
+    def forward(self, pooled_output, centroids, labels, w = 1):
         
         delta = F.softplus(self.delta)
         c = centroids[labels]
@@ -27,6 +27,7 @@ class BoundaryLoss(nn.Module):
         
         pos_loss = (euc_dis - d) * pos_mask
         neg_loss = (d - euc_dis) * neg_mask
-        loss = pos_loss.mean() + neg_loss.mean()
+        loss = w * pos_loss.mean() + neg_loss.mean()
         
         return loss, delta 
+

@@ -30,7 +30,15 @@ def restore_model(model, model_dir):
     return model
 
 def save_results(args, test_results):
-    
+
+    pred_labels_path = os.path.join(args.method_output_dir, 'y_pred.npy')
+    np.save(pred_labels_path, test_results['y_pred'])
+    true_labels_path = os.path.join(args.method_output_dir, 'y_true.npy')
+    np.save(true_labels_path, test_results['y_true'])
+
+    del test_results['y_pred']
+    del test_results['y_true']
+
     if not os.path.exists(args.result_dir):
         os.makedirs(args.result_dir)
 

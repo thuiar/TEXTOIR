@@ -56,6 +56,11 @@ class ADBManager:
         best_model = None
         best_eval_score = 0
 
+        if args.loss_fct == 'center_loss':
+            from losses.CenterLoss import CenterLoss
+            center_loss = CenterLoss(num_classes=data.num_labels, feat_dim=args.feat_dim, device = self.device)
+            optimizer_centloss = torch.optim.Adam(center_loss.parameters(), lr = 0.05)
+
         for epoch in trange(int(args.num_train_epochs), desc="Epoch"):
             
             if args.backbone == 'bert_disaware':
@@ -73,13 +78,28 @@ class ADBManager:
 
                     if args.backbone == 'bert_disaware':
                         loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct = self.loss_fct, centroids = self.centroids)
+                    elif args.loss_fct == 'center_loss':
+                        alpha = 0.05
+                        loss_fct = nn.CrossEntropyLoss()
+                        loss_softmax = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct =  loss_fct)
+                        features = self.model(input_ids, segment_ids, input_mask, label_ids, feature_ext = True)
+                        loss = center_loss(features, label_ids) * alpha  + loss_softmax
                     else:    
                         loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct = self.loss_fct)
 
                     self.optimizer.zero_grad()
 
+                    if args.loss_fct == 'center_loss':
+                        optimizer_centloss.zero_grad()
+
                     loss.backward()
                     self.optimizer.step()
+
+                    if args.loss_fct == 'center_loss':
+                        for param in center_loss.parameters():
+                            param.grad.data *= (1./alpha)
+
+                        optimizer_centloss.step()
                     
                     tr_loss += loss.item()
                     nb_tr_examples += input_ids.size(0)
@@ -209,7 +229,7 @@ class ADBManager:
             input_ids, input_mask, segment_ids, label_ids = batch
             with torch.set_grad_enabled(False):
 
-                if self.centroids is not None:
+                if args.backbone == 'bert_disaware':
                     pooled_output, logits = self.model(input_ids, segment_ids, input_mask, centroids = self.centroids)
                 else:
                     pooled_output, logits = self.model(input_ids, segment_ids, input_mask)
@@ -250,6 +270,7 @@ class ADBManager:
     def test(self, args, data, show=False):
         
         y_true, y_pred = self.get_outputs(args, data, self.test_dataloader)
+        
         cm = confusion_matrix(y_true, y_pred)
         test_results = F_measure(cm)
 
@@ -263,6 +284,9 @@ class ADBManager:
         
         for key in sorted(test_results.keys()):
             logger.info("  %s = %s", key, str(test_results[key]))
+
+        test_results['y_true'] = y_true
+        test_results['y_pred'] = y_pred
 
         return test_results
 
