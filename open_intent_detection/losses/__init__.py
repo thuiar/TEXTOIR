@@ -5,5 +5,5 @@ from torch import nn
 loss_map = {
                 'CrossEntropyLoss': nn.CrossEntropyLoss(), 
                 'LargeMarginCosineLoss': LargeMarginCosineLoss(), 
-                'center_loss': CenterLoss()
+                'center_loss': CenterLoss(),
             }

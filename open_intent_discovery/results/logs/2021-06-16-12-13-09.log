@@ -1,0 +1,40 @@
+2021-06-16 12:13:09,237 - Detection - Open Intent Discovery Begin...
+2021-06-16 12:13:09,237 - Detection - Parameters Initialization...
+2021-06-16 12:13:09,237 - Detection - ============================== Params ==============================
+2021-06-16 12:13:09,237 - Detection - type:	open_intent_detection
+2021-06-16 12:13:09,237 - Detection - dataset:	banking
+2021-06-16 12:13:09,237 - Detection - known_cls_ratio:	0.75
+2021-06-16 12:13:09,237 - Detection - labeled_ratio:	0.1
+2021-06-16 12:13:09,237 - Detection - cluster_num_factor:	1
+2021-06-16 12:13:09,237 - Detection - method:	DeepAligned
+2021-06-16 12:13:09,237 - Detection - train:	True
+2021-06-16 12:13:09,237 - Detection - save_model:	False
+2021-06-16 12:13:09,237 - Detection - backbone:	bert
+2021-06-16 12:13:09,237 - Detection - num_train_epochs:	100
+2021-06-16 12:13:09,237 - Detection - setting:	semi_supervised
+2021-06-16 12:13:09,237 - Detection - config_file_name:	DeepAligned
+2021-06-16 12:13:09,237 - Detection - seed:	0
+2021-06-16 12:13:09,237 - Detection - gpu_id:	1
+2021-06-16 12:13:09,237 - Detection - pipe_results_path:	pipe_results
+2021-06-16 12:13:09,237 - Detection - data_dir:	/home/zhanghanlei/git/TEXTOIR/open_intent_discovery/../data
+2021-06-16 12:13:09,237 - Detection - output_dir:	outputs
+2021-06-16 12:13:09,237 - Detection - model_dir:	models
+2021-06-16 12:13:09,237 - Detection - result_dir:	results
+2021-06-16 12:13:09,237 - Detection - results_file_name:	results.csv
+2021-06-16 12:13:09,237 - Detection - save_results:	False
+2021-06-16 12:13:09,237 - Detection - method_output_dir:	outputs/open_intent_detection/DeepAligned_banking_0.75_0.1_bert
+2021-06-16 12:13:09,237 - Detection - model_output_dir:	outputs/open_intent_detection/DeepAligned_banking_0.75_0.1_bert/models
+2021-06-16 12:13:09,237 - Detection - bert_model:	/home/sharing/disk1/pretrained_embedding/bert/uncased_L-12_H-768_A-12/
+2021-06-16 12:13:09,237 - Detection - max_seq_length:	None
+2021-06-16 12:13:09,237 - Detection - freeze_bert_parameters:	True
+2021-06-16 12:13:09,237 - Detection - feat_dim:	768
+2021-06-16 12:13:09,237 - Detection - warmup_proportion:	0.1
+2021-06-16 12:13:09,237 - Detection - lr_pre:	5e-05
+2021-06-16 12:13:09,238 - Detection - lr:	5e-05
+2021-06-16 12:13:09,238 - Detection - loss_fct:	CrossEntropyLoss
+2021-06-16 12:13:09,238 - Detection - train_batch_size:	128
+2021-06-16 12:13:09,238 - Detection - eval_batch_size:	128
+2021-06-16 12:13:09,238 - Detection - test_batch_size:	128
+2021-06-16 12:13:09,238 - Detection - wait_patient:	20
+2021-06-16 12:13:09,238 - Detection - ============================== End Params ==============================
+2021-06-16 12:13:09,238 - Detection - Data and Model Preparation...

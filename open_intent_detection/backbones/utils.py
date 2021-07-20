@@ -1,6 +1,5 @@
 import torch
 from torch import nn
-
 def l2_norm(input,axis=1):
     norm = torch.norm(input,2,axis,True)
     output = torch.div(input, norm)
@@ -17,4 +16,3 @@ def freeze_bert_parameters(model):
         if "encoder.layer.11" in name or "pooler" in name:
             param.requires_grad = True
     return model
-

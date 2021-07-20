@@ -1,26 +1,23 @@
-from importlib import import_module
 import torch
 import torch.nn.functional as F
 import numpy as np
 import os
 import copy
 import pandas as pd
-from torch import nn
-from datetime import datetime
+import logging
+
 from sklearn.metrics import confusion_matrix, accuracy_score
 from tqdm import trange, tqdm
-
-from losses import loss_map
-from utils.functions import save_model
-from utils.metrics import F_measure
-from utils.functions import restore_model
-
 from sklearn.neighbors import LocalOutlierFactor
-
+from losses import loss_map
+from utils.functions import save_model, restore_model
+from utils.metrics import F_measure
 
 class DeepUnkManager:
     
-    def __init__(self, args, data, model):
+    def __init__(self, args, data, model, logger_name = 'Detection'):
+        
+        self.logger = logging.getLogger(logger_name)
 
         self.model = model.model 
         self.optimizer = model.optimizer
@@ -34,11 +31,9 @@ class DeepUnkManager:
         self.loss_fct = loss_map[args.loss_fct]
 
         if args.train:
-
             self.best_features = None
 
         else:
-            
             restore_model(self.model, args.model_output_dir)
             self.best_features = np.load(os.path.join(args.method_output_dir, 'features.npy'))
 
@@ -72,22 +67,28 @@ class DeepUnkManager:
                     nb_tr_steps += 1
 
             loss = tr_loss / nb_tr_steps
-            print('train_loss',loss)
+            train_feats = self.get_outputs(args, data, mode = 'train', get_feats = True)
 
-            train_feats = self.get_outputs(args, data, self.train_dataloader, get_feats = True)
-
-            y_true, y_pred = self.get_outputs(args, data, self.eval_dataloader, train_feats = train_feats)
+            y_true, y_pred = self.get_outputs(args, data, mode = 'eval', train_feats = train_feats)
             eval_score = round(accuracy_score(y_true, y_pred) * 100, 2)
-            print('eval_score', eval_score)
             
-            if eval_score >= best_eval_score:
+            eval_results = {
+                'train_loss': loss,
+                'eval_acc': eval_score,
+                'best_acc':best_eval_score,
+            }
+            self.logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
+            for key in sorted(eval_results.keys()):
+                self.logger.info("  %s = %s", key, str(eval_results[key]))
+            
+            if eval_score > best_eval_score:
                 
                 self.best_feats = train_feats
                 best_eval_score = eval_score
                 best_model = copy.deepcopy(self.model)
                 wait = 0
 
-            else:
+            elif eval_score > 0:
                 wait += 1
                 if wait >= args.wait_patient:
                     break
@@ -100,17 +101,24 @@ class DeepUnkManager:
             save_model(self.model, args.model_output_dir)
 
 
-    def classify_lof(self, data, preds, train_feats, pred_feats):
+    def classify_lof(self, args, data, preds, train_feats, pred_feats):
         
-        lof = LocalOutlierFactor(n_neighbors=20, contamination = 0.05, novelty=True, n_jobs=-1)
+        lof = LocalOutlierFactor(n_neighbors=args.n_neighbors, contamination = args.contamination, novelty=True, n_jobs=-1)
         lof.fit(train_feats)
         y_pred_lof = pd.Series(lof.predict(pred_feats))
         preds[y_pred_lof[y_pred_lof == -1].index] = data.unseen_label_id
 
         return preds
 
-    def get_outputs(self, args, data, dataloader, get_feats = False, train_feats = None):
-    
+    def get_outputs(self, args, data, mode, get_feats = False, train_feats = None):
+        
+        if mode == 'train':
+            dataloader = self.train_dataloader
+        elif mode == 'eval':
+            dataloader = self.eval_dataloader
+        elif mode == 'test':
+            dataloader = self.test_dataloader
+
         self.model.eval()
         
         total_labels = torch.empty(0,dtype=torch.long).to(self.device)
@@ -142,22 +150,29 @@ class DeepUnkManager:
             
             if train_feats is not None:
                 feats = total_features.cpu().numpy()
-                y_pred = self.classify_lof(data, y_pred, train_feats, feats)
+                y_pred = self.classify_lof(args, data, y_pred, train_feats, feats)
             
             return y_true, y_pred
 
     def test(self, args, data, show=False):
     
-        y_true, y_pred = self.get_outputs(args, data, self.test_dataloader, train_feats = self.best_feats)
+        y_true, y_pred = self.get_outputs(args, data, mode = 'test', train_feats = self.best_feats)
         cm = confusion_matrix(y_true, y_pred)
         test_results = F_measure(cm)
 
         acc = round(accuracy_score(y_true, y_pred) * 100, 2)
         test_results['Acc'] = acc
         
-        if show:
-            print('cm',cm)
-            print('results', test_results)
+        self.logger.info
+        self.logger.info("***** Test: Confusion Matrix *****")
+        self.logger.info("%s", str(cm))
+        self.logger.info("***** Test results *****")
+
+        for key in sorted(test_results.keys()):
+            self.logger.info("  %s = %s", key, str(test_results[key]))
+
+        test_results['y_true'] = y_true
+        test_results['y_pred'] = y_pred
 
         return test_results
     

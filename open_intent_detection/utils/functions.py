@@ -5,7 +5,6 @@ import numpy as np
 import pandas as pd
 from pytorch_pretrained_bert.modeling import WEIGHTS_NAME, CONFIG_NAME
 
-    
 def save_npy(npy_file, path, file_name):
     npy_path = os.path.join(path, file_name)
     np.save(npy_path, npy_file)
@@ -42,8 +41,11 @@ def save_results(args, test_results):
     if not os.path.exists(args.result_dir):
         os.makedirs(args.result_dir)
 
-    var = [args.dataset, args.method, args.backbone, args.known_cls_ratio, args.labeled_ratio, args.loss_fct, args.seed]
-    names = ['dataset', 'method', 'backbone', 'known_cls_ratio', 'labeled_ratio', 'loss', 'seed']
+    import datetime
+    created_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+
+    var = [args.dataset, args.method, args.backbone, args.known_cls_ratio, args.labeled_ratio, args.loss_fct, args.seed, args.num_train_epochs, created_time]
+    names = ['dataset', 'method', 'backbone', 'known_cls_ratio', 'labeled_ratio', 'loss', 'seed', 'train_epochs', 'created_time']
     vars_dict = {k:v for k,v in zip(names, var) }
     results = dict(test_results,**vars_dict)
     keys = list(results.keys())
@@ -51,7 +53,7 @@ def save_results(args, test_results):
     
     results_path = os.path.join(args.result_dir, args.results_file_name)
     
-    if not os.path.exists(results_path):
+    if not os.path.exists(results_path) or os.path.getsize(results_path) == 0:
         ori = []
         ori.append(values)
         df1 = pd.DataFrame(ori,columns = keys)
@@ -64,6 +66,7 @@ def save_results(args, test_results):
     data_diagram = pd.read_csv(results_path)
     
     print('test_results', data_diagram)
+
 
 # def debug(outputs, data, manager, args):
 

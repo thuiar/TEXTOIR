@@ -1,0 +1,9 @@
+ACC,ARI,NMI,dataset,method,backbone,known_cls_ratio,labeled_ratio,loss,seed
+63.73,52.6,78.76,banking,DeepAligned,bert,0.75,0.1,CrossEntropyLoss,0
+62.31,51.43,78.51,banking,DeepAligned,bert,0.75,0.1,CrossEntropyLoss,1
+64.22,52.71,79.06,banking,DeepAligned,bert,0.75,0.1,CrossEntropyLoss,2
+65.97,53.69,79.38,banking,DeepAligned,bert,0.75,0.1,CrossEntropyLoss,3
+63.93,53.03,80.01,banking,DeepAligned,bert,0.75,0.1,CrossEntropyLoss,4
+66.04,53.27,79.65,banking,DeepAligned,bert,0.75,0.1,CrossEntropyLoss,5
+66.2,53.69,79.68,banking,DeepAligned,bert,0.75,0.1,CrossEntropyLoss,6
+64.94,53.74,79.22,banking,DeepAligned,bert,0.75,0.1,CrossEntropyLoss,7

@@ -1,10 +1,10 @@
 class Param():
     
-    def __init__(self):
+    def __init__(self, args):
         
-        self.hyper_param = self.get_hyper_parameters()
+        self.hyper_param = self.get_hyper_parameters(args)
 
-    def get_hyper_parameters(self):
+    def get_hyper_parameters(self, args):
         """
         Args:
             bert_model (directory): The path for the pre-trained bert model.
@@ -30,15 +30,15 @@ class Param():
             'feat_dim': 768,
             'warmup_proportion': 0.1,
             'lr': 2e-5, 
-            'loss_fct': 'cross_entropy',
+            'loss_fct': 'CrossEntropyLoss',
             'weibull_tail_size': 20,
             'alpharank': 10,
             'distance_type': 'cosine',
-            'threshold': 0.5,
+            'threshold': 0.5, 
             'train_batch_size': 128,
             'eval_batch_size': 64,
             'test_batch_size': 64,
-            'wait_patient': 10
+            'wait_patient': 15
 
         }
 

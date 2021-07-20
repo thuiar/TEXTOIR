@@ -1,9 +1,9 @@
-import random
 import numpy as np
 import torch
 import os
 import csv
 import sys
+import logging
 from pytorch_pretrained_bert.tokenization import BertTokenizer
 from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler, TensorDataset)
 
@@ -11,11 +11,14 @@ from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler, Tens
 
 class BERT_Loader:
     
-    def __init__(self, args, base_attrs):
-
-        self.train_labeled_examples, self.train_unlabeled_examples  = get_examples(args, base_attrs, 'train')
+    def __init__(self, args, base_attrs, logger):
+        
+        self.logger = logger
+        self.train_examples, self.train_labeled_examples, self.train_unlabeled_examples  = get_examples(args, base_attrs, 'train')
         self.eval_examples = get_examples(args, base_attrs, 'eval')
         self.test_examples = get_examples(args, base_attrs, 'test')
+
+        self.logger.info('The number of labeled training examples is %s.', len(self.train_labeled_examples))
 
         self.train_labeled_loader = get_loader(self.train_labeled_examples, args, base_attrs['label_list'], 'train_labeled')
         self.train_unlabeled_loader = get_loader(self.train_unlabeled_examples, args, base_attrs['label_list'], 'train_unlabeled')
@@ -37,8 +40,8 @@ def get_examples(args, base_attrs, mode):
             else:
                 example.label = base_attrs['unseen_label']
                 unlabeled_examples.append(example)
-    
-        return labeled_examples, unlabeled_examples 
+
+        return ori_examples, labeled_examples, unlabeled_examples
 
     elif mode == 'eval':
 
@@ -68,12 +71,16 @@ def get_loader(examples, args, label_list, mode):
     input_ids = torch.tensor([f.input_ids for f in features], dtype=torch.long)
     input_mask = torch.tensor([f.input_mask for f in features], dtype=torch.long)
     segment_ids = torch.tensor([f.segment_ids for f in features], dtype=torch.long)
-    label_ids = torch.tensor([f.label_id for f in features], dtype=torch.long)
+    if mode == 'train_unlabeled':
+        label_ids = torch.tensor([-1 for f in features], dtype=torch.long)
+    else:
+        label_ids = torch.tensor([f.label_id for f in features], dtype=torch.long)
     datatensor = TensorDataset(input_ids, input_mask, segment_ids, label_ids)
 
-    if mode == 'train_labeled':  
+    if mode == 'train_labeled':   
 
         sampler = RandomSampler(datatensor)
+
         dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.train_batch_size)    
 
     else:
@@ -81,10 +88,8 @@ def get_loader(examples, args, label_list, mode):
 
         if mode == 'train_unlabeled':
             dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.train_batch_size)    
-
         elif mode == 'eval':
             dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.eval_batch_size)    
-        
         elif mode == 'test':
             dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.test_batch_size)    
 
@@ -161,15 +166,6 @@ class DatasetProcessor(DataProcessor):
         elif mode == 'test':
             return self._create_examples(
                 self._read_tsv(os.path.join(data_dir, "test.tsv")), "test")
-
-    def get_labels(self, data_dir):
-        """See base class."""
-        import pandas as pd
-        test = pd.read_csv(os.path.join(data_dir, "train.tsv"), sep="\t")
-        labels = np.unique(np.array(test['label']))
-        # labels = list(dict.fromkeys(train['label']))
-            
-        return labels
 
     def _create_examples(self, lines, set_type):
         """Creates examples for the training and dev sets."""

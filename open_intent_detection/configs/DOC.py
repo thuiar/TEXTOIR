@@ -1,10 +1,10 @@
 class Param():
-    
-    def __init__(self):
-        
-        self.hyper_param = self.get_hyper_parameters()
 
-    def get_hyper_parameters(self):
+    def __init__(self, args):
+
+        self.hyper_param = self.get_hyper_parameters(args)
+
+    def get_hyper_parameters(self, args):
         """
         Args:
             bert_model (directory): The path for the pre-trained bert model.
@@ -22,18 +22,17 @@ class Param():
         hyper_parameters = {
 
             'bert_model': "/home/sharing/disk1/pretrained_embedding/bert/uncased_L-12_H-768_A-12/",
-            'max_seq_length': None, 
+            'max_seq_length': None,
             'freeze_bert_parameters': True,
             'feat_dim': 768,
             'warmup_proportion': 0.1,
-            'lr': 2e-5, 
-            'loss_fct': 'cross_entropy',
+            'lr': 2e-5,
+            'loss_fct': 'CrossEntropyLoss',
             'scale': 2,
             'train_batch_size': 128,
             'eval_batch_size': 64,
             'test_batch_size': 64,
-            'wait_patient': 10
-
+            'wait_patient': 20
         }
 
         return hyper_parameters

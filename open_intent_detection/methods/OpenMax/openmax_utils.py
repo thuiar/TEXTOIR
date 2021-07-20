@@ -43,7 +43,7 @@ def computeOpenMaxProbability(openmax_fc8, openmax_score_u, n_classes):
 def compute_distance(MAV, query_channel, distance_type):
     
     if distance_type == 'eucos':
-        query_distance = spd.euclidean(MAV, query_channel) / 200.0  + spd.cosine(MAV, query_channel) / 200.0
+        query_distance = spd.euclidean(MAV, query_channel) / 200.  + spd.cosine(MAV, query_channel) / 200.
     elif distance_type == 'euclidean':
         query_distance = spd.euclidean(MAV, query_channel)
     elif distance_type == 'cosine':
@@ -89,7 +89,7 @@ def query_weibull(category_name, weibull_model):
 
     return category_weibull 
 
-def recalibrate_scores(weibull_model, num_labels, textarr, layer = 'fc8', alpharank = 5, distance_type = 'cosine'):
+def recalibrate_scores(weibull_model, num_labels, textarr, layer = 'fc8', alpharank = 5, distance_type = 'eucos'):
     
     txtlayer = textarr[layer]
     ranked_list = textarr['scores'].argsort().ravel()[::-1]

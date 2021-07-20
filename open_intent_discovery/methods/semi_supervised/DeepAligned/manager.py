@@ -1,94 +1,185 @@
-from open_intent_discovery.utils import *
-from .pretrain import *
-import open_intent_discovery.Backbone as Backbone
+import torch
+import numpy as np
+import copy
+import os
+import logging
 
-TIMESTAMP = "{0:%Y-%m-%dT%H-%M-%S/}".format(datetime.now())
-train_log_dir = 'logs/train/' + TIMESTAMP
-test_log_dir = 'logs/test/'   + TIMESTAMP
+from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_score, confusion_matrix, f1_score, accuracy_score
+from tqdm import trange, tqdm
+from scipy.optimize import linear_sum_assignment
+from torch.utils.data import (DataLoader, SequentialSampler, TensorDataset)
+
+from ....losses import loss_map
+from ....utils.functions import save_model
+from ....utils.functions import restore_model
+from ....utils.metrics import clustering_score
+from .pretrain import ModelManager as PretrainModelManager
 
 class ModelManager:
     
-    def __init__(self, args, data):
-
-        self.model_dir, self.output_file_dir, self.pretrain_model_dir = set_path(args)
-
-        os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id    
-
-        Model = Backbone.__dict__[args.backbone]
+    def __init__(self, args, data, model, logger_name = 'Discovery'):
         
-        if args.train_discover:
-            
-            self.best_eval_score = 0
+        self.logger = logging.getLogger(logger_name)
+
+        self.model = model.model
+        self.optimizer = model.optimizer
+        self.device = model.device
+
+        self.data = data
+        self.train_dataloader, self.eval_dataloader, self.test_dataloader = \
+            data.dataloader.train_loader, data.dataloader.eval_loader, data.dataloader.test_loader
+        self.train_input_ids, self.train_input_mask, self.train_segment_ids = \
+            data.dataloader.train_input_ids, data.dataloader.train_input_mask, data.dataloader.train_segment_ids
+
+        self.loss_fct = loss_map[args.loss_fct]
+        
+        pretrain_manager = PretrainModelManager(args, data, model)  
+        
+        if args.train:
+
+            self.logger.info('Pre-raining start...')
+            pretrain_manager.train(args, data)
+            self.logger.info('Pre-training finished...')
+
             self.centroids = None
-            pretrained_model = self.pre_train(args, data) 
-        
-            if args.cluster_num_factor > 1:
-                self.num_labels = self.predict_k(args, data, pretrained_model) 
-            else:
-                self.num_labels = data.num_labels  
-            
-            self.model = Model.from_pretrained(args.bert_model, cache_dir = "", num_labels = self.num_labels)
-            self.model = load_pretrained_model(self.model, pretrained_model)
-
+            self.pretrained_model = pretrain_manager.model
         else:
+            self.pretrained_model = restore_model(pretrain_manager.model, os.path.join(args.method_output_dir, 'pretrain'))
+        
+        if args.cluster_num_factor > 1:
+            self.num_labels = self.predict_k(args, data) 
+        else:
+            self.num_labels = data.num_labels 
+        
+        if args.train:
+            self.load_pretrained_model(self.pretrained_model)
+        else:
+            self.model = restore_model(self.model, args.model_output_dir)
+
+    def train(self, args, data): 
+        best_model = None
+        wait = 0
+        best_eval_score = 0 
+
+        for epoch in trange(int(args.num_train_epochs), desc="Epoch"):  
+
+            feats = self.get_outputs(args, self.train_dataloader, get_feats = True)
+            km = KMeans(n_clusters = self.num_labels).fit(feats)
+            eval_score = silhouette_score(feats, km.labels_)
+
+            if epoch > 0:
+                
+                eval_results = {
+                    'train_loss': tr_loss,
+                    'cluster_silhouette_score': eval_score,
+                    'best_cluster_silhouette_score': best_eval_score,   
+                }
+
+                self.logger.info("***** Epoch: %s: Eval results *****", str(epoch))
+                for key in sorted(eval_results.keys()):
+                    self.logger.info("  %s = %s", key, str(eval_results[key]))
+
+            if eval_score > best_eval_score:
+                best_model = copy.deepcopy(self.model)
+                wait = 0
+                best_eval_score = eval_score
+            elif eval_score > 0:
+                wait += 1
+                if wait >= args.wait_patient:
+                    break 
             
-            pretrained_model = Model.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.n_known_cls)
-            pretrained_model = restore_model(pretrained_model, self.pretrain_model_dir)
+            pseudo_labels = self.alignment(km, args)
+            pseudo_train_dataloader = self.update_pseudo_labels(pseudo_labels, args)
+            
+            tr_loss = 0
+            nb_tr_examples, nb_tr_steps = 0, 0
+            self.model.train()
 
-            if args.cluster_num_factor > 1:
-                self.num_labels = self.predict_k(args, data, pretrained_model) 
-            else:
-                self.num_labels = data.num_labels 
+            for batch in tqdm(pseudo_train_dataloader, desc="Training(All)"):
 
-            self.model = Model.from_pretrained(args.bert_model, cache_dir = "", num_labels = self.num_labels)
-            self.model = restore_model(self.model, self.model_dir)
+                batch = tuple(t.to(self.device) for t in batch)
+                input_ids, input_mask, segment_ids, label_ids = batch
+                loss = self.model(input_ids, segment_ids, input_mask, label_ids, loss_fct = self.loss_fct, mode = "train")
+                
+                loss.backward()
+
+                tr_loss += loss.item()
+                nb_tr_examples += input_ids.size(0)
+                nb_tr_steps += 1
+
+                self.optimizer.step()
+                self.optimizer.zero_grad()
+            
+            tr_loss = tr_loss / nb_tr_steps
         
+        self.model = best_model
 
-        if args.freeze_bert_parameters:
-            self.model = freeze_bert_parameters(self.model)   
+        if args.save_model:
+            save_model(self.model, args.model_output_dir)
 
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model.to(self.device)
-
-        num_train_examples = len(data.train_labeled_examples) + len(data.train_unlabeled_examples)
-        self.num_train_optimization_steps = int(num_train_examples / args.train_batch_size) * args.num_train_epochs
-        self.optimizer = self.get_optimizer(args)
-
-        self.test_results, self.predictions, self.true_labels = None, None, None
-
-    def pre_train(self, args, data):
+    def test(self, args, data):
         
-        manager_p = PretrainModelManager(args, data)
-        manager_p.train(args, data)
-        print('Pretraining finished...')
-
-        if args.save_discover:
-            save_model(manager_p.model, self.pretrain_model_dir)
-
-        return manager_p.model
-
-    def get_features_labels(self, dataloader, model, args):
+        feats = self.get_outputs(args, self.test_dataloader, get_feats = True)
+        km = KMeans(n_clusters = self.num_labels).fit(feats)
+        y_pred = km.labels_
+        y_true, _ = self.get_outputs(args, self.test_dataloader)
         
-        model.eval()
-        total_features = torch.empty((0,args.feat_dim)).to(self.device)
+        test_results = clustering_score(y_true, y_pred)
+        cm = confusion_matrix(y_true, y_pred)
+        
+        self.logger.info
+        self.logger.info("***** Test: Confusion Matrix *****")
+        self.logger.info("%s", str(cm))
+        self.logger.info("***** Test results *****")
+        
+        for key in sorted(test_results.keys()):
+            self.logger.info("  %s = %s", key, str(test_results[key]))
+
+        test_results['y_true'] = y_true
+        test_results['y_pred'] = y_pred
+        test_results['feats'] = feats
+
+        return test_results
+
+    def get_outputs(self, args, dataloader, get_feats = False):
+    
+        self.model.eval()
+
         total_labels = torch.empty(0,dtype=torch.long).to(self.device)
+        total_preds = torch.empty(0,dtype=torch.long).to(self.device)
+        
+        total_features = torch.empty((0,args.feat_dim)).to(self.device)
+        total_logits = torch.empty((0, self.num_labels)).to(self.device)
+        
+        for batch in tqdm(dataloader, desc="Iteration"):
 
-        for batch in tqdm(dataloader, desc="Extracting representation"):
             batch = tuple(t.to(self.device) for t in batch)
             input_ids, input_mask, segment_ids, label_ids = batch
-            with torch.no_grad():
-                feature = model(input_ids, segment_ids, input_mask, feature_ext = True)
+            with torch.set_grad_enabled(False):
+                pooled_output, logits = self.model(input_ids, segment_ids, input_mask)
+                
+                total_labels = torch.cat((total_labels,label_ids))
+                total_features = torch.cat((total_features, pooled_output))
+                total_logits = torch.cat((total_logits, logits))
 
-            total_features = torch.cat((total_features, feature))
-            total_labels = torch.cat((total_labels, label_ids))
+        if get_feats:  
+            feats = total_features.cpu().numpy()
+            return feats 
 
-        return total_features, total_labels
+        else:
+            y_pred = total_preds.cpu().numpy()
+            y_true = total_labels.cpu().numpy()
 
-    def predict_k(self, args, data, pretrained_model):
-        print('Predict K begin...')
+            return y_true, y_pred
 
-        feats, _ = self.get_features_labels(data.train_dataloader, pretrained_model, args)
+    def predict_k(self, args, data):
+
+        self.logger.info('Predict number of clusters start...')
+
+        feats = self.get_outputs(args, self.train_dataloader, self.pretrained_model, get_feats = True)
         feats = feats.cpu().numpy()
+
         km = KMeans(n_clusters = data.num_labels).fit(feats)
         y_pred = km.labels_
 
@@ -101,39 +192,21 @@ class ModelManager:
             if num < drop_out:
                 cnt += 1
 
-        num_labels = len(pred_label_list) - cnt
-        print('Predict K finished.. K={}, mean_cluster_size={}'.format(num_labels, drop_out))
-        return num_labels
-    
-    def get_optimizer(self, args):
-        param_optimizer = list(self.model.named_parameters())
-        no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
-        optimizer_grouped_parameters = [
-            {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
-            {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
-        ]
-        optimizer = BertAdam(optimizer_grouped_parameters,
-                         lr = args.lr,
-                         warmup = args.warmup_proportion,
-                         t_total = self.num_train_optimization_steps)   
-        return optimizer
+        K = len(pred_label_list) - cnt
+        
+        self.logger.info('Predict number of clusters finish...')
+        outputs = {'K': K, 'mean_cluster_size': drop_out}
+        for key in outputs.keys():
+            self.logger.info("  %s = %s", key, str(outputs[key]))
 
-    def evaluation(self, args, data, show=False):
+        return K
 
-        feats, labels = self.get_features_labels(data.test_dataloader, self.model, args)
-        feats = feats.cpu().numpy()
+    def load_pretrained_model(self, pretrained_model):
 
-        km = KMeans(n_clusters = self.num_labels).fit(feats)
-
-        y_pred = km.labels_
-        y_true = labels.cpu().numpy()
-
-        results = clustering_score(y_true, y_pred)
-        self.test_results =  results
-        if show:
-            print('results', results)
-
-        return (y_pred, y_true, feats)
+        pretrained_dict = pretrained_model.state_dict()
+        classifier_params = ['classifier.weight','classifier.bias']
+        pretrained_dict =  {k: v for k, v in pretrained_dict.items() if k not in classifier_params}
+        self.model.load_state_dict(pretrained_dict, strict=False)
 
     def alignment(self, km, args):
 
@@ -164,66 +237,13 @@ class ModelManager:
         
         return pseudo_labels
 
-    def update_pseudo_labels(self, pseudo_labels, args, data):
-        train_data = TensorDataset(data.input_ids, data.input_mask, data.segment_ids, pseudo_labels)
+    def update_pseudo_labels(self, pseudo_labels, args):
+        train_data = TensorDataset(self.train_input_ids, self.train_input_mask, self.train_segment_ids, pseudo_labels)
         train_sampler = SequentialSampler(train_data)
         train_dataloader = DataLoader(train_data, sampler = train_sampler, batch_size = args.train_batch_size)
         return train_dataloader
 
-    def train(self, args, data): 
 
-        best_model = None
-        wait = 0
-
-        for epoch in trange(int(args.num_train_epochs), desc="Epoch"):  
-
-            feats, _ = self.get_features_labels(data.train_dataloader, self.model, args)
-            feats = feats.cpu().numpy()
-            km = KMeans(n_clusters = self.num_labels).fit(feats)
-            
-            eval_score = metrics.silhouette_score(feats, km.labels_)
-            print('eval_score',eval_score)
-            # self.evaluation(args, data)
-
-            if eval_score > self.best_eval_score:
-                best_model = copy.deepcopy(self.model)
-                wait = 0
-                self.best_eval_score = eval_score
-            else:
-                wait += 1
-                if wait >= args.wait_patient:
-                    break 
-            
-            pseudo_labels = self.alignment(km, args)
-            train_dataloader = self.update_pseudo_labels(pseudo_labels, args, data)
-            
-            tr_loss = 0
-            nb_tr_examples, nb_tr_steps = 0, 0
-            self.model.train()
-
-            for batch in tqdm(train_dataloader, desc="Training(All)"):
-
-                batch = tuple(t.to(self.device) for t in batch)
-                input_ids, input_mask, segment_ids, label_ids = batch
-                loss_fct = nn.CrossEntropyLoss()
-                loss = self.model(input_ids, segment_ids, input_mask, label_ids, loss_fct = loss_fct, mode='train')
-                
-                loss.backward()
-
-                tr_loss += loss.item()
-                nb_tr_examples += input_ids.size(0)
-                nb_tr_steps += 1
-
-                self.optimizer.step()
-                self.optimizer.zero_grad()
-            
-            tr_loss = tr_loss / nb_tr_steps
-            print('train_loss',tr_loss)
-        
-        self.model = best_model
-
-        if args.save_discover:
-            save_model(self.model, self.model_dir)
             
 
 

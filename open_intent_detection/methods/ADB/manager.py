@@ -4,26 +4,30 @@ import numpy as np
 import os
 import copy
 import logging
-
 from torch import nn
-from datetime import datetime
 from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
 from tqdm import trange, tqdm
 
+from .boundary import BoundaryLoss
 from losses import loss_map
-from .loss import BoundaryLoss
-from losses.utils import euclidean_metric
 from utils.functions import save_model
 from utils.metrics import F_measure
 from utils.functions import restore_model
 
-
-logger = logging.getLogger('Detection')
+def euclidean_metric(a, b):
+    n = a.shape[0]
+    m = b.shape[0]
+    a = a.unsqueeze(1).expand(n, m, -1)
+    b = b.unsqueeze(0).expand(n, m, -1)
+    logits = -((a - b)**2).sum(dim=2)
+    return logits
 
 class ADBManager:
     
-    def __init__(self, args, data, model):
-        
+    def __init__(self, args, data, model, logger_name = 'Detection'):
+
+        self.logger = logging.getLogger(logger_name)
+
         self.model = model.model
         self.optimizer = model.optimizer
         self.device = model.device
@@ -51,7 +55,7 @@ class ADBManager:
 
     def pre_train(self, args, data):
         
-        logger.info('Pre-training Start...')
+        self.logger.info('Pre-training Start...')
         wait = 0
         best_model = None
         best_eval_score = 0
@@ -77,15 +81,23 @@ class ADBManager:
                 with torch.set_grad_enabled(True):
 
                     if args.backbone == 'bert_disaware':
-                        loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct = self.loss_fct, centroids = self.centroids)
-                    elif args.loss_fct == 'center_loss':
-                        alpha = 0.05
+                        
                         loss_fct = nn.CrossEntropyLoss()
-                        loss_softmax = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct =  loss_fct)
-                        features = self.model(input_ids, segment_ids, input_mask, label_ids, feature_ext = True)
-                        loss = center_loss(features, label_ids) * alpha  + loss_softmax
-                    else:    
-                        loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct = self.loss_fct)
+                        loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct =  loss_fct, centroids = self.centroids)
+
+                        if args.loss_fct == 'center_loss':
+                            alpha = 0.05
+                            features = self.model(input_ids, segment_ids, input_mask, label_ids, feature_ext = True)
+                            loss = center_loss(features, label_ids) * alpha  + loss
+                    else:
+
+                        loss_fct = nn.CrossEntropyLoss()
+                        loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct = loss_fct)
+
+                        if args.loss_fct == 'center_loss':
+                            alpha = 0.05
+                            features = self.model(input_ids, segment_ids, input_mask, label_ids, feature_ext = True)
+                            loss = center_loss(features, label_ids) * alpha  + loss
 
                     self.optimizer.zero_grad()
 
@@ -115,9 +127,9 @@ class ADBManager:
                 'eval_acc': eval_score,
                 'best_acc':best_eval_score,
             }
-            logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
+            self.logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
             for key in sorted(eval_results.keys()):
-                logger.info("  %s = %s", key, str(eval_results[key]))
+                self.logger.info("  %s = %s", key, str(eval_results[key]))
             
             if eval_score > best_eval_score:
                 
@@ -136,7 +148,7 @@ class ADBManager:
         if args.save_model:
             save_model(self.model, args.model_output_dir)
 
-        logger.info('Pre-training finished...')
+        self.logger.info('Pre-training finished...')
 
 
     def train(self, args, data):  
@@ -165,9 +177,9 @@ class ADBManager:
                     features = self.model(input_ids, segment_ids, input_mask, feature_ext=True)
                     loss, self.delta = criterion_boundary(features, self.centroids, label_ids)
 
-                    optimizer.zero_grad()
                     loss.backward()
                     optimizer.step()
+                    optimizer.zero_grad()
                     
                     tr_loss += loss.item()
                     
@@ -186,9 +198,9 @@ class ADBManager:
                 'eval_acc': eval_score,
                 'best_acc':best_eval_score,
             }
-            logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
+            self.logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
             for key in sorted(eval_results.keys()):
-                logger.info("  %s = %s", key, str(eval_results[key]))
+                self.logger.info("  %s = %s", key, str(eval_results[key]))
             
             if eval_score > best_eval_score:
 
@@ -267,7 +279,7 @@ class ADBManager:
 
         return preds
     
-    def test(self, args, data, show=False):
+    def test(self, args, data, show=True):
         
         y_true, y_pred = self.get_outputs(args, data, self.test_dataloader)
         
@@ -277,13 +289,14 @@ class ADBManager:
         acc = round(accuracy_score(y_true, y_pred) * 100, 2)
         test_results['Acc'] = acc
         
-        logger.info
-        logger.info("***** Test: Confusion Matrix *****")
-        logger.info("%s", str(cm))
-        logger.info("***** Test results *****")
-        
-        for key in sorted(test_results.keys()):
-            logger.info("  %s = %s", key, str(test_results[key]))
+        if show:
+            
+            self.logger.info("***** Test: Confusion Matrix *****")
+            self.logger.info("%s", str(cm))
+            self.logger.info("***** Test results *****")
+            
+            for key in sorted(test_results.keys()):
+                self.logger.info("  %s = %s", key, str(test_results[key]))
 
         test_results['y_true'] = y_true
         test_results['y_pred'] = y_pred

@@ -13,7 +13,11 @@ def parse_arguments():
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--type', type=str, default='open_intent_detection', help="Type for methods")
+    parser.add_argument('--type', type=str, default='open_intent_detection', help="Type style.")
+
+    parser.add_argument('--logger_name', type=str, default='Detection', help="Logger name for open intent detection.")
+
+    parser.add_argument('--log_dir', type=str, default='logs', help="Logger directory.")
 
     parser.add_argument("--dataset", default='banking', type=str, help="The name of the dataset to train selected")
 
@@ -35,14 +39,14 @@ def parse_arguments():
 
     parser.add_argument('--seed', type=int, default=0, help="random seed for initialization")
 
-    parser.add_argument("--gpu_id", type=str, default='1', help="Select the GPU id")
+    parser.add_argument("--gpu_id", type=str, default='0', help="Select the GPU id")
 
     parser.add_argument("--pipe_results_path", type=str, default='pipe_results', help="the path to save results of pipeline methods")
     
-    parser.add_argument("--data_dir", default = sys.path[0]+'/../data', type=str,
+    parser.add_argument("--data_dir", default = sys.path[0]+'/data', type=str,
                         help="The input data dir. Should contain the .csv files (or other data files) for the task.")
 
-    parser.add_argument("--output_dir", default= 'outputs', type=str, 
+    parser.add_argument("--output_dir", default= '/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs', type=str, 
                         help="The output directory where all train data will be written.") 
 
     parser.add_argument("--model_dir", default='models', type=str, 
@@ -59,17 +63,20 @@ def parse_arguments():
     return args
 
 
-def set_logger(save_path):
+def set_logger(args):
 
-    if not os.path.exists(save_path):
-        os.makedirs(save_path)
-    time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-    file_name = f"{time}.log"
+
+    if not os.path.exists(args.log_dir):
+        os.makedirs(args.log_dir)
     
-    logger = logging.getLogger('Detection')
+    time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+    file_name = f"{args.method}_{args.dataset}_{args.backbone}_{args.known_cls_ratio}_{args.labeled_ratio}_{time}.log"
+    print(file_name)
+    
+    logger = logging.getLogger(args.logger_name)
     logger.setLevel(logging.DEBUG)
 
-    fh = logging.FileHandler(os.path.join(save_path, file_name))
+    fh = logging.FileHandler(os.path.join(args.log_dir, file_name))
     fh_formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s')
     fh.setFormatter(fh_formatter)
     fh.setLevel(logging.DEBUG)
@@ -86,7 +93,7 @@ def set_logger(save_path):
 def run(args, data, model):
 
     method_manager = method_map[args.method]
-    method = method_manager(args, data, model)
+    method = method_manager(args, data, model, logger_name = args.logger_name)
     
     if args.train:
         
@@ -105,10 +112,12 @@ def run(args, data, model):
 
 if __name__ == '__main__':
     
+    sys.path.append('.')
+    
     args = parse_arguments()
-    logger = set_logger(os.path.join(args.result_dir, 'logs'))
+    logger = set_logger(args)
 
-    logger.info('Open Intent Classification Begin...')
+    logger.info('Open Intent Detection Begin...')
     logger.info('Parameters Initialization...')
     param = ParamManager(args)
     args = param.args
@@ -120,9 +129,9 @@ if __name__ == '__main__':
 
     logger.info('Data and Model Preparation...')
     data = DataManager(args)
-    model = ModelManager(args, data)
+    model = ModelManager(args, data, logger_name = args.logger_name)
 
     run(args, data, model)
-    logger.info('Open Intent Classification Finished...')
+    logger.info('Open Intent Detection Finished...')
     
 

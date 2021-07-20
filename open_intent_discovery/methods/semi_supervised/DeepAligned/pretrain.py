@@ -1,103 +1,132 @@
-from open_intent_discovery.utils import * 
-import open_intent_discovery.Backbone as Backbone
+import torch
+import torch.nn.functional as F
+import os
+import copy
+import logging
 
-class PretrainModelManager:
+from sklearn.metrics import accuracy_score
+from tqdm import trange, tqdm
+from ....losses import loss_map
+from ....utils.functions import save_model
+
+class ModelManager:
     
-    def __init__(self, args, data):
-        Model = Backbone.__dict__[args.backbone]
-        self.model = Model.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.n_known_cls)
-        if args.freeze_bert_parameters:
-            self.freeze_parameters(self.model)
-                    
-        os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id           
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model.to(self.device)
-        # n_gpu = torch.cuda.device_count()
-        # if n_gpu > 1:
-        #     self.model = torch.nn.DataParallel(self.model)
+    def __init__(self, args, data, model, logger_name = 'Discovery'):
         
-        self.num_train_optimization_steps = int(len(data.train_labeled_examples) / args.train_batch_size + 1) * args.num_train_epochs
+        self.logger = logging.getLogger(logger_name)
+
+        tmp_lr, tmp_num_labels, tmp_num_train_examples, tmp_num_train_epochs \
+            = args.lr, data.num_labels, data.dataloader.num_train_examples, args.num_train_epochs
+        self.num_labels = data.n_known_cls
+
+        args.lr, data.num_labels, data.dataloader.num_train_examples, args.num_train_epochs\
+             = args.lr_pre, self.num_labels, len(data.dataloader.train_labeled_examples), args.num_pretrain_epochs
         
-        self.optimizer = self.get_optimizer(args)
-        
-        self.best_eval_score = 0
+        self.model, self.optimizer = model.set_model(args, data)  
+        args.lr, data.num_labels, data.dataloader.num_train_examples, args.num_train_epochs = \
+            tmp_lr, tmp_num_labels, tmp_num_train_examples, tmp_num_train_epochs
 
-    def eval(self, args, data):
-        self.model.eval()
+        self.device = model.device
 
-        total_labels = torch.empty(0,dtype=torch.long).to(self.device)
-        total_logits = torch.empty((0, data.n_known_cls)).to(self.device)
-        
-        for batch in tqdm(data.eval_dataloader, desc="Iteration"):
-            batch = tuple(t.to(self.device) for t in batch)
-            input_ids, input_mask, segment_ids, label_ids = batch
-            with torch.set_grad_enabled(False):
-                _, logits = self.model(input_ids, segment_ids, input_mask, mode = 'eval')
-                total_labels = torch.cat((total_labels, label_ids))
-                total_logits = torch.cat((total_logits, logits))
-        
-        total_probs, total_preds = F.softmax(total_logits.detach(), dim=1).max(dim = 1)
-        y_pred = total_preds.cpu().numpy()
-        y_true = total_labels.cpu().numpy()
-        acc = round(accuracy_score(y_true, y_pred) * 100, 2)
+        self.data = data
+        self.train_dataloader = data.dataloader.train_labeled_loader
+        self.eval_dataloader = data.dataloader.eval_loader 
+        self.test_dataloader = data.dataloader.test_loader
 
-        return acc
+        self.loss_fct = loss_map[args.loss_fct]
 
+    def train(self, args, data):
 
-    def train(self, args, data):     
         wait = 0
         best_model = None
-        for epoch in trange(int(args.num_train_epochs), desc="Epoch"):
+        best_eval_score = 0
+
+        for epoch in trange(int(args.num_pretrain_epochs), desc="Epoch"):
+            
             self.model.train()
             tr_loss = 0
             nb_tr_examples, nb_tr_steps = 0, 0
             
-            for step, batch in enumerate(tqdm(data.train_labeled_dataloader, desc="Iteration")):
+            for step, batch in enumerate(tqdm(self.train_dataloader, desc="Iteration")):
                 batch = tuple(t.to(self.device) for t in batch)
                 input_ids, input_mask, segment_ids, label_ids = batch
+
                 with torch.set_grad_enabled(True):
-                    loss_fct = nn.CrossEntropyLoss()
-                    loss = self.model(input_ids, segment_ids, input_mask, label_ids, loss_fct = loss_fct, mode = "train")
-                    self.optimizer.zero_grad()
+
+                    loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct = self.loss_fct)
+                    
                     loss.backward()
                     self.optimizer.step()
+                    self.optimizer.zero_grad()
                     
                     tr_loss += loss.item()
                     nb_tr_examples += input_ids.size(0)
                     nb_tr_steps += 1
             
             loss = tr_loss / nb_tr_steps
-            print('train_loss',loss)
             
-            eval_score = self.eval(args, data)
-            print('eval_score',eval_score)
+            y_true, y_pred = self.get_outputs(args, self.eval_dataloader)
+            eval_score = round(accuracy_score(y_true, y_pred) * 100, 2)
+
+            eval_results = {
+                'train_loss': loss,
+                'eval_acc': eval_score,
+                'best_acc':best_eval_score,
+            }
+            self.logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
+            for key in sorted(eval_results.keys()):
+                self.logger.info("  %s = %s", key, str(eval_results[key]))
             
-            if eval_score > self.best_eval_score:
+            if eval_score > best_eval_score:
+                
                 best_model = copy.deepcopy(self.model)
                 wait = 0
-                self.best_eval_score = eval_score
-            else:
+                best_eval_score = eval_score
+
+            elif eval_score > 0:
+
                 wait += 1
                 if wait >= args.wait_patient:
                     break
                 
         self.model = best_model
 
-    def get_optimizer(self, args):
-        param_optimizer = list(self.model.named_parameters())
-        no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
-        optimizer_grouped_parameters = [
-            {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
-            {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
-        ]
-        optimizer = BertAdam(optimizer_grouped_parameters,
-                         lr = args.lr_pre,
-                         warmup = args.warmup_proportion,
-                         t_total = self.num_train_optimization_steps)   
-        return optimizer
+        if args.save_model:
+            pretrained_model_dir = os.path.join(args.method_output_dir, 'pretrain')
+            if not os.path.exists(pretrained_model_dir):
+                os.makedirs(pretrained_model_dir)
+            save_model(self.model, pretrained_model_dir)
 
-    def freeze_parameters(self, model):
-        for name, param in model.bert.named_parameters():  
-            param.requires_grad = False
-            if "encoder.layer.11" in name or "pooler" in name:
-                param.requires_grad = True
+    def get_outputs(self, args, dataloader, get_feats = False):
+        
+        self.model.eval()
+
+        total_labels = torch.empty(0,dtype=torch.long).to(self.device)
+        total_preds = torch.empty(0,dtype=torch.long).to(self.device)
+        
+        total_features = torch.empty((0,args.feat_dim)).to(self.device)
+        total_logits = torch.empty((0, self.num_labels)).to(self.device)
+        
+        for batch in tqdm(dataloader, desc="Iteration"):
+
+            batch = tuple(t.to(self.device) for t in batch)
+            input_ids, input_mask, segment_ids, label_ids = batch
+            with torch.set_grad_enabled(False):
+                pooled_output, logits = self.model(input_ids, segment_ids, input_mask)
+                
+                total_labels = torch.cat((total_labels,label_ids))
+                total_features = torch.cat((total_features, pooled_output))
+                total_logits = torch.cat((total_logits, logits))
+
+        if get_feats:  
+            feats = total_features.cpu().numpy()
+            return feats 
+
+        else:
+            total_probs = F.softmax(total_logits.detach(), dim=1)
+            total_maxprobs, total_preds = total_probs.max(dim = 1)
+
+            y_pred = total_preds.cpu().numpy()
+            y_true = total_labels.cpu().numpy()
+
+            return y_true, y_pred

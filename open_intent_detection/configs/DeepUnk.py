@@ -1,10 +1,10 @@
 class Param():
     
-    def __init__(self):
+    def __init__(self, args):
         
-        self.hyper_param = self.get_hyper_parameters()
+        self.hyper_param = self.get_hyper_parameters(args)
 
-    def get_hyper_parameters(self):
+    def get_hyper_parameters(self, args):
         """
         Args:
             bert_model (directory): The path for the pre-trained bert model.
@@ -27,8 +27,8 @@ class Param():
             'freeze_bert_parameters': True,
             'feat_dim': 768,
             'warmup_proportion': 0.1,
-            'lr': 2e-5, 
-            'loss_fct': 'LMCL',
+            'lr': 5e-5, 
+            'loss_fct': 'LargeMarginCosineLoss',
             'n_neighbors': 20,
             'contamination': 0.05,
             'train_batch_size': 128,

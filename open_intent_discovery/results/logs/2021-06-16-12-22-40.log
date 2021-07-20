@@ -1,0 +1,69 @@
+2021-06-16 12:22:40,720 - Discovery - Open Intent Discovery Begin...
+2021-06-16 12:22:40,720 - Discovery - Parameters Initialization...
+2021-06-16 12:22:40,720 - Discovery - ============================== Params ==============================
+2021-06-16 12:22:40,720 - Discovery - type:	open_intent_detection
+2021-06-16 12:22:40,720 - Discovery - dataset:	banking
+2021-06-16 12:22:40,720 - Discovery - known_cls_ratio:	0.75
+2021-06-16 12:22:40,720 - Discovery - labeled_ratio:	0.1
+2021-06-16 12:22:40,720 - Discovery - cluster_num_factor:	1
+2021-06-16 12:22:40,720 - Discovery - method:	DeepAligned
+2021-06-16 12:22:40,720 - Discovery - train:	True
+2021-06-16 12:22:40,720 - Discovery - save_model:	False
+2021-06-16 12:22:40,720 - Discovery - backbone:	bert
+2021-06-16 12:22:40,720 - Discovery - num_train_epochs:	100
+2021-06-16 12:22:40,720 - Discovery - setting:	semi_supervised
+2021-06-16 12:22:40,720 - Discovery - config_file_name:	DeepAligned
+2021-06-16 12:22:40,720 - Discovery - seed:	0
+2021-06-16 12:22:40,720 - Discovery - gpu_id:	1
+2021-06-16 12:22:40,720 - Discovery - pipe_results_path:	pipe_results
+2021-06-16 12:22:40,721 - Discovery - data_dir:	/home/zhanghanlei/git/TEXTOIR/open_intent_discovery/../data
+2021-06-16 12:22:40,721 - Discovery - output_dir:	outputs
+2021-06-16 12:22:40,721 - Discovery - model_dir:	models
+2021-06-16 12:22:40,721 - Discovery - result_dir:	results
+2021-06-16 12:22:40,721 - Discovery - results_file_name:	results.csv
+2021-06-16 12:22:40,721 - Discovery - save_results:	False
+2021-06-16 12:22:40,721 - Discovery - method_output_dir:	outputs/open_intent_detection/DeepAligned_banking_0.75_0.1_bert
+2021-06-16 12:22:40,721 - Discovery - model_output_dir:	outputs/open_intent_detection/DeepAligned_banking_0.75_0.1_bert/models
+2021-06-16 12:22:40,721 - Discovery - bert_model:	/home/sharing/disk1/pretrained_embedding/bert/uncased_L-12_H-768_A-12/
+2021-06-16 12:22:40,721 - Discovery - max_seq_length:	None
+2021-06-16 12:22:40,721 - Discovery - freeze_bert_parameters:	True
+2021-06-16 12:22:40,721 - Discovery - feat_dim:	768
+2021-06-16 12:22:40,721 - Discovery - warmup_proportion:	0.1
+2021-06-16 12:22:40,721 - Discovery - lr_pre:	5e-05
+2021-06-16 12:22:40,721 - Discovery - lr:	5e-05
+2021-06-16 12:22:40,721 - Discovery - loss_fct:	CrossEntropyLoss
+2021-06-16 12:22:40,721 - Discovery - train_batch_size:	128
+2021-06-16 12:22:40,721 - Discovery - eval_batch_size:	128
+2021-06-16 12:22:40,721 - Discovery - test_batch_size:	128
+2021-06-16 12:22:40,721 - Discovery - wait_patient:	20
+2021-06-16 12:22:40,721 - Discovery - ============================== End Params ==============================
+2021-06-16 12:22:40,721 - Discovery - Data and Model Preparation...
+2021-06-16 12:22:48,139 - Discovery - Pre-raining start...
+2021-06-16 12:22:51,865 - Discovery - ***** Epoch: 1: Eval results *****
+2021-06-16 12:22:51,866 - Discovery -   best_acc = 0
+2021-06-16 12:22:51,866 - Discovery -   eval_acc = 0.022757697456492636
+2021-06-16 12:22:51,866 - Discovery -   train_loss = 4.061723788579305
+2021-06-16 12:22:52,875 - Discovery - ***** Epoch: 2: Eval results *****
+2021-06-16 12:22:52,875 - Discovery -   best_acc = 0.022757697456492636
+2021-06-16 12:22:52,875 - Discovery -   eval_acc = 0.022757697456492636
+2021-06-16 12:22:52,875 - Discovery -   train_loss = 4.064299742380778
+2021-06-16 12:22:53,876 - Discovery - ***** Epoch: 3: Eval results *****
+2021-06-16 12:22:53,876 - Discovery -   best_acc = 0.022757697456492636
+2021-06-16 12:22:53,876 - Discovery -   eval_acc = 0.022757697456492636
+2021-06-16 12:22:53,876 - Discovery -   train_loss = 4.060075521469116
+2021-06-16 12:22:54,889 - Discovery - ***** Epoch: 4: Eval results *****
+2021-06-16 12:22:54,889 - Discovery -   best_acc = 0.022757697456492636
+2021-06-16 12:22:54,889 - Discovery -   eval_acc = 0.020080321285140562
+2021-06-16 12:22:54,889 - Discovery -   train_loss = 4.05983567237854
+2021-06-16 12:22:55,890 - Discovery - ***** Epoch: 5: Eval results *****
+2021-06-16 12:22:55,891 - Discovery -   best_acc = 0.022757697456492636
+2021-06-16 12:22:55,891 - Discovery -   eval_acc = 0.018741633199464525
+2021-06-16 12:22:55,891 - Discovery -   train_loss = 4.052047252655029
+2021-06-16 12:22:56,895 - Discovery - ***** Epoch: 6: Eval results *****
+2021-06-16 12:22:56,895 - Discovery -   best_acc = 0.022757697456492636
+2021-06-16 12:22:56,895 - Discovery -   eval_acc = 0.018741633199464525
+2021-06-16 12:22:56,895 - Discovery -   train_loss = 4.048173189163208
+2021-06-16 12:22:57,908 - Discovery - ***** Epoch: 7: Eval results *****
+2021-06-16 12:22:57,908 - Discovery -   best_acc = 0.022757697456492636
+2021-06-16 12:22:57,908 - Discovery -   eval_acc = 0.020080321285140562
+2021-06-16 12:22:57,908 - Discovery -   train_loss = 4.04646881421407
