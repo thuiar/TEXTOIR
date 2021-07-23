@@ -22,8 +22,7 @@ do
                 --gpu_id '1' \
                 --train \
                 --save_results \
-                --results_file_name 'results_DOC.csv' \
-                
+                --results_file_name 'results_DOC.csv' 
             done
         done
     done

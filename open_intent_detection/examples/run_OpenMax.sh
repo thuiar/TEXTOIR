@@ -19,7 +19,7 @@ do
                 --gpu_id '0' \
                 --train \
                 --save_results \
-                --results_file_name 'results_OpenMax_final_4.csv'
+                --results_file_name 'results_OpenMax.csv'
             done
         done
     done

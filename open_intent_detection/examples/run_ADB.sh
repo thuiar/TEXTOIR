@@ -1,6 +1,6 @@
 #!/usr/bin bash
 
-for dataset in 'banking' 'oos' 'stackoverflow' 'snips' 
+for dataset in 'banking' 'oos' 'stackoverflow' 
 do
     for known_cls_ratio in 0.25 0.5 0.75
     do
@@ -20,8 +20,7 @@ do
                 --gpu_id '0' \
                 --train \
                 --save_results \
-                --results_file_name 'results_ADB.csv' \
-                --save_model
+                --results_file_name 'results_ADB.csv' 
             done
         done
     done

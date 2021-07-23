@@ -22,8 +22,7 @@ do
                 --gpu_id '1' \
                 --train \
                 --save_results \
-                --results_file_name 'results_DeepUnk.csv' \
-                --save_model 
+                --results_file_name 'results_DeepUnk.csv' 
             done
         done
     done

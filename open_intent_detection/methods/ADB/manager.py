@@ -195,8 +195,8 @@ class ADBManager:
 
             eval_results = {
                 'train_loss': loss,
-                'eval_acc': eval_score,
-                'best_acc':best_eval_score,
+                'eval_score': eval_score,
+                'best_score':best_eval_score,
             }
             self.logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
             for key in sorted(eval_results.keys()):
