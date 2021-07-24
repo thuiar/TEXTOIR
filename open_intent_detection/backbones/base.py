@@ -27,7 +27,7 @@ class ModelManager:
 
         if args.backbone[:4] == 'bert':
 
-            model = backbone.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.num_labels)    
+            model = backbone.from_pretrained(args.bert_model, cache_dir = "", args = args, data = data)    
             model.to(self.device)
 
             if args.freeze_bert_parameters:

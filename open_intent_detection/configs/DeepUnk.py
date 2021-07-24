@@ -29,6 +29,7 @@ class Param():
             'warmup_proportion': 0.1,
             'lr': 5e-5, 
             'loss_fct': 'LargeMarginCosineLoss',
+            'activation': 'relu',
             'n_neighbors': 20,
             'contamination': 0.05,
             'train_batch_size': 128,

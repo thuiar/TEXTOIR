@@ -28,6 +28,7 @@ class Param():
             'warmup_proportion': 0.1,
             'lr': 2e-5, 
             'loss_fct': 'CrossEntropyLoss',
+            'activation': 'relu',
             'threshold': 0.5,
             'train_batch_size': 128,
             'eval_batch_size': 64,

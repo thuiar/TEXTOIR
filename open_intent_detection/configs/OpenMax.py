@@ -31,6 +31,7 @@ class Param():
             'warmup_proportion': 0.1,
             'lr': 2e-5, 
             'loss_fct': 'CrossEntropyLoss',
+            'activation': 'tanh',
             'weibull_tail_size': 20,
             'alpharank': 10,
             'distance_type': 'cosine',
@@ -38,7 +39,7 @@ class Param():
             'train_batch_size': 128,
             'eval_batch_size': 64,
             'test_batch_size': 64,
-            'wait_patient': 15
+            'wait_patient': 10
 
         }
 

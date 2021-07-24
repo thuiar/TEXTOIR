@@ -5,18 +5,19 @@ from pytorch_pretrained_bert.modeling import BertPreTrainedModel, BertModel
 from torch.nn.parameter import Parameter
 from .utils import L2_normalization
 
+activation_map = {'relu': nn.ReLU(), 'tanh': nn.Tanh()}
 
 class BERT(BertPreTrainedModel):
 
-    def __init__(self, config, num_labels):
+    def __init__(self, config, args, data):
 
         super(BERT, self).__init__(config)
-        self.num_labels = num_labels
+        self.num_labels = data.num_labels
         self.bert = BertModel(config)
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
-        self.activation = nn.Tanh()
+        self.activation = activation_map[args.activation]
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
-        self.classifier = nn.Linear(config.hidden_size, num_labels)
+        self.classifier = nn.Linear(config.hidden_size, data.num_labels)
         self.apply(self.init_bert_weights)
 
     def forward(self, input_ids=None, token_type_ids=None, attention_mask=None, labels=None,
@@ -42,17 +43,17 @@ class BERT(BertPreTrainedModel):
 
 class BERT_DeepUnk(BertPreTrainedModel):
 
-    def __init__(self, config, num_labels):
+    def __init__(self, config, args, data):
 
         super(BERT_DeepUnk, self).__init__(config)
-        self.num_labels = num_labels
+        self.num_labels = data.num_labels
         self.bert = BertModel(config)
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
         from torch.nn.utils import weight_norm
         self.norm = L2_normalization()
         self.classifier = weight_norm(
-            nn.Linear(config.hidden_size, num_labels), name='weight')
+            nn.Linear(config.hidden_size, data.num_labels), name='weight')
         self.apply(self.init_bert_weights)
 
     def forward(self, input_ids=None, token_type_ids=None, attention_mask=None, labels=None,

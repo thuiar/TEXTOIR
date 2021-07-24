@@ -43,7 +43,7 @@ def parse_arguments():
 
     parser.add_argument("--pipe_results_path", type=str, default='pipe_results', help="the path to save results of pipeline methods")
     
-    parser.add_argument("--data_dir", default = sys.path[0]+'/data', type=str,
+    parser.add_argument("--data_dir", default = sys.path[0]+'/../data', type=str,
                         help="The input data dir. Should contain the .csv files (or other data files) for the task.")
 
     parser.add_argument("--output_dir", default= '/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs', type=str, 
@@ -90,7 +90,7 @@ def set_logger(args):
 
     return logger
 
-def run(args, data, model):
+def run(args, data, model, logger):
 
     method_manager = method_map[args.method]
     method = method_manager(args, data, model, logger_name = args.logger_name)
@@ -113,7 +113,6 @@ def run(args, data, model):
 if __name__ == '__main__':
     
     sys.path.append('.')
-    
     args = parse_arguments()
     logger = set_logger(args)
 
@@ -131,7 +130,7 @@ if __name__ == '__main__':
     data = DataManager(args)
     model = ModelManager(args, data, logger_name = args.logger_name)
 
-    run(args, data, model)
+    run(args, data, model, logger)
     logger.info('Open Intent Detection Finished...')
     
 

@@ -29,6 +29,7 @@ class Param():
             'lr_boundary': 0.05,
             'lr': 2e-5, 
             'loss_fct': 'CrossEntropyLoss',
+            'activation': 'relu',
             'train_batch_size': 128,
             'eval_batch_size': 128,
             'test_batch_size': 128,
