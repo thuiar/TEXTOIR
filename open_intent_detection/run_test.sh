@@ -1,0 +1,12 @@
+python run.py \
+--dataset 'banking' \
+--method 'ADB' \
+--known_cls_ratio 0.75 \
+--labeled_ratio 1.0 \
+--seed 0 \
+--num_train_epochs 100 \
+--backbone bert \
+--config_file_name ADB_ArcFaceLoss \
+--gpu_id '0' \
+--train \
+--save_results

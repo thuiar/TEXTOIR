@@ -3,7 +3,7 @@ import math
 import torch.nn.functional as F
 from torch import nn
 
-class LargeMarginCosineLoss(nn.Module):
+class CosineFaceLoss(nn.Module):
 
     """
     cos_theta and target need to be normalized first
@@ -11,7 +11,7 @@ class LargeMarginCosineLoss(nn.Module):
 
     def __init__(self, m=0.35, s=30):
         
-        super(LargeMarginCosineLoss, self).__init__()
+        super(CosineFaceLoss, self).__init__()
         self.m = m
         self.s = s
 
