@@ -1,3 +1,5 @@
 ACC,ARI,NMI,dataset,method,backbone,known_cls_ratio,labeled_ratio,cluster_num_factor,seed
-8.21,0.64,23.45,banking,SAE-KM,sae,0.75,0.1,1.0,0
 36.04,23.7,60.41,banking,SAE-KM,sae,0.75,0.1,1.0,0
+35.71,22.32,58.23,banking,SAE-KM,sae,0.75,0.1,1.0,0
+37.37,23.53,59.76,banking,SAE-KM,sae,0.75,0.1,1.0,1
+38.96,25.14,61.07,banking,SAE-KM,sae,0.75,0.1,1.0,2

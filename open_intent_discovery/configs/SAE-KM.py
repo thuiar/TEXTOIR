@@ -14,7 +14,7 @@ class Param():
             'num_train_epochs': 5000,
             'feat_dim': 2000,
             'batch_size': 4096,
-
+            'model_name': 'SAE.h5'
         }
 
         return hyper_parameters

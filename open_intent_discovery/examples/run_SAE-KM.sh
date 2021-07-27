@@ -12,8 +12,8 @@ do
         --backbone 'sae' \
         --config_file_name 'SAE-KM' \
         --gpu_id '0' \
-        --train \
         --save_results \
+        --train \
         --results_file_name 'results_SAE-KM.csv'
     done
 done

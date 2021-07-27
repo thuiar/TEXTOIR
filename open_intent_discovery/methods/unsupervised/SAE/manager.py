@@ -1,4 +1,5 @@
 import logging
+import os
 from utils.metrics import clustering_score
 from sklearn.metrics import confusion_matrix
 
@@ -22,7 +23,8 @@ class SAEManager:
                     validation_data=(self.tfidf_test, self.tfidf_test), verbose=1)
 
         if args.save_model:
-            self.sae.save_weights(args.model_output_dir)
+            save_path = os.path.join(args.model_output_dir, args.model_name)
+            self.sae.save_weights(save_path)
 
     
     def test(self, args, data, show=False):
@@ -30,7 +32,9 @@ class SAEManager:
         from backbones.sae import get_sae
         
         if not args.train:
+            save_path = os.path.join(args.model_output_dir, args.model_name)
             self.sae.load_weights(args.model_output_dir)
+
         sae_emb_train, sae_emb_test = get_sae(args, self.sae, self.tfidf_train, self.tfidf_test)
         
         self.logger.info('K-Means start...')

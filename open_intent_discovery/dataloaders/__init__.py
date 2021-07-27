@@ -13,7 +13,7 @@ backbone_loader_map = {
                       }
 
 benchmark_labels = {
-    'oos': 
+    'clinc': 
             ['accept_reservations', 'account_blocked', 'alarm', 'application_status', 'apr', 
              'are_you_a_bot', 'balance', 'bill_balance', 'bill_due', 'book_flight', 
              'book_hotel', 'calculator', 'calendar', 'calendar_update', 'calories', 

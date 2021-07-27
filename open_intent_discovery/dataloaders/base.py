@@ -3,6 +3,7 @@ import os
 import random
 import torch
 import logging
+import tensorflow as tf
 
 from .__init__ import max_seq_lengths, backbone_loader_map, benchmark_labels
 
@@ -10,6 +11,7 @@ def set_seed(seed):
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
+    tf.random.set_seed(seed)
 
 class DataManager:
     

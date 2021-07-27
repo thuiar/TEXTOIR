@@ -7,7 +7,7 @@ from easydict import EasyDict
 class ParamManager:
     
     def __init__(self, args):
-        
+
         output_path_param = self.add_output_path_param(args)
 
         method_param = self.get_method_param(args)
@@ -55,5 +55,5 @@ class ParamManager:
             'method_output_dir': method_output_dir,
             'model_output_dir': model_output_dir,
         }
-
+        
         return output_path_param

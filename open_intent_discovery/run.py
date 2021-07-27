@@ -115,7 +115,7 @@ if __name__ == '__main__':
     sys.path.append('.')
     args = parse_arguments()
     logger = set_logger(args)
-
+    
     logger.info('Open Intent Discovery Begin...')
     logger.info('Parameters Initialization...')
     param = ParamManager(args)
