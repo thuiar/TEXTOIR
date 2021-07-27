@@ -1,5 +1,6 @@
 import torch
 import math
+import torch.nn.functional as F
 from torch import nn
 from pytorch_pretrained_bert.modeling import BertPreTrainedModel, BertModel
 from torch.nn.parameter import Parameter
@@ -41,11 +42,11 @@ class BERT(BertPreTrainedModel):
                 return pooled_output, logits
 
 
-class BERT_DeepUnk(BertPreTrainedModel):
+class BERT_Norm(BertPreTrainedModel):
 
     def __init__(self, config, args, data):
 
-        super(BERT_DeepUnk, self).__init__(config)
+        super(BERT_Norm, self).__init__(config)
         self.num_labels = data.num_labels
         self.bert = BertModel(config)
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)

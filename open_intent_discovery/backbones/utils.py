@@ -1,4 +1,5 @@
 import torch
+import tensorflow as tf
 from torch import nn
 
 def l2_norm(input,axis=1):
@@ -17,4 +18,12 @@ def freeze_bert_parameters(model):
         if "encoder.layer.11" in name or "pooler" in name:
             param.requires_grad = True
     return model
+
+def set_allow_growth(device):
+    config = tf.compat.v1.ConfigProto()
+    config.gpu_options.allow_growth = True  # dynamically grow the memory used on the GPU
+    config.gpu_options.visible_device_list = device
+    sess = tf.compat.v1.Session(config=config)
+    tf.compat.v1.keras.backend.set_session(sess) # set this TensorFlow session as the default session for Keras
+
 

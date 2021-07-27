@@ -71,7 +71,6 @@ def set_logger(args):
     
     time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
     file_name = f"{args.method}_{args.dataset}_{args.backbone}_{args.known_cls_ratio}_{args.labeled_ratio}_{time}.log"
-    print(file_name)
     
     logger = logging.getLogger(args.logger_name)
     logger.setLevel(logging.DEBUG)

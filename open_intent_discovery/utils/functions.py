@@ -42,8 +42,8 @@ def save_results(args, test_results):
     if not os.path.exists(args.result_dir):
         os.makedirs(args.result_dir)
 
-    var = [args.dataset, args.method, args.backbone, args.known_cls_ratio, args.labeled_ratio, args.loss_fct, args.seed]
-    names = ['dataset', 'method', 'backbone', 'known_cls_ratio', 'labeled_ratio', 'loss', 'seed']
+    var = [args.dataset, args.method, args.backbone, args.known_cls_ratio, args.labeled_ratio, args.cluster_num_factor, args.seed]
+    names = ['dataset', 'method', 'backbone', 'known_cls_ratio', 'labeled_ratio', 'cluster_num_factor', 'seed']
     vars_dict = {k:v for k,v in zip(names, var) }
     results = dict(test_results,**vars_dict)
     keys = list(results.keys())
@@ -51,7 +51,7 @@ def save_results(args, test_results):
     
     results_path = os.path.join(args.result_dir, args.results_file_name)
     
-    if not os.path.exists(results_path):
+    if not os.path.exists(results_path) or os.path.getsize(results_path) == 0:
         ori = []
         ori.append(values)
         df1 = pd.DataFrame(ori,columns = keys)

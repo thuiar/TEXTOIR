@@ -13,7 +13,11 @@ def parse_arguments():
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--logger_name', type=str, default='detection', help="Logger name for open intent discovery.")
+    parser.add_argument('--type', type=str, default='open_intent_discovery', help="Type for methods")
+
+    parser.add_argument('--logger_name', type=str, default='Discovery', help="Logger name for open intent discovery.")
+
+    parser.add_argument('--log_dir', type=str, default='logs', help="Logger directory.")
 
     parser.add_argument("--dataset", default='banking', type=str, help="The name of the dataset to train selected")
 
@@ -23,7 +27,7 @@ def parse_arguments():
     
     parser.add_argument("--cluster_num_factor", default=1.0, type=float, help="The factor (magnification) of the number of clusters K.")
 
-    parser.add_argument("--method", type=str, default='ADB', help="which method to use")
+    parser.add_argument("--method", type=str, default='DeepAligned', help="which method to use")
 
     parser.add_argument("--train", action="store_true", help="Whether train the model")
 
@@ -31,22 +35,20 @@ def parse_arguments():
 
     parser.add_argument("--backbone", type=str, default='bert', help="which backbone to use")
 
-    parser.add_argument("--num_train_epochs", type=int, default=100, help = "The number of training epochs.")
-
     parser.add_argument('--setting', type=str, default='semi_supervised', help="Type for clustering methods.")
 
     parser.add_argument("--config_file_name", type=str, default='DeepAligned.py', help = "The name of the config file.")
 
     parser.add_argument('--seed', type=int, default=0, help="random seed for initialization")
 
-    parser.add_argument("--gpu_id", type=str, default='1', help="Select the GPU id")
+    parser.add_argument("--gpu_id", type=str, default='0', help="Select the GPU id")
 
     parser.add_argument("--pipe_results_path", type=str, default='pipe_results', help="the path to save results of pipeline methods")
     
-    parser.add_argument("--data_dir", default = sys.path[0]+'/data', type=str,
+    parser.add_argument("--data_dir", default = sys.path[0]+'/../data', type=str,
                         help="The input data dir. Should contain the .csv files (or other data files) for the task.")
 
-    parser.add_argument("--output_dir", default= '/home/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs', type=str, 
+    parser.add_argument("--output_dir", default= '/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs', type=str, 
                         help="The output directory where all train data will be written.") 
 
     parser.add_argument("--model_dir", default='models', type=str, 
@@ -56,7 +58,7 @@ def parse_arguments():
 
     parser.add_argument("--results_file_name", type=str, default = 'results.csv', help="The file name of all the results.")
 
-    parser.add_argument("--save_results", action="store_true", help="save final results for open intent discovery.")
+    parser.add_argument("--save_results", action="store_true", help="save final results for open intent detection")
 
     args = parser.parse_args()
 
@@ -64,12 +66,12 @@ def parse_arguments():
 
 
 def set_logger(args):
-    
 
     if not os.path.exists(args.log_dir):
         os.makedirs(args.log_dir)
+
     time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-    file_name = f"{time}.log"
+    file_name = f"{args.method}_{args.dataset}_{args.backbone}_{args.known_cls_ratio}_{args.labeled_ratio}_{time}.log"
     
     logger = logging.getLogger(args.logger_name)
     logger.setLevel(logging.DEBUG)
@@ -88,10 +90,10 @@ def set_logger(args):
 
     return logger
 
-def run(args, data, model):
+def run(args, data, model, logger):
 
     method_manager = method_map[args.method]
-    method = method_manager(args, data, model)
+    method = method_manager(args, data, model, logger_name = args.logger_name)
     
     if args.train:
         
@@ -109,11 +111,10 @@ def run(args, data, model):
 
 
 if __name__ == '__main__':
-
-    sys.path.append(".")#corresponding to working directory
     
+    sys.path.append('.')
     args = parse_arguments()
-    logger = set_logger(os.path.join(args.result_dir, 'logs'))
+    logger = set_logger(args)
 
     logger.info('Open Intent Discovery Begin...')
     logger.info('Parameters Initialization...')
@@ -129,7 +130,7 @@ if __name__ == '__main__':
     data = DataManager(args)
     model = ModelManager(args, data)
 
-    run(args, data, model)
+    run(args, data, model, logger)
     logger.info('Open Intent Discovery Finished...')
     
 

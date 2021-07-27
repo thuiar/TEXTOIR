@@ -28,7 +28,7 @@ class Param():
             'feat_dim': 768,
             'warmup_proportion': 0.1,
             'lr': 5e-5, 
-            'loss_fct': 'LargeMarginCosineLoss',
+            'loss_fct': 'CosineFaceLoss',
             'activation': 'relu',
             'n_neighbors': 20,
             'contamination': 0.05,

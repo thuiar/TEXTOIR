@@ -8,26 +8,19 @@ import logging
 from pytorch_pretrained_bert.tokenization import BertTokenizer
 from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler, TensorDataset)
 
-logger = logging.getLogger('Discovery')
-
 class BERT_Loader:
     
-    def __init__(self, args, base_attrs):
+    def __init__(self, args, base_attrs, logger_name = 'Discovery'):
 
-        self.get_examples(args, base_attrs)
-        self.get_dataloader(args, base_attrs)
-
-    def get_examples(self, args, base_attrs):
+        self.logger = logging.getLogger('logger_name')
 
         self.train_examples, self.train_labeled_examples, self.train_unlabeled_examples  = get_examples(args, base_attrs, 'train')
-        logger.info("Number of labeled samples = %s", str(len(self.train_labeled_examples)))
-        logger.info("Number of unlabeled samples = %s", str(len(self.train_unlabeled_examples)))
+        self.logger.info("Number of labeled samples = %s", str(len(self.train_labeled_examples)))
+        self.logger.info("Number of unlabeled samples = %s", str(len(self.train_unlabeled_examples)))
 
         self.eval_examples = get_examples(args, base_attrs, 'eval')
         self.test_examples = get_examples(args, base_attrs, 'test')
-
-    def get_dataloader(self, args, base_attrs):
-
+        
         self.train_labeled_loader = get_loader(self.train_labeled_examples, args, base_attrs['known_label_list'], 'train_labeled')
 
         self.train_unlabeled_loader = get_loader(self.train_unlabeled_examples, args, base_attrs['all_label_list'], 'train_unlabeled')

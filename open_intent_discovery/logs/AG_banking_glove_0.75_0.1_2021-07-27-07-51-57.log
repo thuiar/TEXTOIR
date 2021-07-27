@@ -1,0 +1,54 @@
+2021-07-27 07:51:57,807 - Discovery - Open Intent Discovery Begin...
+2021-07-27 07:51:57,807 - Discovery - Parameters Initialization...
+2021-07-27 07:51:57,808 - Discovery - ============================== Params ==============================
+2021-07-27 07:51:57,808 - Discovery - type:	open_intent_discovery
+2021-07-27 07:51:57,808 - Discovery - logger_name:	Discovery
+2021-07-27 07:51:57,808 - Discovery - log_dir:	logs
+2021-07-27 07:51:57,808 - Discovery - dataset:	banking
+2021-07-27 07:51:57,808 - Discovery - known_cls_ratio:	0.75
+2021-07-27 07:51:57,808 - Discovery - labeled_ratio:	0.1
+2021-07-27 07:51:57,808 - Discovery - cluster_num_factor:	1.0
+2021-07-27 07:51:57,808 - Discovery - method:	AG
+2021-07-27 07:51:57,808 - Discovery - train:	True
+2021-07-27 07:51:57,808 - Discovery - save_model:	False
+2021-07-27 07:51:57,808 - Discovery - backbone:	glove
+2021-07-27 07:51:57,808 - Discovery - num_train_epochs:	100
+2021-07-27 07:51:57,808 - Discovery - setting:	unsupervised
+2021-07-27 07:51:57,808 - Discovery - config_file_name:	AG
+2021-07-27 07:51:57,808 - Discovery - seed:	1
+2021-07-27 07:51:57,808 - Discovery - gpu_id:	0
+2021-07-27 07:51:57,808 - Discovery - pipe_results_path:	pipe_results
+2021-07-27 07:51:57,808 - Discovery - data_dir:	/home/zhanghanlei/git/TEXTOIR/open_intent_discovery/../data
+2021-07-27 07:51:57,808 - Discovery - output_dir:	/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs
+2021-07-27 07:51:57,808 - Discovery - model_dir:	models
+2021-07-27 07:51:57,808 - Discovery - result_dir:	results
+2021-07-27 07:51:57,808 - Discovery - results_file_name:	results_KM.csv
+2021-07-27 07:51:57,808 - Discovery - save_results:	True
+2021-07-27 07:51:57,808 - Discovery - method_output_dir:	/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs/open_intent_discovery/AG_banking_0.75_0.1_glove_1
+2021-07-27 07:51:57,808 - Discovery - model_output_dir:	/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs/open_intent_discovery/AG_banking_0.75_0.1_glove_1/models
+2021-07-27 07:51:57,808 - Discovery - glove_model:	/home/sharing/disk1/pretrained_embedding/glove
+2021-07-27 07:51:57,808 - Discovery - max_num_words:	10000
+2021-07-27 07:51:57,808 - Discovery - ============================== End Params ==============================
+2021-07-27 07:51:57,808 - Discovery - Data and Model Preparation...
+2021-07-27 07:51:59,283 - Discovery - Building GloVe (D=300)...
+2021-07-27 07:52:17,809 - Discovery - Building finished!
+2021-07-27 07:52:17,925 - Discovery - Training Begin...
+2021-07-27 07:52:17,925 - Discovery - Agglomerative Clustering does not need training...
+2021-07-27 07:52:17,925 - Discovery - Training Finished...
+2021-07-27 07:52:17,925 - Discovery - Testing begin...
+2021-07-27 07:52:17,925 - Discovery - Agglomerative Clustering start...
+2021-07-27 07:52:29,311 - Discovery - ***** Test: Confusion Matrix *****
+2021-07-27 07:52:29,312 - Discovery - [[0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 0 0]
+ [0 0 0 ... 0 1 0]
+ ...
+ [0 0 0 ... 0 1 0]
+ [0 9 0 ... 0 1 0]
+ [0 1 0 ... 0 3 0]]
+2021-07-27 07:52:29,312 - Discovery - ***** Test results *****
+2021-07-27 07:52:29,312 - Discovery -   ACC = 30.23
+2021-07-27 07:52:29,312 - Discovery -   ARI = 14.16
+2021-07-27 07:52:29,312 - Discovery -   NMI = 52.45
+2021-07-27 07:52:29,313 - Discovery - Testing finished...
+2021-07-27 07:52:29,313 - Discovery - Results saved in results/results_KM.csv
+2021-07-27 07:52:29,335 - Discovery - Open Intent Discovery Finished...

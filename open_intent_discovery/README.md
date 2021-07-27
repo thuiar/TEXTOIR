@@ -13,4 +13,5 @@ seed: random seed (type: int)
 #### An Example
 python run.py --dataset banking --known_cls_ratio 0.25 --labeled_ratio 0.1 --cluster_num_factor 1 --method DeepAligned --backbone bert --seed 1 
 
+python run.py --backbone glove --setting unsupervised --method KM --config_file_name KM
 aoligei!!!
