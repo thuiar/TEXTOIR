@@ -1,8 +1,8 @@
-logs
 results
-SAE_banking_0.h5
-Backbone.py
-dataloader.py 
-init_parameters.py
-run_discovery.py
-utils.py
+logs
+final_results
+archive
+__pycache__
+plot
+ablation_studies
+test
