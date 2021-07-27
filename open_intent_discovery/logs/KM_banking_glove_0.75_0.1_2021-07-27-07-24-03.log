@@ -1,0 +1,55 @@
+2021-07-27 07:24:03,103 - Discovery - Open Intent Discovery Begin...
+2021-07-27 07:24:03,103 - Discovery - Parameters Initialization...
+2021-07-27 07:24:03,104 - Discovery - ============================== Params ==============================
+2021-07-27 07:24:03,104 - Discovery - type:	open_intent_discovery
+2021-07-27 07:24:03,104 - Discovery - logger_name:	Discovery
+2021-07-27 07:24:03,104 - Discovery - log_dir:	logs
+2021-07-27 07:24:03,104 - Discovery - dataset:	banking
+2021-07-27 07:24:03,104 - Discovery - known_cls_ratio:	0.75
+2021-07-27 07:24:03,104 - Discovery - labeled_ratio:	0.1
+2021-07-27 07:24:03,104 - Discovery - cluster_num_factor:	1.0
+2021-07-27 07:24:03,104 - Discovery - method:	KM
+2021-07-27 07:24:03,104 - Discovery - train:	True
+2021-07-27 07:24:03,104 - Discovery - save_model:	False
+2021-07-27 07:24:03,104 - Discovery - backbone:	glove
+2021-07-27 07:24:03,104 - Discovery - num_train_epochs:	100
+2021-07-27 07:24:03,104 - Discovery - setting:	unsupervised
+2021-07-27 07:24:03,104 - Discovery - config_file_name:	KM
+2021-07-27 07:24:03,104 - Discovery - seed:	9
+2021-07-27 07:24:03,104 - Discovery - gpu_id:	0
+2021-07-27 07:24:03,104 - Discovery - pipe_results_path:	pipe_results
+2021-07-27 07:24:03,104 - Discovery - data_dir:	/home/zhanghanlei/git/TEXTOIR/open_intent_discovery/../data
+2021-07-27 07:24:03,104 - Discovery - output_dir:	/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs
+2021-07-27 07:24:03,104 - Discovery - model_dir:	models
+2021-07-27 07:24:03,104 - Discovery - result_dir:	results
+2021-07-27 07:24:03,104 - Discovery - results_file_name:	results_KM.csv
+2021-07-27 07:24:03,104 - Discovery - save_results:	True
+2021-07-27 07:24:03,104 - Discovery - method_output_dir:	/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs/open_intent_discovery/KM_banking_0.75_0.1_glove_9
+2021-07-27 07:24:03,104 - Discovery - model_output_dir:	/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs/open_intent_discovery/KM_banking_0.75_0.1_glove_9/models
+2021-07-27 07:24:03,104 - Discovery - glove_model:	/home/sharing/disk1/pretrained_embedding/glove
+2021-07-27 07:24:03,104 - Discovery - max_num_words:	10000
+2021-07-27 07:24:03,104 - Discovery - ============================== End Params ==============================
+2021-07-27 07:24:03,104 - Discovery - Data and Model Preparation...
+2021-07-27 07:24:04,648 - Discovery - Building GloVe (D=300)...
+2021-07-27 07:24:24,132 - Discovery - Building finished!
+2021-07-27 07:24:24,248 - Discovery - Training Begin...
+2021-07-27 07:24:24,248 - Discovery - K-Means does not need training...
+2021-07-27 07:24:24,248 - Discovery - Training Finished...
+2021-07-27 07:24:24,248 - Discovery - Testing begin...
+2021-07-27 07:24:24,248 - Discovery - K-Means start...
+2021-07-27 07:24:29,903 - Discovery - K-Means finished...
+2021-07-27 07:24:29,918 - Discovery - ***** Test: Confusion Matrix *****
+2021-07-27 07:24:29,919 - Discovery - [[0 0 6 ... 0 0 0]
+ [0 0 0 ... 3 0 0]
+ [0 0 0 ... 0 0 0]
+ ...
+ [0 0 1 ... 0 0 0]
+ [0 0 1 ... 0 0 0]
+ [0 0 0 ... 0 0 1]]
+2021-07-27 07:24:29,919 - Discovery - ***** Test results *****
+2021-07-27 07:24:29,920 - Discovery -   ACC = 27.99
+2021-07-27 07:24:29,920 - Discovery -   ARI = 12.4
+2021-07-27 07:24:29,920 - Discovery -   NMI = 49.19
+2021-07-27 07:24:29,920 - Discovery - Testing finished...
+2021-07-27 07:24:29,920 - Discovery - Results saved in results/results_KM.csv
+2021-07-27 07:24:29,950 - Discovery - Open Intent Discovery Finished...

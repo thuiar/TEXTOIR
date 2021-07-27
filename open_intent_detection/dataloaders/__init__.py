@@ -10,8 +10,9 @@ max_seq_lengths = {
 
 backbone_loader_map = {
                             'bert': BERT_Loader,
-                            'bert_deepunk': BERT_Loader,
+                            'bert_norm': BERT_Loader,
                       }
+                      
 benchmark_labels = {
     'oos': 
             ['accept_reservations', 'account_blocked', 'alarm', 'application_status', 'apr', 

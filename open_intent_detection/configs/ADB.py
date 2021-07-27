@@ -31,8 +31,8 @@ class Param():
             'loss_fct': 'CrossEntropyLoss',
             'activation': 'relu',
             'train_batch_size': 128,
-            'eval_batch_size': 128,
-            'test_batch_size': 128,
+            'eval_batch_size': 64,
+            'test_batch_size': 64,
             'wait_patient': 10
 
         }

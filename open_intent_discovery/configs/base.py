@@ -40,7 +40,12 @@ class ParamManager:
         if not os.path.exists(task_output_dir):
             os.makedirs(task_output_dir)
 
-        concat_names = [args.method, args.dataset, args.known_cls_ratio, args.labeled_ratio, args.backbone, args.seed]
+        
+        if args.setting == 'unsupervised':
+            concat_names = [args.method, args.dataset, args.known_cls_ratio, args.labeled_ratio, args.backbone, args.seed]    
+        elif args.setting == 'semi_supervised':
+            concat_names = [args.method, args.dataset, args.backbone]  
+
         method_output_name = "_".join([str(x) for x in concat_names])
 
         method_output_dir = os.path.join(task_output_dir, method_output_name)

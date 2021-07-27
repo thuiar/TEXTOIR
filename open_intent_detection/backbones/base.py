@@ -3,12 +3,12 @@ import torch
 import math
 import logging
 from pytorch_pretrained_bert.optimization import BertAdam
-from .bert import BERT, BERT_DeepUnk
+from .bert import BERT, BERT_Norm
 from .utils import freeze_bert_parameters
 
 backbones_map = {
                     'bert': BERT, 
-                    'bert_deepunk': BERT_DeepUnk,
+                    'bert_norm': BERT_Norm
                 }
 
 class ModelManager:

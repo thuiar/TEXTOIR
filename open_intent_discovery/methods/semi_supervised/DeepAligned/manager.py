@@ -1,27 +1,27 @@
 import torch
+import torch.nn.functional as F
 import numpy as np
 import copy
-import os
 import logging
+import os
 
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score, confusion_matrix, f1_score, accuracy_score
 from tqdm import trange, tqdm
 from scipy.optimize import linear_sum_assignment
+from losses import loss_map
+from utils.functions import save_model
+from utils.functions import restore_model
 from torch.utils.data import (DataLoader, SequentialSampler, TensorDataset)
 
-from ....losses import loss_map
-from ....utils.functions import save_model
-from ....utils.functions import restore_model
-from ....utils.metrics import clustering_score
+from utils.metrics import clustering_score
 from .pretrain import ModelManager as PretrainModelManager
 
-class ModelManager:
+class DeepAlignedManager:
     
     def __init__(self, args, data, model, logger_name = 'Discovery'):
-        
-        self.logger = logging.getLogger(logger_name)
 
+        self.logger = logging.getLogger(logger_name)
         self.model = model.model
         self.optimizer = model.optimizer
         self.device = model.device
@@ -138,7 +138,6 @@ class ModelManager:
 
         test_results['y_true'] = y_true
         test_results['y_pred'] = y_pred
-        test_results['feats'] = feats
 
         return test_results
 

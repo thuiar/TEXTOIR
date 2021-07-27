@@ -1,20 +1,23 @@
 import torch
 import torch.nn.functional as F
+import numpy as np
 import os
 import copy
 import logging
 
 from sklearn.metrics import accuracy_score
 from tqdm import trange, tqdm
-from ....losses import loss_map
-from ....utils.functions import save_model
+
+from losses import loss_map
+from utils.functions import save_model
+
+
+logger = logging.getLogger('Discovery')
 
 class ModelManager:
     
-    def __init__(self, args, data, model, logger_name = 'Discovery'):
+    def __init__(self, args, data, model):
         
-        self.logger = logging.getLogger(logger_name)
-
         tmp_lr, tmp_num_labels, tmp_num_train_examples, tmp_num_train_epochs \
             = args.lr, data.num_labels, data.dataloader.num_train_examples, args.num_train_epochs
         self.num_labels = data.n_known_cls
@@ -73,9 +76,9 @@ class ModelManager:
                 'eval_acc': eval_score,
                 'best_acc':best_eval_score,
             }
-            self.logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
+            logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
             for key in sorted(eval_results.keys()):
-                self.logger.info("  %s = %s", key, str(eval_results[key]))
+                logger.info("  %s = %s", key, str(eval_results[key]))
             
             if eval_score > best_eval_score:
                 

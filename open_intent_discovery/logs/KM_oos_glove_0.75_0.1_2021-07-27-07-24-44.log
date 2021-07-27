@@ -1,0 +1,32 @@
+2021-07-27 07:24:44,907 - Discovery - Open Intent Discovery Begin...
+2021-07-27 07:24:44,908 - Discovery - Parameters Initialization...
+2021-07-27 07:24:44,908 - Discovery - ============================== Params ==============================
+2021-07-27 07:24:44,908 - Discovery - type:	open_intent_discovery
+2021-07-27 07:24:44,908 - Discovery - logger_name:	Discovery
+2021-07-27 07:24:44,908 - Discovery - log_dir:	logs
+2021-07-27 07:24:44,908 - Discovery - dataset:	oos
+2021-07-27 07:24:44,908 - Discovery - known_cls_ratio:	0.75
+2021-07-27 07:24:44,908 - Discovery - labeled_ratio:	0.1
+2021-07-27 07:24:44,908 - Discovery - cluster_num_factor:	1.0
+2021-07-27 07:24:44,908 - Discovery - method:	KM
+2021-07-27 07:24:44,908 - Discovery - train:	True
+2021-07-27 07:24:44,908 - Discovery - save_model:	False
+2021-07-27 07:24:44,908 - Discovery - backbone:	glove
+2021-07-27 07:24:44,908 - Discovery - num_train_epochs:	100
+2021-07-27 07:24:44,908 - Discovery - setting:	unsupervised
+2021-07-27 07:24:44,908 - Discovery - config_file_name:	KM
+2021-07-27 07:24:44,908 - Discovery - seed:	4
+2021-07-27 07:24:44,908 - Discovery - gpu_id:	0
+2021-07-27 07:24:44,908 - Discovery - pipe_results_path:	pipe_results
+2021-07-27 07:24:44,908 - Discovery - data_dir:	/home/zhanghanlei/git/TEXTOIR/open_intent_discovery/../data
+2021-07-27 07:24:44,908 - Discovery - output_dir:	/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs
+2021-07-27 07:24:44,908 - Discovery - model_dir:	models
+2021-07-27 07:24:44,908 - Discovery - result_dir:	results
+2021-07-27 07:24:44,908 - Discovery - results_file_name:	results_KM.csv
+2021-07-27 07:24:44,908 - Discovery - save_results:	True
+2021-07-27 07:24:44,908 - Discovery - method_output_dir:	/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs/open_intent_discovery/KM_oos_0.75_0.1_glove_4
+2021-07-27 07:24:44,908 - Discovery - model_output_dir:	/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs/open_intent_discovery/KM_oos_0.75_0.1_glove_4/models
+2021-07-27 07:24:44,908 - Discovery - glove_model:	/home/sharing/disk1/pretrained_embedding/glove
+2021-07-27 07:24:44,908 - Discovery - max_num_words:	10000
+2021-07-27 07:24:44,908 - Discovery - ============================== End Params ==============================
+2021-07-27 07:24:44,908 - Discovery - Data and Model Preparation...
