@@ -1,5 +1,27 @@
 # TEXTOIR
-An Integrated and Extensible Platform for Text Open Intent Recognition.
+TEXTOIR is an Integrated and Extensible Platform for Text Open Intent Recognition.
+
+## Introduction
+TEXTOIR contains two tasks, which are defined as open intent detection and open intent discovery. Open intent detection aims to identify n-class known intents, and detect one-class open intent. Open intent discovery aims to leverage limited prior knowledge of known intents to find fine-grained known and open intent-wise clusters.
+
+## Benmark Datasets
+* [BANKING](https://arxiv.org/pdf/2003.04807.pdf)
+* [OOS / CLINC150 (without OOD samples)](https://arxiv.org/pdf/1909.02027.pdf) 
+* [StackOverflow](https://aclanthology.org/W15-1509.pdf)
+
+## Integrated Models
+### Open Intent Detection
+
+* [Deep Open Intent Classification with Adaptive Decision Boundary](https://arxiv.org/pdf/2012.10209.pdf) (ADB)
+* [Deep Unknown Intent Detection with Margin Loss](https://aclanthology.org/P19-1548.pdf) (DeepUnk)
+* [DOC: Deep Open Classification of Text Documents](https://aclanthology.org/D17-1314.pdf) (DOC)
+* [Maximum Softmax Probability](https://arxiv.org/pdf/1610.02136.pdf) (MSP) 
+* [Towards Open Set Deep Networks](https://openaccess.thecvf.com/content_cvpr_2016/papers/Bendale_Towards_Open_Set_CVPR_2016_paper.pdf) (OpenMax)
+
+
+### Open Intent Discovery
+
+* Unsupervised Clustering Methods
 
 ## Environments
 
