@@ -74,30 +74,6 @@ class MSPManager:
 
         return y_true, y_pred
 
-    def test(self, args, data, show=False):
-
-        y_true, y_pred = self.get_outputs(args, data, mode = 'test')
-    
-        cm = confusion_matrix(y_true, y_pred)
-        test_results = F_measure(cm)
-
-        acc = round(accuracy_score(y_true, y_pred) * 100, 2)
-        test_results['Acc'] = acc
-        
-        self.logger.info
-        self.logger.info("***** Test: Confusion Matrix *****")
-        self.logger.info("%s", str(cm))
-        self.logger.info("***** Test results *****")
-
-        for key in sorted(test_results.keys()):
-            self.logger.info("  %s = %s", key, str(test_results[key]))
-
-        test_results['y_true'] = y_true
-        test_results['y_pred'] = y_pred
-
-        return test_results
-
-
     def train(self, args, data):     
         
         self.logger.info('Training Start...')
@@ -160,7 +136,28 @@ class MSPManager:
 
         self.logger.info('Training finished...')
 
+    def test(self, args, data, show=False):
     
+        y_true, y_pred = self.get_outputs(args, data, mode = 'test')
+    
+        cm = confusion_matrix(y_true, y_pred)
+        test_results = F_measure(cm)
+
+        acc = round(accuracy_score(y_true, y_pred) * 100, 2)
+        test_results['Acc'] = acc
+        
+        self.logger.info
+        self.logger.info("***** Test: Confusion Matrix *****")
+        self.logger.info("%s", str(cm))
+        self.logger.info("***** Test results *****")
+
+        for key in sorted(test_results.keys()):
+            self.logger.info("  %s = %s", key, str(test_results[key]))
+
+        test_results['y_true'] = y_true
+        test_results['y_pred'] = y_pred
+
+        return test_results
 
 
 

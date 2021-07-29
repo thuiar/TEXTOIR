@@ -57,7 +57,63 @@ class DeepAlignedManager:
         else:
             self.model = restore_model(self.model, args.model_output_dir)
 
+    def pre_train(self, args, data):
+
+        self.logger.info('Pre-training Start...')
+        wait = 0
+        best_model = None
+        best_eval_score = 0
+
+        for epoch in trange(int(args.num_pretrain_epochs), desc="Epoch"):
+
+            self.model.train()
+            tr_loss = 0
+            nb_tr_examples, nb_tr_steps = 0, 0
+
+            for step, batch in enumerate(tqdm(self.train_dataloader, desc="Iteration")):
+                batch = tuple(t.to(self.device) for t in batch)
+                input_ids, input_mask, segment_ids, label_ids = batch
+
+                with torch.set_grad_enabled(True):
+
+                    loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct = self.loss_fct)
+                    
+                    loss.backward()
+                    self.optimizer.step()
+                    self.optimizer.zero_grad()
+                    
+                    tr_loss += loss.item()
+                    nb_tr_examples += input_ids.size(0)
+                    nb_tr_steps += 1
+
+            loss = tr_loss / nb_tr_steps
+            
+            y_true, y_pred = self.get_outputs(args, self.eval_dataloader)
+            eval_score = round(accuracy_score(y_true, y_pred) * 100, 2)
+
+            eval_results = {
+                'train_loss': loss,
+                'eval_acc': eval_score,
+                'best_acc':best_eval_score,
+            }
+            self.logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
+            for key in sorted(eval_results.keys()):
+                self.logger.info("  %s = %s", key, str(eval_results[key]))
+            
+            if eval_score > best_eval_score:
+                
+                best_model = copy.deepcopy(self.model)
+                wait = 0
+                best_eval_score = eval_score
+
+            elif eval_score > 0:
+
+                wait += 1
+                if wait >= args.wait_patient:
+                    break
+
     def train(self, args, data): 
+
         best_model = None
         wait = 0
         best_eval_score = 0 

@@ -22,6 +22,8 @@ class SAEManager:
         self.sae.fit(self.tfidf_train, self.tfidf_train, epochs = args.num_train_epochs, batch_size = args.batch_size, shuffle=True, 
                     validation_data=(self.tfidf_test, self.tfidf_test), verbose=1)
 
+        self.logger.info('SAE (emb) training finished...') 
+        
         if args.save_model:
             save_path = os.path.join(args.model_output_dir, args.model_name)
             self.sae.save_weights(save_path)
@@ -33,13 +35,12 @@ class SAEManager:
         
         if not args.train:
             save_path = os.path.join(args.model_output_dir, args.model_name)
-            self.sae.load_weights(args.model_output_dir)
+            self.sae.load_weights(save_path)
 
         sae_emb_train, sae_emb_test = get_sae(args, self.sae, self.tfidf_train, self.tfidf_test)
         
         self.logger.info('K-Means start...')
         from sklearn.cluster import KMeans
-
 
         km = KMeans(n_clusters= self.num_labels, n_jobs=-1, random_state=args.seed)
         km.fit(sae_emb_train)

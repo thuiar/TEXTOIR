@@ -3,7 +3,10 @@ import os
 import argparse
 #read A, compute mean
 
-def results_mean_csv(input_dir, input_file_name, output_dir):
+def results_mean_csv(input_dir, input_file_name, output_dir, output_file_name = None):
+
+    if output_file_name == None:
+        output_file_name = input_file_name
 
     df = pd.read_csv(os.path.join(input_dir, input_file_name))
     cols = ['dataset', 'method',  'ACC', 'ARI', 'NMI', 'seed']
@@ -16,7 +19,7 @@ def results_mean_csv(input_dir, input_file_name, output_dir):
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
     
-    results_path = os.path.join(output_dir, input_file_name)
+    results_path = os.path.join(output_dir, output_file_name)
     df_mean.to_csv(results_path,index=False)
 
 def compute_gap(old_file, new_file, gap_dir, input_file_name):
@@ -41,7 +44,7 @@ if __name__ == '__main__':
     # input_file_name = args.method + '.csv'
     input_dir = 'mean/'
     gap_dir = 'gap/'
-
+    results_mean_csv("", 'original.csv',"gap", 'standard.csv')
     results_mean_csv(input_dir, args.input_file_name, gap_dir)
     new_file = os.path.join(gap_dir, args.input_file_name)
     old_file = os.path.join(gap_dir, 'standard.csv')

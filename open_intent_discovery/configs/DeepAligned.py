@@ -1,10 +1,10 @@
 class Param():
     
-    def __init__(self):
+    def __init__(self, args):
         
-        self.hyper_param = self.get_hyper_parameters()
+        self.hyper_param = self.get_hyper_parameters(args)
 
-    def get_hyper_parameters(self):
+    def get_hyper_parameters(self, args):
         """
         Args:
             bert_model (directory): The path for the pre-trained bert model.
