@@ -40,6 +40,7 @@ class Param():
             'update_interval': 5,
             'alpha': 0.6,
             'pre_train': False,
+            'wait_patient': 20
 
         }
 
