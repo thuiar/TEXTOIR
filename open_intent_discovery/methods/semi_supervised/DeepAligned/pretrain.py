@@ -11,27 +11,19 @@ from tqdm import trange, tqdm
 from losses import loss_map
 from utils.functions import save_model
 
-
-logger = logging.getLogger('Discovery')
-
-class ModelManager:
+class PretrainDeepAlignedManager:
     
-    def __init__(self, args, data, model):
+    def __init__(self, args, data, model, logger_name = 'Discovery'):
         
-        tmp_lr, tmp_num_labels, tmp_num_train_examples, tmp_num_train_epochs \
-            = args.lr, data.num_labels, data.dataloader.num_train_examples, args.num_train_epochs
-        self.num_labels = data.n_known_cls
+        self.logger = logging.getLogger(logger_name)
 
-        args.lr, data.num_labels, data.dataloader.num_train_examples, args.num_train_epochs\
-             = args.lr_pre, self.num_labels, len(data.dataloader.train_labeled_examples), args.num_pretrain_epochs
-        
-        self.model, self.optimizer = model.set_model(args, data)  
-        args.lr, data.num_labels, data.dataloader.num_train_examples, args.num_train_epochs = \
-            tmp_lr, tmp_num_labels, tmp_num_train_examples, tmp_num_train_epochs
+        args.num_labels = data.n_known_cls
+        self.model = model.set_model(args, data, 'bert')
+        self.optimizer = model.set_optimizer(self.model, len(data.dataloader.train_labeled_examples), args.train_batch_size, \
+            args.num_pretrain_epochs, args.lr_pre, args.warmup_proportion)
 
         self.device = model.device
 
-        self.data = data
         self.train_dataloader = data.dataloader.train_labeled_loader
         self.eval_dataloader = data.dataloader.eval_loader 
         self.test_dataloader = data.dataloader.test_loader
@@ -59,26 +51,26 @@ class ModelManager:
                     loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct = self.loss_fct)
                     
                     loss.backward()
-                    self.optimizer.step()
-                    self.optimizer.zero_grad()
-                    
                     tr_loss += loss.item()
                     nb_tr_examples += input_ids.size(0)
                     nb_tr_steps += 1
+
+                    self.optimizer.step()
+                    self.optimizer.zero_grad()
             
             loss = tr_loss / nb_tr_steps
             
-            y_true, y_pred = self.get_outputs(args, self.eval_dataloader)
+            y_true, y_pred = self.get_outputs(args, mode = 'eval')
             eval_score = round(accuracy_score(y_true, y_pred) * 100, 2)
 
             eval_results = {
                 'train_loss': loss,
-                'eval_acc': eval_score,
-                'best_acc':best_eval_score,
+                'eval_score': eval_score,
+                'best_score':best_eval_score,
             }
-            logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
+            self.logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
             for key in sorted(eval_results.keys()):
-                logger.info("  %s = %s", key, str(eval_results[key]))
+                self.logger.info("  %s = %s", key, str(eval_results[key]))
             
             if eval_score > best_eval_score:
                 
@@ -100,15 +92,18 @@ class ModelManager:
                 os.makedirs(pretrained_model_dir)
             save_model(self.model, pretrained_model_dir)
 
-    def get_outputs(self, args, dataloader, get_feats = False):
+    def get_outputs(self, args, mode = 'eval', get_feats = False):
         
+        if mode == 'eval':
+            dataloader = self.eval_dataloader
+
         self.model.eval()
 
         total_labels = torch.empty(0,dtype=torch.long).to(self.device)
         total_preds = torch.empty(0,dtype=torch.long).to(self.device)
         
         total_features = torch.empty((0,args.feat_dim)).to(self.device)
-        total_logits = torch.empty((0, self.num_labels)).to(self.device)
+        total_logits = torch.empty((0, args.num_labels)).to(self.device)
         
         for batch in tqdm(dataloader, desc="Iteration"):
 

@@ -8,6 +8,8 @@ max_seq_lengths = {
                     
 backbone_loader_map = {
                             'bert': BERT_Loader,
+                            'bert_CDAC': BERT_Loader,
+                            'bert_DTC': BERT_Loader,
                             'glove': UNSUP_Loader,
                             'sae': UNSUP_Loader
                       }

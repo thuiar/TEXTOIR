@@ -30,7 +30,7 @@ class DataManager:
         self.logger.info('The number of known intents is %s', self.n_known_cls)
         self.logger.info('Lists of known labels are: %s', str(self.known_label_list))
 
-        self.num_labels = int(len(self.all_label_list) * args.cluster_num_factor)
+        args.num_labels = self.num_labels = int(len(self.all_label_list) * args.cluster_num_factor)
 
         self.dataloader = self.get_loader(args, self.get_attrs())
 

@@ -20,7 +20,7 @@ class Param():
             'batch_size': 256,
             'lr': 0.001,
             'momentum': 0.9,
-            'tol': 0.001,
+            'tol': 0.01,
             'model_name': 'DEC.h5'
         }
 

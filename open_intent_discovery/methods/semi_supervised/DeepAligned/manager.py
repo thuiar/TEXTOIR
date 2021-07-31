@@ -10,12 +10,11 @@ from sklearn.metrics import silhouette_score, confusion_matrix, f1_score, accura
 from tqdm import trange, tqdm
 from scipy.optimize import linear_sum_assignment
 from losses import loss_map
-from utils.functions import save_model
-from utils.functions import restore_model
+from utils.functions import save_model, restore_model
 from torch.utils.data import (DataLoader, SequentialSampler, TensorDataset)
 
 from utils.metrics import clustering_score
-from .pretrain import ModelManager as PretrainModelManager
+from .pretrain import PretrainDeepAlignedManager
 
 class DeepAlignedManager:
     
@@ -26,7 +25,6 @@ class DeepAlignedManager:
         self.optimizer = model.optimizer
         self.device = model.device
 
-        self.data = data
         self.train_dataloader, self.eval_dataloader, self.test_dataloader = \
             data.dataloader.train_loader, data.dataloader.eval_loader, data.dataloader.test_loader
         self.train_input_ids, self.train_input_mask, self.train_segment_ids = \
@@ -34,8 +32,9 @@ class DeepAlignedManager:
 
         self.loss_fct = loss_map[args.loss_fct]
         
-        pretrain_manager = PretrainModelManager(args, data, model)  
+        pretrain_manager = PretrainDeepAlignedManager(args, data, model)  
         
+
         if args.train:
 
             self.logger.info('Pre-raining start...')
@@ -44,73 +43,24 @@ class DeepAlignedManager:
 
             self.centroids = None
             self.pretrained_model = pretrain_manager.model
-        else:
-            self.pretrained_model = restore_model(pretrain_manager.model, os.path.join(args.method_output_dir, 'pretrain'))
-        
-        if args.cluster_num_factor > 1:
-            self.num_labels = self.predict_k(args, data) 
-        else:
-            self.num_labels = data.num_labels 
-        
-        if args.train:
+
+            if args.cluster_num_factor > 1:
+                self.num_labels = self.predict_k(args, data) 
+            else:
+                self.num_labels = data.num_labels 
+
             self.load_pretrained_model(self.pretrained_model)
+
         else:
+
+            self.pretrained_model = restore_model(pretrain_manager.model, os.path.join(args.method_output_dir, 'pretrain'))
+            
+            if args.cluster_num_factor > 1:
+                self.num_labels = self.predict_k(args, data) 
+            else:
+                self.num_labels = data.num_labels 
+
             self.model = restore_model(self.model, args.model_output_dir)
-
-    def pre_train(self, args, data):
-
-        self.logger.info('Pre-training Start...')
-        wait = 0
-        best_model = None
-        best_eval_score = 0
-
-        for epoch in trange(int(args.num_pretrain_epochs), desc="Epoch"):
-
-            self.model.train()
-            tr_loss = 0
-            nb_tr_examples, nb_tr_steps = 0, 0
-
-            for step, batch in enumerate(tqdm(self.train_dataloader, desc="Iteration")):
-                batch = tuple(t.to(self.device) for t in batch)
-                input_ids, input_mask, segment_ids, label_ids = batch
-
-                with torch.set_grad_enabled(True):
-
-                    loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct = self.loss_fct)
-                    
-                    loss.backward()
-                    self.optimizer.step()
-                    self.optimizer.zero_grad()
-                    
-                    tr_loss += loss.item()
-                    nb_tr_examples += input_ids.size(0)
-                    nb_tr_steps += 1
-
-            loss = tr_loss / nb_tr_steps
-            
-            y_true, y_pred = self.get_outputs(args, self.eval_dataloader)
-            eval_score = round(accuracy_score(y_true, y_pred) * 100, 2)
-
-            eval_results = {
-                'train_loss': loss,
-                'eval_acc': eval_score,
-                'best_acc':best_eval_score,
-            }
-            self.logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
-            for key in sorted(eval_results.keys()):
-                self.logger.info("  %s = %s", key, str(eval_results[key]))
-            
-            if eval_score > best_eval_score:
-                
-                best_model = copy.deepcopy(self.model)
-                wait = 0
-                best_eval_score = eval_score
-
-            elif eval_score > 0:
-
-                wait += 1
-                if wait >= args.wait_patient:
-                    break
 
     def train(self, args, data): 
 
@@ -120,7 +70,7 @@ class DeepAlignedManager:
 
         for epoch in trange(int(args.num_train_epochs), desc="Epoch"):  
 
-            feats = self.get_outputs(args, self.train_dataloader, get_feats = True)
+            feats = self.get_outputs(args, mode = 'train', model = self.model, get_feats = True)
             km = KMeans(n_clusters = self.num_labels).fit(feats)
             eval_score = silhouette_score(feats, km.labels_)
 
@@ -176,10 +126,10 @@ class DeepAlignedManager:
 
     def test(self, args, data):
         
-        feats = self.get_outputs(args, self.test_dataloader, get_feats = True)
+        feats = self.get_outputs(args, mode = 'test', model = self.model, get_feats = True)
         km = KMeans(n_clusters = self.num_labels).fit(feats)
         y_pred = km.labels_
-        y_true, _ = self.get_outputs(args, self.test_dataloader)
+        y_true, _ = self.get_outputs(args, mode = 'test', model = self.model)
         
         test_results = clustering_score(y_true, y_pred)
         cm = confusion_matrix(y_true, y_pred)
@@ -197,9 +147,16 @@ class DeepAlignedManager:
 
         return test_results
 
-    def get_outputs(self, args, dataloader, get_feats = False):
-    
-        self.model.eval()
+    def get_outputs(self, args, mode, model, get_feats = False):
+        
+        if mode == 'eval':
+            dataloader = self.eval_dataloader
+        elif mode == 'test':
+            dataloader = self.test_dataloader
+        elif mode == 'train':
+            dataloader = self.train_dataloader
+
+        model.eval()
 
         total_labels = torch.empty(0,dtype=torch.long).to(self.device)
         total_preds = torch.empty(0,dtype=torch.long).to(self.device)
@@ -212,7 +169,7 @@ class DeepAlignedManager:
             batch = tuple(t.to(self.device) for t in batch)
             input_ids, input_mask, segment_ids, label_ids = batch
             with torch.set_grad_enabled(False):
-                pooled_output, logits = self.model(input_ids, segment_ids, input_mask)
+                pooled_output, logits = model(input_ids, segment_ids, input_mask)
                 
                 total_labels = torch.cat((total_labels,label_ids))
                 total_features = torch.cat((total_features, pooled_output))
@@ -223,6 +180,9 @@ class DeepAlignedManager:
             return feats 
 
         else:
+            total_probs = F.softmax(total_logits.detach(), dim=1)
+            total_maxprobs, total_preds = total_probs.max(dim = 1)
+            
             y_pred = total_preds.cpu().numpy()
             y_true = total_labels.cpu().numpy()
 
@@ -232,7 +192,7 @@ class DeepAlignedManager:
 
         self.logger.info('Predict number of clusters start...')
 
-        feats = self.get_outputs(args, self.train_dataloader, self.pretrained_model, get_feats = True)
+        feats = self.get_outputs(args, mode = 'train', model = self.pretrained_model, get_feats = True)
         feats = feats.cpu().numpy()
 
         km = KMeans(n_clusters = data.num_labels).fit(feats)

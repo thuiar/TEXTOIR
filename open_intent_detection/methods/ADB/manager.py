@@ -119,8 +119,8 @@ class ADBManager:
             
             loss = tr_loss / nb_tr_steps
             
-            y_true, y_pred = self.get_outputs(args, data, self.eval_dataloader, pre_train=True)
-            eval_score = accuracy_score(y_true, y_pred)
+            y_true, y_pred = self.get_outputs(args, data, mode = 'eval', pre_train=True)
+            eval_score = round(accuracy_score(y_true, y_pred) * 100, 2)
 
             eval_results = {
                 'train_loss': loss,
@@ -190,8 +190,8 @@ class ADBManager:
 
             loss = tr_loss / nb_tr_steps
             
-            y_true, y_pred = self.get_outputs(args, data, self.eval_dataloader)
-            eval_score = f1_score(y_true, y_pred, average='macro')
+            y_true, y_pred = self.get_outputs(args, data, mode = 'eval')
+            eval_score = round(f1_score(y_true, y_pred, average='macro') * 100, 2)
 
             eval_results = {
                 'train_loss': loss,
@@ -224,9 +224,13 @@ class ADBManager:
             np.save(os.path.join(args.method_output_dir, 'deltas.npy'), self.delta.detach().cpu().numpy())
             
 
-    def get_outputs(self, args, data, dataloader, get_feats = False, \
-                                    pre_train= False, delta = None):
-    
+    def get_outputs(self, args, data, mode = 'eval', get_feats = False, pre_train= False, delta = None):
+        
+        if mode == 'eval':
+            dataloader = self.eval_dataloader
+        elif mode == 'test':
+            dataloader = self.test_dataloader
+
         self.model.eval()
 
         total_labels = torch.empty(0,dtype=torch.long).to(self.device)
@@ -281,7 +285,7 @@ class ADBManager:
     
     def test(self, args, data, show=True):
         
-        y_true, y_pred = self.get_outputs(args, data, self.test_dataloader)
+        y_true, y_pred = self.get_outputs(args, data, mode = 'test')
         
         cm = confusion_matrix(y_true, y_pred)
         test_results = F_measure(cm)

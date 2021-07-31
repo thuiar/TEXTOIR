@@ -1,4 +1,6 @@
 from .semi_supervised.DeepAligned.manager import DeepAlignedManager
+from .semi_supervised.CDACPlus.manager import CDACPlusManager
+from .semi_supervised.DTC_BERT.manager import DTCManager
 from .unsupervised.KM.manager import KMManager
 from .unsupervised.AG.manager import AGManager
 from .unsupervised.SAE.manager import SAEManager
@@ -11,5 +13,7 @@ method_map = {
                 'AG': AGManager,
                 'SAE-KM': SAEManager,
                 'DEC': DECManager,
-                'DCN': DCNManager
+                'DCN': DCNManager,
+                'CDACPlus': CDACPlusManager,
+                'DTC_BERT': DTCManager
             }
