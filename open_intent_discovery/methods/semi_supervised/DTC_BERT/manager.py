@@ -149,7 +149,7 @@ class DTCManager:
             return feats
 
         elif get_probs:
-            return logits
+            return total_probs
 
         else:
             total_preds = total_probs.argmax(1)
@@ -168,6 +168,7 @@ class DTCManager:
         z_ema = torch.zeros(ntrain, args.num_labels).float().to(self.device)        # temporal outputs
         z_epoch = torch.zeros(ntrain, args.num_labels).float().to(self.device)  # current outputs
 
+        p_target = self.p_target
         for epoch in trange(int(args.num_train_epochs), desc="Epoch"):  
 
             # Fine-tuning with auxiliary distribution
@@ -181,8 +182,8 @@ class DTCManager:
                 _, logits = self.model(input_ids, segment_ids, input_mask)
                 q = feat2prob(logits, self.model.center)
                 z_epoch[step * args.train_batch_size: (step+1) * args.train_batch_size, :] = q
-                kl_loss = F.kl_div(q.log(), self.p_target[step * args.train_batch_size: (step+1) * args.train_batch_size])
-                kl_loss.backward()
+                kl_loss = F.kl_div(q.log(), p_target[step * args.train_batch_size: (step+1) * args.train_batch_size])
+                kl_loss.backward() 
 
                 tr_loss += kl_loss.item()
                 nb_tr_examples += input_ids.size(0)
@@ -191,12 +192,13 @@ class DTCManager:
                 self.optimizer.step()
                 self.optimizer.zero_grad() 
             
+            z_epoch = self.get_outputs(args, mode = 'train', get_probs = True)
             Z = args.alpha * Z + (1. - args.alpha) * z_epoch
             z_ema = Z * (1. / (1. - args.alpha ** (epoch + 1)))
 
             if epoch % args.update_interval == 0:
                 self.logger.info('updating target ...')
-                self.p_target = target_distribution(z_ema).float().to(self.device) 
+                p_target = target_distribution(z_ema).float().to(self.device) 
                 self.logger.info('updating finished ...')
 
             eval_true, eval_pred = self.get_outputs(args, mode = 'eval')
@@ -206,6 +208,9 @@ class DTCManager:
                 'train_loss': round(train_loss, 4), 
                 'eval_score': round(eval_score, 2),
             }
+            self.logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
+            for key in sorted(eval_results.keys()):
+                self.logger.info("  %s = %s", key, str(eval_results[key]))
             
         if args.save_model:
             save_model(self.model, args.model_output_dir)
