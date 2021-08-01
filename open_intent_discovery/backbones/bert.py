@@ -4,6 +4,7 @@ import torch.nn.functional as F
 from torch import nn
 from pytorch_pretrained_bert.modeling import BertPreTrainedModel, BertModel
 from torch.nn.parameter import Parameter
+from .utils import PairEnum
 
 activation_map = {'relu': nn.ReLU(), 'tanh': nn.Tanh()}
 
@@ -124,6 +125,11 @@ class BertForDTC(BertPreTrainedModel):
         self.classifier = nn.Linear(config.hidden_size, args.num_labels)
         self.apply(self.init_bert_weights)
 
+        #finetune
+        self.alpha = 1.0
+        self.cluster_layer = Parameter(torch.Tensor(args.num_labels, args.num_labels))
+        torch.nn.init.xavier_normal_(self.cluster_layer.data)
+
     def forward(self, input_ids = None, token_type_ids = None, attention_mask=None , labels = None,
                 feature_ext = False, mode = None, loss_fct=None):
 
@@ -137,6 +143,40 @@ class BertForDTC(BertPreTrainedModel):
             return pooled_output
         elif mode == 'train':
             loss = loss_fct(logits, labels)
+            return loss
+        else:
+            q = 1.0 / (1.0 + torch.sum(torch.pow(logits.unsqueeze(1) - self.cluster_layer, 2), 2) / self.alpha)
+            q = q.pow((self.alpha + 1.0) / 2.0)
+            q = (q.t() / torch.sum(q, 1)).t() # Make sure each sample's n_values add up to 1.
+            return logits, q
+
+class BertForKCL_Similarity(BertPreTrainedModel):
+    def __init__(self, config, args):
+        super(BertForKCL_Similarity,self).__init__(config)
+
+        self.num_labels = args.num_labels
+        self.bert = BertModel(config)
+
+        self.dense = nn.Linear(config.hidden_size * 2, config.hidden_size * 4)
+        self.normalization = nn.BatchNorm1d(config.hidden_size * 4)
+        self.activation = activation_map[args.activation]
+        
+        self.classifier = nn.Linear(config.hidden_size * 4, args.num_labels)
+        self.apply(self.init_bert_weights)
+    
+    def forward(self, input_ids, token_type_ids = None, attention_mask=None, labels=None, loss_fct=None, mode = None):
+
+        encoded_layer_12, pooled_output = self.bert(input_ids, token_type_ids, attention_mask, output_all_encoded_layers=False)
+        feat1,feat2 = PairEnum(encoded_layer_12.mean(dim = 1))
+        feature_cat = torch.cat([feat1,feat2], 1)
+
+        pooled_output = self.dense(feature_cat)
+        pooled_output = self.normalization(pooled_output)
+        pooled_output = self.activation(pooled_output)
+        logits = self.classifier(pooled_output)
+        
+        if mode == 'train':    
+            loss = loss_fct(logits.view(-1,self.num_labels), labels.view(-1))
             return loss
         else:
             return pooled_output, logits

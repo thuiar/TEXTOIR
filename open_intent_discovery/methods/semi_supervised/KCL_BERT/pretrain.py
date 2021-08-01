@@ -1,42 +1,15 @@
-from open_intent_discovery.utils import * 
-from open_intent_discovery.Backbone import BertForSimilarity as SimiModel
+import logging
 
-def Class2Simi(x,mode='cls',mask=None):
-    # Convert class label to pairwise similarity
-    n=x.nelement()
-    assert (n-x.ndimension()+1)==n,'Dimension of Label is not right'
-    expand1 = x.view(-1,1).expand(n,n)
-    expand2 = x.view(1,-1).expand(n,n)
-    out = expand1 - expand2    
-    out[out!=0] = -1 #dissimilar pair: label=-1
-    out[out==0] = 1 #Similar pair: label=1
-    if mode=='cls':
-        out[out==-1] = 0 #dissimilar pair: label=0
-    if mode=='hinge':
-        out = out.float() #hingeloss require float type
-    if mask is None:
-        out = out.view(-1)
-    else:
-        mask = mask.detach()
-        out = out[mask]
-    return out
 
-class SimiModelManager:
+
+class PretrainKCLManager:
     
-    def __init__(self, args, data):
+    def __init__(self, args, data, model, logger_name = 'Discovery'):
         
-        self.model = SimiModel.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.num_labels)
+        self.logger = logging.getLogger(logger_name)
 
-        if args.freeze_bert_parameters:
-            self.freeze_parameters(self.model)
+        self.model = SimiModel.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.num_labels)
                     
-        os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id           
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model.to(self.device)
-        # n_gpu = torch.cuda.device_count()
-        # if n_gpu > 1:
-        #     self.model = torch.nn.DataParallel(self.model)
-        
         self.num_train_optimization_steps = int(len(data.train_labeled_examples) / args.train_batch_size + 1) * args.num_train_epochs
         
         self.optimizer = self.get_optimizer(args)
@@ -119,9 +92,3 @@ class SimiModelManager:
                          warmup = args.warmup_proportion,
                          t_total = self.num_train_optimization_steps)   
         return optimizer
-    
-    def freeze_parameters(self, model):
-        for name, param in model.bert.named_parameters():  
-            param.requires_grad = False
-            if "encoder.layer.11" in name or "pooler" in name:
-                param.requires_grad = True

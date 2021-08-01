@@ -1,24 +1,43 @@
-from open_intent_discovery.utils import *
-from .simi import *
-from open_intent_discovery.Backbone import KCLForBert as KCL
+import logging
+from tqdm import trange, tqdm
 
+def Class2Simi(x,mode='cls',mask=None):
+    # Convert class label to pairwise similarity
+    n=x.nelement()
+    assert (n-x.ndimension()+1)==n,'Dimension of Label is not right'
+    expand1 = x.view(-1,1).expand(n,n)
+    expand2 = x.view(1,-1).expand(n,n)
+    out = expand1 - expand2    
+    out[out!=0] = -1 #dissimilar pair: label=-1
+    out[out==0] = 1 #Similar pair: label=1
+    if mode=='cls':
+        out[out==-1] = 0 #dissimilar pair: label=0
+    if mode=='hinge':
+        out = out.float() #hingeloss require float type
+    if mask is None:
+        out = out.view(-1)
+    else:
+        mask = mask.detach()
+        out = out[mask]
+    return out
 
-TIMESTAMP = "{0:%Y-%m-%dT%H-%M-%S/}".format(datetime.now())
-train_log_dir = 'logs/train/' + TIMESTAMP
-test_log_dir = 'logs/test/'   + TIMESTAMP
-
-class ModelManager:
+class KCLManager:
     
-    def __init__(self, args, data):
+    def __init__(self, args, data, model, logger_name = 'Discovery'):
         
-        self.model_dir, self.output_file_dir, self.pretrain_model_dir = set_path(args)         #Save models and trainined data
+        self.logger = logging.getLogger(logger_name)
+        self.model = model.model 
+        self.optimizer = model.optimizer
+        self.device = model.device
 
-        os.environ["CUDA_VISIBLE_DEVICES"] = args.gpu_id    
+        self.train_dataloader = data.dataloader.train_loader
 
-        self.predictions, self.test_results, self.true_labels = None, None, None
-        self.num_labels = data.num_labels  
+        if args.train:
 
-        if args.train_discover:
+            from backbones.bert import BertForKCL_Similarity
+            args.backbone = 'bert_KCL_simi'
+            self.pretrain_model = model.set_model(args, data, 'bert')
+            self.pretrain_optimizer = model.set_optimizer(self.pretrain_model, )
             self.best_eval_score = 0
             self.simi_model = self.train_simi(args, data)
             self.model = KCL.from_pretrained(args.bert_model, cache_dir = "", num_labels = self.num_labels)
@@ -29,8 +48,6 @@ class ModelManager:
             self.model = KCL.from_pretrained(args.bert_model, cache_dir = "", num_labels = self.num_labels)
             self.model = restore_model(self.model, self.model_dir)
         
-        if args.freeze_bert_parameters:
-            freeze_bert_parameters(self.model)  
 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model.to(self.device)
@@ -42,7 +59,7 @@ class ModelManager:
         self.optimizer = self.get_optimizer(args)
 
 
-    def train_simi(self, args, data):
+    def pre_train(self, args, data):
     
         manager_p = SimiModelManager(args, data)
         manager_p.train(args, data)
@@ -77,19 +94,6 @@ class ModelManager:
 
         return y_true, y_pred, feats
     
-    def get_optimizer(self, args):
-        param_optimizer = list(self.model.named_parameters())
-        no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
-        optimizer_grouped_parameters = [
-            {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
-            {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
-        ]
-        optimizer = BertAdam(optimizer_grouped_parameters,
-                         lr = args.lr,
-                         warmup = args.warmup_proportion,
-                         t_total = self.num_train_optimization_steps)   
-        return optimizer
-    
     def prepare_task_target(self, batch, model):
 
         model.eval()
@@ -99,28 +103,6 @@ class ModelManager:
         target[target == 0] = -1
 
         return target.detach()
-
-    def evaluation(self, args, data, show=True):
-
-        y_true, y_pred, feats = self.get_preds_labels(args, data.test_dataloader, self.model)
-        results = clustering_score(y_true, y_pred)
-
-        # ind, _ = hungray_aligment(y_true, y_pred)
-        # map_ = {i[0]:i[1] for i in ind}
-        # y_pred = np.array([map_[idx] for idx in y_pred])
-        
-        # self.predictions = list([data.all_label_list[idx] for idx in y_pred])
-        # self.true_labels = list([data.all_label_list[idx] for idx in y_true])
-        
-        # cm = confusion_matrix(y_true,y_pred) 
-        
-        if show:
-            print('results',results)
-
-        self.test_results = results
-
-        return y_pred, y_true, feats
-
 
     def train(self, args, data): 
 
@@ -178,3 +160,15 @@ class ModelManager:
 
         if args.save_discover:
             save_model(self.model, self.model_dir)
+
+    def test(self, args, data, show=True):
+    
+        y_true, y_pred, feats = self.get_preds_labels(args, data.test_dataloader, self.model)
+        results = clustering_score(y_true, y_pred) 
+        
+        if show:
+            print('results',results)
+
+        self.test_results = results
+
+        return y_pred, y_true, feats

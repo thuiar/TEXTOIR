@@ -3,18 +3,9 @@ import torch
 import math
 import logging
 from pytorch_pretrained_bert.optimization import BertAdam
-from .bert import BERT, BertForConstrainClustering, BertForDTC
-from .glove import GloVeEmbeddingVectorizer
-from .sae import get_stacked_autoencoder
 from .utils import freeze_bert_parameters, set_allow_growth
+from .__init__ import backbones_map
 
-backbones_map = {
-                    'bert': BERT, 
-                    'bert_CDAC': BertForConstrainClustering,
-                    'bert_DTC': BertForDTC,
-                    'glove': GloVeEmbeddingVectorizer,
-                    'sae': get_stacked_autoencoder
-                }
 
 class ModelManager:
 

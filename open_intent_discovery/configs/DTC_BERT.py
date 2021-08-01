@@ -27,7 +27,7 @@ class Param():
             'num_labels': None,
             'feat_dim': 768,
             'warmup_proportion': 0.1,
-            'lr': 5e-5, 
+            'lr': 2e-5, 
             'lr_pre': 2e-5,
             'activation': 'relu',
             'loss_fct': 'CrossEntropyLoss',
@@ -39,8 +39,7 @@ class Param():
             'num_warmup_train_epochs': 10,
             'update_interval': 5,
             'alpha': 0.6,
-            'pre_train': False,
-            'wait_patient': 20
+            'wait_patient': 10
 
         }
 

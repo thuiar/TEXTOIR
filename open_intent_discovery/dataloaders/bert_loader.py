@@ -75,10 +75,15 @@ def get_loader(examples, args, label_list, mode):
     input_ids = torch.tensor([f.input_ids for f in features], dtype=torch.long)
     input_mask = torch.tensor([f.input_mask for f in features], dtype=torch.long)
     segment_ids = torch.tensor([f.segment_ids for f in features], dtype=torch.long)
-    label_ids = torch.tensor([f.label_id for f in features], dtype=torch.long)
+
+    if mode == 'train_unlabeled':
+        label_ids = torch.tensor([-1 for f in features], dtype=torch.long)
+    else:
+        label_ids = torch.tensor([f.label_id for f in features], dtype=torch.long)
+
     datatensor = TensorDataset(input_ids, input_mask, segment_ids, label_ids)
 
-    if mode == 'train_labeled' or mode == 'train_unlabeled':  
+    if mode == 'train_labeled':  
 
         sampler = RandomSampler(datatensor)
         dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.train_batch_size)    
@@ -86,7 +91,10 @@ def get_loader(examples, args, label_list, mode):
     else:
         sampler = SequentialSampler(datatensor)
 
-        if mode == 'eval':
+        if mode == 'train_unlabeled':
+            dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.train_batch_size)    
+
+        elif mode == 'eval':
             dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.eval_batch_size)    
         
         elif mode == 'test':

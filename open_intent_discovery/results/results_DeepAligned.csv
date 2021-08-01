@@ -17,3 +17,4 @@ ACC,ARI,NMI,dataset,method,backbone,known_cls_ratio,labeled_ratio,loss,seed,clus
 84.8,78.16,93.57,clinc,DeepAligned,bert,0.75,0.1,,4,1.0
 87.73,81.45,94.4,clinc,DeepAligned,bert,0.75,0.1,,5,1.0
 86.76,79.59,93.65,clinc,DeepAligned,bert,0.75,0.1,,7,1.0
+86.36,79.57,93.61,clinc,DeepAligned,bert,0.75,0.1,,9,1.0
