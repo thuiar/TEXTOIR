@@ -9,16 +9,16 @@ do
         do 
             python run.py \
             --dataset $dataset \
-            --method 'DTC_BERT' \
+            --method 'KCL_BERT' \
             --setting 'semi_supervised' \
             --known_cls_ratio $known_cls_ratio \
             --seed $seed \
-            --backbone 'bert_DTC' \
-            --config_file_name 'DTC_BERT' \
+            --backbone 'bert_KCL' \
+            --config_file_name 'KCL_BERT' \
             --gpu_id '0' \
             --train \
             --save_results \
-            --results_file_name 'results_DTC_BERT.csv' \
+            --results_file_name 'results_KCL_BERT.csv' \
             --save_model
         done
     done

@@ -25,6 +25,7 @@ class DTCManager:
         self.device = model.device
 
         self.train_dataloader = data.dataloader.train_unlabeled_loader
+
         from dataloaders.bert_loader import get_loader
         self.eval_dataloader = get_loader(data.dataloader.eval_examples, args, data.all_label_list, 'eval')
         self.test_dataloader = data.dataloader.test_loader 

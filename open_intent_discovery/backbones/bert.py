@@ -177,6 +177,50 @@ class BertForKCL_Similarity(BertPreTrainedModel):
         
         if mode == 'train':    
             loss = loss_fct(logits.view(-1,self.num_labels), labels.view(-1))
+
+            return loss
+        else:
+            return pooled_output, logits
+
+class BertForKCL(BertPreTrainedModel):
+    def __init__(self, config, args):
+        super(BertForKCL, self).__init__(config)
+
+        self.num_labels = args.num_labels
+        self.bert = BertModel(config)
+
+        self.dense = nn.Linear(config.hidden_size, config.hidden_size)
+        self.activation = activation_map[args.activation]
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)
+
+        self.classifier = nn.Linear(config.hidden_size, args.num_labels)
+        self.apply(self.init_bert_weights)
+
+    def forward(self, input_ids = None, token_type_ids = None, attention_mask=None , labels = None, mode = None, 
+        simi = None, loss_fct = None):
+
+        encoded_layer_12, pooled_output = self.bert(input_ids, token_type_ids, attention_mask, output_all_encoded_layers = True)
+        
+        pooled_output = self.dense(encoded_layer_12[-1].mean(dim = 1))
+        pooled_output = self.activation(pooled_output)
+        pooled_output = self.dropout(pooled_output)
+        logits = self.classifier(pooled_output)
+
+        if mode == 'train':    
+
+            probs = F.softmax(logits,dim=1)
+            prob1, prob2 = PairEnum(probs)
+
+            loss_KCL = loss_fct(prob1, prob2, simi)
+            flag = len(labels[labels != -1])
+
+            if flag != 0:
+                loss_ce = nn.CrossEntropyLoss()(logits[labels != -1], labels[labels != -1])
+                loss = loss_ce + loss_KCL
+            else:
+                prob1, prob2 = PairEnum(probs)
+                loss = loss_KCL
+
             return loss
         else:
             return pooled_output, logits

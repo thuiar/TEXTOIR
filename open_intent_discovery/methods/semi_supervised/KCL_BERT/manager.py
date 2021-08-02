@@ -1,113 +1,55 @@
 import logging
-from tqdm import trange, tqdm
+import torch
+import os
+import copy
+import torch.nn.functional as F
 
-def Class2Simi(x,mode='cls',mask=None):
-    # Convert class label to pairwise similarity
-    n=x.nelement()
-    assert (n-x.ndimension()+1)==n,'Dimension of Label is not right'
-    expand1 = x.view(-1,1).expand(n,n)
-    expand2 = x.view(1,-1).expand(n,n)
-    out = expand1 - expand2    
-    out[out!=0] = -1 #dissimilar pair: label=-1
-    out[out==0] = 1 #Similar pair: label=1
-    if mode=='cls':
-        out[out==-1] = 0 #dissimilar pair: label=0
-    if mode=='hinge':
-        out = out.float() #hingeloss require float type
-    if mask is None:
-        out = out.view(-1)
-    else:
-        mask = mask.detach()
-        out = out[mask]
-    return out
+from tqdm import trange, tqdm
+from sklearn.metrics import confusion_matrix
+
+from losses import loss_map
+from .pretrain import PretrainKCLManager
+from utils.functions import restore_model, save_model
+from utils.metrics import clustering_score
 
 class KCLManager:
     
     def __init__(self, args, data, model, logger_name = 'Discovery'):
         
         self.logger = logging.getLogger(logger_name)
-        self.model = model.model 
+
+        backbone = args.backbone
         self.optimizer = model.optimizer
         self.device = model.device
-
+        
         self.train_dataloader = data.dataloader.train_loader
+        self.eval_dataloader = data.dataloader.eval_loader
+        self.test_dataloader = data.dataloader.test_loader
+
+        pretrain_manager = PretrainKCLManager(args, data, model)  
+        self.loss_fct = loss_map[args.loss_fct]
 
         if args.train:
+            
+            self.logger.info('Pre-raining start...')
+            pretrain_manager.train(args, data)
+            self.logger.info('Pre-training finished...')
 
-            from backbones.bert import BertForKCL_Similarity
-            args.backbone = 'bert_KCL_simi'
-            self.pretrain_model = model.set_model(args, data, 'bert')
-            self.pretrain_optimizer = model.set_optimizer(self.pretrain_model, )
-            self.best_eval_score = 0
-            self.simi_model = self.train_simi(args, data)
-            self.model = KCL.from_pretrained(args.bert_model, cache_dir = "", num_labels = self.num_labels)
+            self.pretrained_model = pretrain_manager.model
+
+            args.num_labels = data.num_labels
+            args.backbone = backbone
+            self.model = model.set_model(args, data, 'bert')
 
         else:
-            self.simi_model = SimiModel.from_pretrained(args.bert_model, cache_dir = "", num_labels = data.num_labels)
-            self.simi_model = restore_model(self.simi_model, self.pretrain_model_dir)
-            self.model = KCL.from_pretrained(args.bert_model, cache_dir = "", num_labels = self.num_labels)
-            self.model = restore_model(self.model, self.model_dir)
-        
-
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model.to(self.device)
-        self.simi_model.to(self.device)
-
-        num_train_examples = len(data.train_labeled_examples) + len(data.train_unlabeled_examples)
-        self.num_train_optimization_steps = int(num_train_examples / args.train_batch_size) * args.num_train_epochs
-
-        self.optimizer = self.get_optimizer(args)
-
-
-    def pre_train(self, args, data):
-    
-        manager_p = SimiModelManager(args, data)
-        manager_p.train(args, data)
-        print('Pretraining finished...')
-
-        if args.save_discover:
-            save_model(manager_p.model, self.pretrain_model_dir)
-        
-        return manager_p.model
-
-    def get_preds_labels(self, args, dataloader, model):
-        
-        model.eval()
-        total_labels = torch.empty(0,dtype=torch.long).to(self.device)
-        total_features = torch.empty((0,args.feat_dim)).to(self.device)
-        total_preds = torch.empty(0,dtype=torch.long).to(self.device)
-
-        for batch in tqdm(dataloader, desc="Extracting representation"):
-            batch = tuple(t.to(self.device) for t in batch)
-            input_ids, input_mask, segment_ids, label_ids = batch
-            with torch.no_grad():
-                simi = self.prepare_task_target(batch, self.simi_model)
-                preds, feature = model(input_ids, segment_ids, input_mask)
-    
-            total_labels = torch.cat((total_labels, label_ids))
-            total_preds = torch.cat((total_preds, preds))
-            total_features = torch.cat((total_features, feature))
-
-        y_true = total_labels.cpu().numpy()
-        y_pred = total_preds.cpu().numpy()
-        feats = total_features.cpu().numpy()
-
-        return y_true, y_pred, feats
-    
-    def prepare_task_target(self, batch, model):
-
-        model.eval()
-        input_ids,input_mask,segment_ids,label_ids = batch
-        target = model(input_ids, segment_ids, input_mask)
-        target = target.float()
-        target[target == 0] = -1
-
-        return target.detach()
+            self.pretrained_model = restore_model(pretrain_manager.model, os.path.join(args.method_output_dir, 'pretrain'))
+            self.model = restore_model(self.model, args.model_output_dir)
 
     def train(self, args, data): 
 
         best_model = None
         wait = 0
+        best_eval_score = 0
 
         for epoch in trange(int(args.num_train_epochs), desc="Epoch"):  
             
@@ -115,15 +57,14 @@ class KCLManager:
             nb_tr_examples, nb_tr_steps = 0, 0
             self.model.train()
 
-            for batch in tqdm(data.train_dataloader, desc="Training(All)"):
+            for batch in tqdm(self.train_dataloader, desc="Iteration"):
 
                 batch = tuple(t.to(self.device) for t in batch)
                 input_ids, input_mask, segment_ids, label_ids = batch
                 
-                with torch.no_grad():
-                    simi = self.prepare_task_target(batch, self.simi_model)
+                simi = self.prepare_task_target(batch, self.pretrained_model)
                 
-                loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode='train', simi = simi)
+                loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = 'train', simi = simi, loss_fct = self.loss_fct)
                 
                 loss.backward()
 
@@ -135,18 +76,28 @@ class KCLManager:
                 self.optimizer.zero_grad()
             
             tr_loss = tr_loss / nb_tr_steps
-            print('train_loss',tr_loss)
 
-            y_true, y_pred, feats = self.get_preds_labels(args, data.eval_dataloader, self.model)
-            results = clustering_score(y_true, y_pred)
-            eval_score = results['NMI']
-            print('eval_score',eval_score)
+            y_true, y_pred = self.get_outputs(args, mode = 'eval')
 
-            if eval_score >= self.best_eval_score:
+            eval_score = clustering_score(y_true, y_pred)['NMI']
+            eval_results = {
+                'train_loss': tr_loss,
+                'eval_score': eval_score,
+                'best_score': best_eval_score,
+            }
+
+            self.logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
+            for key in sorted(eval_results.keys()):
+                self.logger.info("  %s = %s", key, str(eval_results[key]))
+
+            if eval_score > best_eval_score:
+
                 best_model = copy.deepcopy(self.model)
                 wait = 0
-                self.best_eval_score = eval_score
-            else:
+                best_eval_score = eval_score
+
+            elif eval_score > 0:
+                
                 wait += 1
                 if wait >= args.wait_patient:
                     break
@@ -158,17 +109,77 @@ class KCLManager:
 
         self.model = best_model
 
-        if args.save_discover:
-            save_model(self.model, self.model_dir)
+        if args.save_model:
+            save_model(self.model, args.model_output_dir)
 
-    def test(self, args, data, show=True):
-    
-        y_true, y_pred, feats = self.get_preds_labels(args, data.test_dataloader, self.model)
-        results = clustering_score(y_true, y_pred) 
+    def get_outputs(self, args, mode = 'eval', get_feats = False):
         
-        if show:
-            print('results',results)
+        if mode == 'eval':
+            dataloader = self.eval_dataloader
+        elif mode == 'test':
+            dataloader = self.test_dataloader
 
-        self.test_results = results
+        self.model.eval()
+        total_labels = torch.empty(0, dtype=torch.long).to(self.device)
+        total_logits = torch.empty((0, args.num_labels)).to(self.device)
+        total_features = torch.empty((0, args.feat_dim)).to(self.device)
+        total_preds = torch.empty(0, dtype=torch.long).to(self.device)
 
-        return y_pred, y_true, feats
+        for batch in tqdm(dataloader, desc="Iteration"):
+
+            batch = tuple(t.to(self.device) for t in batch)
+            input_ids, input_mask, segment_ids, label_ids = batch
+
+            with torch.set_grad_enabled(False):
+
+                features, logits = self.model(input_ids, segment_ids, input_mask)
+                total_labels = torch.cat((total_labels, label_ids))
+                total_logits = torch.cat((total_logits, logits))
+                total_features = torch.cat((total_features, features))
+
+        if get_feats:
+
+            feats = total_features.cpu().numpy()
+            return feats
+
+        else:
+
+            total_probs = F.softmax(total_logits.detach(), dim=1)
+            total_maxprobs, total_preds = total_probs.max(dim = 1)
+
+            y_true = total_labels.cpu().numpy()
+            y_pred = total_preds.cpu().numpy()
+
+            return y_true, y_pred
+    
+    def prepare_task_target(self, batch, model):
+
+        model.eval()
+        input_ids, input_mask, segment_ids, label_ids = batch
+        _, logits = model(input_ids, segment_ids, input_mask)
+        probs = F.softmax(logits,dim=1)
+
+        target = torch.argmax(probs,dim=1)
+        target = target.float()
+        target[target == 0] = -1
+
+        return target.detach()
+
+    def test(self, args, data):
+        
+        y_true, y_pred = self.get_outputs(args, mode = 'test')
+        test_results = clustering_score(y_true, y_pred)
+        cm = confusion_matrix(y_true, y_pred)
+        
+        self.logger.info
+        self.logger.info("***** Test: Confusion Matrix *****")
+        self.logger.info("%s", str(cm))
+        self.logger.info("***** Test results *****")
+        
+        for key in sorted(test_results.keys()):
+            self.logger.info("  %s = %s", key, str(test_results[key]))
+
+        test_results['y_true'] = y_true
+        test_results['y_pred'] = y_pred
+
+        return test_results
