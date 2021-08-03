@@ -151,9 +151,6 @@ class DTCManager:
 
     def train(self, args, data): 
 
-        # probs = self.get_outputs(args, mode = 'train', get_probs = True)
-        # p_target = target_distribution(probs)
-
         ntrain = len(data.dataloader.train_unlabeled_examples)
         Z = torch.zeros(ntrain, args.num_labels).float().to(self.device)        # intermediate values
         z_ema = torch.zeros(ntrain, args.num_labels).float().to(self.device)        # temporal outputs
@@ -162,9 +159,6 @@ class DTCManager:
         best_model = None
         best_eval_score = 0
         for epoch in trange(int(args.num_train_epochs), desc="Epoch"):  
-            
-            # probs = self.get_outputs(args, mode = 'train', get_probs = True)
-            # p_target = target_distribution(probs)
 
             # Fine-tuning with auxiliary distribution
             tr_loss, nb_tr_examples, nb_tr_steps = 0, 0, 0

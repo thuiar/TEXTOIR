@@ -10,7 +10,6 @@ from sklearn.metrics import accuracy_score
 from tqdm import trange, tqdm
 from losses import loss_map
 from utils.functions import save_model
-from utils.metrics import clustering_score
 
 class PretrainDTCManager:
     
@@ -45,7 +44,6 @@ class PretrainDTCManager:
             for step, batch in enumerate(tqdm(self.train_dataloader, desc="Iteration (labeled)")):
                 batch = tuple(t.to(self.device) for t in batch)
                 input_ids, input_mask, segment_ids, label_ids = batch
-
                 with torch.set_grad_enabled(True):
                     
                     loss = self.model(input_ids, segment_ids, input_mask, label_ids, loss_fct = self.loss_fct, mode = "train")

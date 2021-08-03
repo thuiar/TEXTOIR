@@ -19,7 +19,6 @@ class KCLManager:
         self.logger = logging.getLogger(logger_name)
 
         backbone = args.backbone
-        self.optimizer = model.optimizer
         self.device = model.device
         
         self.train_dataloader = data.dataloader.train_loader
@@ -40,6 +39,8 @@ class KCLManager:
             args.num_labels = data.num_labels
             args.backbone = backbone
             self.model = model.set_model(args, data, 'bert')
+            self.optimizer = model.set_optimizer(self.model, data.dataloader.num_train_examples, args.train_batch_size, \
+                args.num_train_epochs, args.lr, args.warmup_proportion)
 
         else:
             self.pretrained_model = restore_model(pretrain_manager.model, os.path.join(args.method_output_dir, 'pretrain'))
@@ -63,7 +64,6 @@ class KCLManager:
                 input_ids, input_mask, segment_ids, label_ids = batch
                 
                 simi = self.prepare_task_target(batch, self.pretrained_model)
-                
                 loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = 'train', simi = simi, loss_fct = self.loss_fct)
                 
                 loss.backward()
@@ -78,7 +78,7 @@ class KCLManager:
             tr_loss = tr_loss / nb_tr_steps
 
             y_true, y_pred = self.get_outputs(args, mode = 'eval')
-
+            
             eval_score = clustering_score(y_true, y_pred)['NMI']
             eval_results = {
                 'train_loss': tr_loss,
@@ -101,11 +101,6 @@ class KCLManager:
                 wait += 1
                 if wait >= args.wait_patient:
                     break
-            
-            #########debug
-            # y_true, y_pred, feats = self.get_preds_labels(data.test_dataloader, self.model)
-            # results = clustering_score(y_true, y_pred)
-            # print('test_score', results)
 
         self.model = best_model
 

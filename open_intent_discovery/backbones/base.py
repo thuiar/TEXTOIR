@@ -44,7 +44,6 @@ class ModelManager:
         backbone = backbones_map[args.backbone]
 
         if pattern == 'bert':
-
             self.device = torch.device('cuda:%d' % int(args.gpu_id) if torch.cuda.is_available() else 'cpu')   
             model = backbone.from_pretrained(args.bert_model, cache_dir = "", args = args)    
 

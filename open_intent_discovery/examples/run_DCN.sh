@@ -13,7 +13,6 @@ do
         --config_file_name 'DCN' \
         --gpu_id '0' \
         --save_results \
-        --save_model \
         --train \
         --results_file_name 'results_DCN.csv'
     done

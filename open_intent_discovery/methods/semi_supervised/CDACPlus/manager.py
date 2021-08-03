@@ -34,11 +34,7 @@ class CDACPlusManager:
         self.eval_dataloader = data.dataloader.eval_loader
         self.test_dataloader = data.dataloader.test_loader 
 
-        if args.train:
-            self.train(args, data)
-            self.refine(args, data)
-
-        else:
+        if not args.train:
             self.model = restore_model(self.model, args.model_output_dir)
 
     def initialize_centroids(self, args, data):
@@ -128,8 +124,11 @@ class CDACPlusManager:
         
         self.logger.info('Pairwise-similarity Learning finished...')
 
+        self.refine(args, data)
+
     def refine(self, args, data):
         
+        self.logger.info('Cluster refining begin...')
         self.initialize_centroids(args, data)
 
         best_model = None
@@ -196,6 +195,8 @@ class CDACPlusManager:
             self.logger.info("***** Epoch: %s: Eval results *****", str(epoch))
             for key in sorted(eval_results.keys()):
                 self.logger.info("  %s = %s", key, str(eval_results[key]))
+
+        self.logger.info('Cluster refining finished...')
 
         if args.save_model:
             save_model(self.model, args.model_output_dir)

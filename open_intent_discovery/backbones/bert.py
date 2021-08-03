@@ -165,7 +165,7 @@ class BertForKCL_Similarity(BertPreTrainedModel):
         self.apply(self.init_bert_weights)
     
     def forward(self, input_ids, token_type_ids = None, attention_mask=None, labels=None, loss_fct=None, mode = None):
-
+        
         encoded_layer_12, pooled_output = self.bert(input_ids, token_type_ids, attention_mask, output_all_encoded_layers=False)
         feat1,feat2 = PairEnum(encoded_layer_12.mean(dim = 1))
         feature_cat = torch.cat([feat1,feat2], 1)
@@ -218,9 +218,53 @@ class BertForKCL(BertPreTrainedModel):
                 loss_ce = nn.CrossEntropyLoss()(logits[labels != -1], labels[labels != -1])
                 loss = loss_ce + loss_KCL
             else:
-                prob1, prob2 = PairEnum(probs)
                 loss = loss_KCL
 
             return loss
+        else:
+            return pooled_output, logits
+
+class BertForMCL(BertPreTrainedModel):
+    def __init__(self, config, args):
+        super(BertForMCL, self).__init__(config)
+
+        self.num_labels = args.num_labels
+        self.bert = BertModel(config)
+
+        self.dense = nn.Linear(config.hidden_size, config.hidden_size)
+        self.activation = activation_map[args.activation]
+        self.dropout = nn.Dropout(config.hidden_dropout_prob)
+        self.classifier = nn.Linear(config.hidden_size, args.num_labels)
+        self.apply(self.init_bert_weights)
+
+    def forward(self, input_ids = None, token_type_ids = None, attention_mask=None , labels = None, mode = None, loss_fct = None):
+
+        encoded_layer_12, pooled_output = self.bert(input_ids, token_type_ids, attention_mask, output_all_encoded_layers = False)
+        pooled_output = self.dense(encoded_layer_12.mean(dim = 1))
+        pooled_output = self.activation(pooled_output)
+        pooled_output = self.dropout(pooled_output)
+        logits = self.classifier(pooled_output)
+        probs = F.softmax(logits, dim = 1)
+
+        if mode == 'train':
+            
+            flag = len(labels[labels != -1])
+            prob1, prob2 = PairEnum(probs)
+            simi = torch.matmul(probs, probs.transpose(0, -1)).view(-1)
+
+            simi[simi > 0.5] = 1
+            simi[simi < 0.5] = -1
+            loss_MCL = loss_fct(prob1, prob2, simi)
+
+            if flag != 0:
+
+                loss_ce = nn.CrossEntropyLoss()(logits[labels != -1], labels[labels != -1])
+                loss = loss_ce + loss_MCL
+
+            else:
+                loss = loss_MCL
+
+            return loss
+            
         else:
             return pooled_output, logits

@@ -45,7 +45,6 @@ class PretrainDeepAlignedManager:
             for step, batch in enumerate(tqdm(self.train_dataloader, desc="Iteration")):
                 batch = tuple(t.to(self.device) for t in batch)
                 input_ids, input_mask, segment_ids, label_ids = batch
-
                 with torch.set_grad_enabled(True):
 
                     loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct = self.loss_fct)

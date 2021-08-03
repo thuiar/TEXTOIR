@@ -65,10 +65,10 @@ class PretrainKCLManager:
                 batch = tuple(t.to(self.device) for t in batch)
                 input_ids, input_mask, segment_ids, label_ids = batch
                 train_target = Class2Simi(label_ids, mode='cls').detach()
-
                 loss = self.model(input_ids, segment_ids, input_mask, train_target, loss_fct = self.loss_fct, mode = 'train')
                 
                 loss.backward()
+
                 tr_loss += loss.item()
                 nb_tr_examples += input_ids.size(0)
                 nb_tr_steps += 1 
@@ -100,9 +100,8 @@ class PretrainKCLManager:
         
                 wait += 1
                 if wait >= args.wait_patient:
+                    self.model = best_model
                     break 
-                
-        self.model = best_model
 
         if args.save_model:
             pretrained_model_dir = os.path.join(args.method_output_dir, 'pretrain')
@@ -116,9 +115,9 @@ class PretrainKCLManager:
             dataloader = self.eval_dataloader
 
         self.model.eval()
-        total_labels = torch.empty(0,dtype=torch.long).to(self.device)
-        total_preds = torch.empty(0,dtype=torch.long).to(self.device)
-        total_logits = torch.empty((0,args.num_labels)).to(self.device)
+        total_labels = torch.empty(0, dtype=torch.long).to(self.device)
+        total_preds = torch.empty(0, dtype=torch.long).to(self.device)
+        total_logits = torch.empty((0, args.num_labels)).to(self.device)
 
         for batch in tqdm(dataloader, desc="Iteration"):
 

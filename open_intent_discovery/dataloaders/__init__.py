@@ -12,6 +12,7 @@ backbone_loader_map = {
                             'bert_DTC': BERT_Loader,
                             'bert_KCL_simi': BERT_Loader,
                             'bert_KCL': BERT_Loader,
+                            'bert_MCL': BERT_Loader,
                             'glove': UNSUP_Loader,
                             'sae': UNSUP_Loader
                       }

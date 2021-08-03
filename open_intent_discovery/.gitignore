@@ -2,3 +2,7 @@ results
 logs
 final_results
 archive
+__pycache__
+plot
+ablation_studies
+test

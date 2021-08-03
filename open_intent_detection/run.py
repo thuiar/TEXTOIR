@@ -33,8 +33,6 @@ def parse_arguments():
 
     parser.add_argument("--backbone", type=str, default='bert', help="which backbone to use")
 
-    parser.add_argument("--num_train_epochs", type=int, default=100, help = "The number of training epochs.")
-
     parser.add_argument("--config_file_name", type=str, default='ADB.py', help = "The name of the config file.")
 
     parser.add_argument('--seed', type=int, default=0, help="random seed for initialization")

@@ -1,7 +1,7 @@
 #!/usr/bin bash
 
 
-for dataset in 'clinc' 'banking' 
+for dataset in  'banking'  'clinc'
 do
     for known_cls_ratio in 0.75
     do
@@ -19,7 +19,6 @@ do
             --train \
             --save_results \
             --results_file_name 'results_DTC_BERT.csv' \
-            --save_model
         done
     done
 done
