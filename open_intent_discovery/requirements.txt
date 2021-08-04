@@ -111,7 +111,7 @@ translationstring==1.4
 Tree==0.2.4
 triton==0.4.2
 umap-learn==0.5.1
-urllib3==1.26.4
+urllib3==1.26.5
 velruse==1.1.1
 venusian==3.0.0
 Wand==0.6.6
