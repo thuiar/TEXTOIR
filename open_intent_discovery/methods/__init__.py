@@ -17,7 +17,7 @@ method_map = {
                 'MCL_BERT': MCLManager,
                 'KM': KMManager,
                 'AG': AGManager,
-                'SAE-KM': SAEManager,
+                'SAE': SAEManager,
                 'DEC': DECManager,
                 'DCN': DCNManager,
             }

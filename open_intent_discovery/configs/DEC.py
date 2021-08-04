@@ -11,6 +11,7 @@ class Param():
             SAE_feats_path (directory): The path for pre-trained stacked auto-encoder features.
             num_train_epochs_SAE (int): The number of epochs for training stacked auto-encoder.
             num_train_epochs_DEC (int): The number of epochs for training DEC model.
+            feat_dim (int): The feature dimension.
             update_interval (int): The number of intervals between contiguous updates.
             lr (float): The learning rate for training DCN.
             momentum (float): The momentum value of SGD optimizer.
@@ -21,6 +22,7 @@ class Param():
             'SAE_feats_path': os.path.join('_'.join([str(x) for x in ['SAE', args.dataset, 'sae', str(args.seed)]]), 'models', 'SAE.h5'),
             'num_train_epochs_SAE': 5000,
             'num_train_epochs_DEC': 12000,
+            'feat_dim': 2000,
             'update_interval': 100,
             'batch_size': 256,
             'lr': 0.001,

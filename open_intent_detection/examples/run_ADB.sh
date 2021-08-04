@@ -14,7 +14,6 @@ do
                 --known_cls_ratio $known_cls_ratio \
                 --labeled_ratio $labeled_ratio \
                 --seed $seed \
-                --num_train_epochs 100 \
                 --backbone 'bert' \
                 --config_file_name 'ADB' \
                 --gpu_id '0' \

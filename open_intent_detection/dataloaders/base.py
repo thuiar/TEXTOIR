@@ -51,7 +51,7 @@ class DataManager:
     
     def get_loader(self, args, attrs):
         
-        dataloader = backbone_loader_map[args.backbone](args, attrs, self.logger)
+        dataloader = backbone_loader_map[args.backbone](args, attrs, args.logger_name)
 
         return dataloader
     

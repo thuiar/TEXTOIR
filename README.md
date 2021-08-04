@@ -2,14 +2,11 @@
 
 TEXTOIR is an Integrated and Extensible Platform for Text Open Intent Recognition. 
 
-Contributors: Hanlei Zhang, Ting-En Lin, Jieshao Zhao, Xin Wang, Qianrui Zhou, and Huisheng Mao.
-
-Supervisor: Hua Xu.
-
 ## Introduction
 TEXTOIR aims to provide a convenience toolkit for researchers to reproduce the related text open classification and clustering methods. It contains two tasks, which are defined as open intent detection and open intent discovery. Open intent detection aims to identify n-class known intents, and detect one-class open intent. Open intent discovery aims to leverage limited prior knowledge of known intents to find fine-grained known and open intent-wise clusters.
 
-![Example](figs/Intro.png "Open Intent Detection and Discovery:")
+Open Intent Recognition:  
+![Example](figs/Intro.png "Example")
 
 ## Benmark Datasets
 * [BANKING](https://arxiv.org/pdf/2003.04807.pdf)
@@ -46,13 +43,18 @@ TEXTOIR aims to provide a convenience toolkit for researchers to reproduce the r
 (* denotes the CV model replaced with the BERT backbone)
 
 ## Quick Start
-1. Install PyTorch (Cuda version 11.2)
+1. Use anaconda to create Python (version >= 3.6) environment
+```
+conda create --name textoir python=3.6
+conda activate textoir
+```
+2. Install PyTorch (Cuda version 11.2)
 ```
 conda install pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch -c conda-forge  
 ```
 2. Clone the TEXTOIR repository, and choose the task (Take open intent detection as an example).
 ```
-git clone https://github.com/TEXTOIR
+git clone git@github.com:HanleiZhang/TEXTOIR.git
 cd TEXTOIR
 cd open_intent_detection
 ```
@@ -67,7 +69,7 @@ sh examples/run_ADB.sh
 
 More usage details can be seen in the directory [open_intent_detection](./open_intent_detection/README.md) and [open_intent_discovery](./open_intent_discovery/README.md) respectively.
 
-If you are insterested in this work, and want to use the codes or results in this repository, please **star** this repository, and **cite** by:
+If you are insterested in this work, and want to use the codes or results in this repository, please **star**, **fork** this repository, and **cite** by:
 ```
 @inproceedings{zhang-etal-2021-textoir,
     title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
@@ -84,3 +86,7 @@ If you are insterested in this work, and want to use the codes or results in thi
 ```
 
 If you have any questions, feel free to open issues and pull request. Please illustrate your problems as detailed as possible. If you want to integrate your method in our repo, please contact us (zhang-hl20@mails.tsinghua.edu.cn).
+
+Contributors: [Hanlei Zhang](https://github.com/HanleiZhang), [Ting-En Lin](https://github.com/tnlin), Shaojie Zhao, Xin Wang, Qianrui Zhou, and Huisheng Mao.
+
+Supervisor: Hua Xu.

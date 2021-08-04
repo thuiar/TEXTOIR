@@ -24,42 +24,6 @@ class UNSUP_Loader:
                 get_glove_data(args, self.all_data, self.train_data, self.test_data)
         elif args.backbone == 'sae':
             self.tfidf_train, self.tfidf_test = get_tfidf_data(args, self.train_data, self.test_data)
-    
-        # self.train_data['words'] = self.train_data['text'].apply(word_tokenize)
-        # self.train_texts = self.train_data['words'].tolist()
-        # self.train_pad = self.get_sequences_pad(self.train_texts, args)
-        # self.train_x = self.train_pad[self.train_data.index]
-        
-        # self.test_data['words'] = self.test_data['text'].apply(word_tokenize)
-        # self.test_texts = self.test_data['words'].tolist()
-        # self.test_pad = self.get_sequences_pad(self.test_texts, args)
-        # self.le = LabelEncoder()
-        # self.test_data['y_true'] = self.le.fit_transform(self.test_data['label'])
-        # self.test_x = self.train_pad[self.test_data.index]
-        # self.test_y = self.test_data.y_true.values
-        # # self.all_data, self.train_data, self.dev_data, self.test_data = self.get_examples(base_attrs)
-        
-        
-        
-        # # self.le = LabelEncoder()
-        # # self.train_data['y_true'] = self.le.fit_transform(self.train_data['label'])
-        # # self.test_data['y_true'] = self.le.fit_transform(self.test_data['label'])
-
-        # # df_train = train_test_split(self.train_data, test_size=0, stratify=self.train_data.label, shuffle=True, random_state=args.seed)
-        # # # df_test = train_test_split(self.test_data, test_size=0, stratify=self.test_data.label, shuffle=True, random_state=args.seed)
-        # df_train, df_test = train_test_split(self.all_data, test_size=0.2, stratify=self.all_data.label, shuffle=True, random_state=args.seed)
-        # df_test, df_t = train_test_split(self.all_data, test_size=0.9, stratify=self.all_data.label, shuffle=True, random_state=args.seed)
-        # # print(df_test)
-        # print(self.test_data)
-        
-        
-        # # self.train_x = self.sequences_pad[self.all_data.index]
-        # # self.test_x = self.sequences_pad[self.test_data.index]
-        # # self.le = LabelEncoder()
-        # # self.test_data['y_true'] = self.le.fit_transform(self.test_data['label'])
-        # # print('11111111111', set(self.test_data['y_true']))
-        # # self.test_y = self.test_data.y_true.values
-
 
     def get_examples(self, base_attrs):
         
@@ -76,7 +40,6 @@ class UNSUP_Loader:
 
         train_data_list = train_data_list + dev_data_list
         train_data_frame = pd.DataFrame(train_data_list, columns = ['text', 'label'])
-        # dev_data_frame = pd.DataFrame(dev_data_list, columns = ['text', 'label'])
         test_data_frame = pd.DataFrame(test_data_list, columns = ['text', 'label'])
 
         return all_data_frame, train_data_frame, test_data_frame
@@ -84,7 +47,7 @@ class UNSUP_Loader:
 def get_tfidf_data(args, train_data, test_data):
 
     from sklearn.feature_extraction.text import TfidfVectorizer
-    vec_tfidf = TfidfVectorizer(max_features=args.feat_dim)
+    vec_tfidf = TfidfVectorizer(max_features = args.feat_dim)
     tfidf_train = vec_tfidf.fit_transform(train_data['text'].tolist()).todense()
     tfidf_test = vec_tfidf.transform(test_data['text'].tolist()).todense()
 

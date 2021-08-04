@@ -71,7 +71,7 @@ class ADBManager:
                 input_ids, input_mask, segment_ids, label_ids = batch
 
                 with torch.set_grad_enabled(True):
-                    loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct = loss_fct)
+                    loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct = self.loss_fct)
 
                     self.optimizer.zero_grad()
                     loss.backward()

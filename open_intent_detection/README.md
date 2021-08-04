@@ -1,17 +1,23 @@
 # Open Intent Detection
+
 This package provides the toolkit for open intent detection implemented with PyTorch.
 
 ## Introduction
-Open intent detection aims to identify n-class known intents, and detect one-class open intent. We collect benchmark intent datasets, and reproduce related methods to our best. For the convenience of users, we provide flexible and extensible interfaces to add new methods. Welcome to contact us to add your methods!
 
-![Example](figs/open_intent_detection.png "Open Intent Detection:")
+Open intent detection aims to identify n-class known intents, and detect one-class open intent. We collect benchmark intent datasets, and reproduce related methods to our best. For the convenience of users, we provide flexible and extensible interfaces to add new methods. Welcome to contact us (zhang-hl20@mails.tsinghua.edu.cn) to add your methods!
 
-## Benchmark Datasets
+Open Intent Detection:  
+![Example](figs/open_intent_detection.png =100x "Example")
+
+## Basic Information
+
+### Benchmark Datasets
+
 * [BANKING](https://arxiv.org/pdf/2003.04807.pdf)
 * [OOS](https://arxiv.org/pdf/1909.02027.pdf) 
 * [StackOverflow](https://aclanthology.org/W15-1509.pdf)
 
-## Models
+### Integrated Models
 
 * [Deep Open Intent Classification with Adaptive Decision Boundary](https://ojs.aaai.org/index.php/AAAI/article/view/17690) (ADB, AAAI 2021)
 * [Deep Unknown Intent Detection with Margin Loss](https://aclanthology.org/P19-1548.pdf) (DeepUnk, ACL 2019)
@@ -21,11 +27,12 @@ Open intent detection aims to identify n-class known intents, and detect one-cla
 
 We welcome any issues and requests for model implementation and bug fix. 
 
-## Experimental Settings
+### Data Settings
+
 Each dataset is split to training, development, and testing sets. We select partial intents as known (the labeled ratio can be changed) for training, and use all intents for testing. All the unknown intents are regarded as one open class (with token \<UNK> or \<OOS> in our codes).
 
+### Parameter Configurations
 
-## Configurations
 The basic parameters include parsing parameters about selected dataset, method, setting, etc. More details can be seen in [run.py](./run.py). For specific parameters of each method, we support add configuration files with different hyper-parameters in the [configs](./configs) directory. 
 
 An example can be seen in [configs/ADB.py](./configs/ADB.py). Notice that the config file name is corresponding to the parsing parameter.
@@ -36,41 +43,60 @@ python run.py --dataset xxx --known_cls_ratio xxx --labeled_ratio xxx --config_f
 ```
 Notice that if you want to train the model, save the model, or save the testing results, you need to add related parameters (--train, --save_model, --save_results)
 
-## How to add your own method? (Take MSP as an example)
+## Tutorials
+### a. How to add a new dataset? 
+1. Prepare Data  
+Create a new directory to store your dataset in the [data](../data) directory. You should provide the train.tsv, dev.tsv, and test.tsv, with the same formats as in the provided [datasets](./data/banking).
 
-1. Configs Setting   
-1.1 Create a new file, named "MSP.py" in the [configs](./configs) directory, and set the hyper-parameters for the method (an example can be seen in [MSP.py](./configs/MSP.py)).  
-1.2 set the [configs/base.py](./configs/base.py) configs as follows:
- 
+2. Dataloader Setting  
+Calculate the maximum sentence length (token unit) and count the labels of the dataset. Add them in the [file](./configs/__init__.py) as follows:  
 ```
-from xxx import xxx
-from .MSP import MSP_Param
-
-param_map = {
-    'xxx': xxx, 'MSP': MSP_Param
+max_seq_lengths = {
+    'new_dataset': max_length
+}
+benchmark_labels = {
+    'new_dataset': label_list
 }
 ```
-2. Add Methods  
-2.1 Create a new directory, named "MSP" in the [methods](./methods) directory.  
-2.2 Add the manager file for MSP. The file should include the method manager class (e.g., MSPManager), which includes training, evalutation, and testing modules for the method. An example can be seen in [methods/MSP/manager.py](./methods/MSP/manager.py).  
-2.3 Add the related method dependency in [methods/__init__.py](./methods/__init__.py) as below:
+
+### b. How to add a new backbone?
+
+1. Add a new backbone in the [backbones](./backbones) directory. For example, we provide some bert-based backbones in the [file](./backbones/bert.py).
+
+2. Add the new backbone mapping in the [file](./backbones/__init__.py) as follows:
 ```
-from xxx import xxx
-from .MSP.manager import MSPManager
+from .bert import new_backbone_class
+backbones_map = {
+    'new_backbone': new_backbone_class
+}
+```
+Add a new loss in the [losses](./losses) directory is almost the same as adding a new backbone.
 
-method_map = {'xxx': xxx, 'MSP': MSPManager}
+### c. How to add a new method? (Take MSP as an example)
+
+1. Configuration Setting   
+Create a new file, named "method_name.py" in the [configs](./configs) directory, and set the hyper-parameters for the method (an example can be seen in [MSP.py](./configs/MSP.py)). 
+
+2. Dataloader Setting  
+Add the dataloader mapping if you use new backbone for the method. For example, the bert-based model corresponds to the bert dataloader as follows.
+```
+from .bert_loader import BERT_Loader
+backbone_loader_map = {
+    'bert': BERT_Loader
+}
 ```
 
-3. Training and Testing  
-3.1 Common Parameters (More Details in [this](./configs/base.py) file)    
-    --dataset  
-    The name of the chosen dataset. Type: str. Supported datasets can be seen in 
-
-    --known_cls_ratio (The class ratio of known intents, type: float)  
-    --train (whether to train the model)  
-    --save_model (whether to save the well-trained model)  
-3.2 An Example:  
-    python run.py --dataset banking --known_cls_ratio 0.25 --train --save_model 
+3. Add Methods  
+3.1 Create a new directory, named "MSP" in the [methods](./methods) directory.  
+3.2 Add the manager file for MSP. The file should include the method manager class (e.g., MSPManager), which includes training, evalutation, and testing modules for the method. An example can be seen in [methods/MSP/manager.py](./methods/MSP/manager.py).  
+3.3 Add the related method dependency in [methods/__init__.py](./methods/__init__.py) as below:
+```
+from .xxx.manager import xxxManager
+method_map = {
+    'xxx': xxxManager
+}
+```
+xxx denotes the name of the new method.
     
 
 
