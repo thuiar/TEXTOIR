@@ -2,6 +2,24 @@
 
 TEXTOIR is an Integrated and Extensible Platform for Text Open Intent Recognition. 
 
+If you are insterested in this work, and want to use the codes or results in this repository, please **star**, **fork** this repository, and **cite** our [ACL 2021 demo paper](https://aclanthology.org/2021.acl-demo.20.pdf):
+```
+@inproceedings{zhang-etal-2021-textoir,
+    title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
+    author = "Zhang, Hanlei  and
+      Li, Xiaoteng  and
+      Xu, Hua  and
+      Zhang, Panpan  and
+      Zhao, Kang  and
+      Gao, Kai",
+    booktitle = "Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing: System Demonstrations",
+    year = "2021",
+    pages = "167--174",
+}
+```
+This toolkit is mainly contributed by: Hanlei Zhang, Ting-En Lin, Shaojie Zhao, Xin Wang, Qianrui Zhou, and Huisheng Mao.
+
+
 ## Introduction
 TEXTOIR aims to provide a convenience toolkit for researchers to reproduce the related text open classification and clustering methods. It contains two tasks, which are defined as open intent detection and open intent discovery. Open intent detection aims to identify n-class known intents, and detect one-class open intent. Open intent discovery aims to leverage limited prior knowledge of known intents to find fine-grained known and open intent-wise clusters.
 
@@ -69,24 +87,6 @@ sh examples/run_ADB.sh
 
 More usage details can be seen in the directory [open_intent_detection](./open_intent_detection/README.md) and [open_intent_discovery](./open_intent_discovery/README.md) respectively.
 
-If you are insterested in this work, and want to use the codes or results in this repository, please **star**, **fork** this repository, and **cite** by:
-```
-@inproceedings{zhang-etal-2021-textoir,
-    title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
-    author = "Zhang, Hanlei  and
-      Li, Xiaoteng  and
-      Xu, Hua  and
-      Zhang, Panpan  and
-      Zhao, Kang  and
-      Gao, Kai",
-    booktitle = "Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing: System Demonstrations",
-    year = "2021",
-    pages = "167--174",
-}
-```
+## Bugs or questions?
 
 If you have any questions, feel free to open issues and pull request. Please illustrate your problems as detailed as possible. If you want to integrate your method in our repo, please contact us (zhang-hl20@mails.tsinghua.edu.cn).
-
-Contributors: [Hanlei Zhang](https://github.com/HanleiZhang), [Ting-En Lin](https://github.com/tnlin), Shaojie Zhao, Xin Wang, Qianrui Zhou, and Huisheng Mao.
-
-Supervisor: Hua Xu.

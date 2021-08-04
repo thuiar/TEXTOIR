@@ -72,7 +72,7 @@ backbones_map = {
 ```
 Add a new loss in the [losses](./losses) directory is almost the same as adding a new backbone.
 
-### c. How to add a new method? (Take MSP as an example)
+### c. How to add a new method?
 
 1. Configuration Setting   
 Create a new file, named "method_name.py" in the [configs](./configs) directory, and set the hyper-parameters for the method (an example can be seen in [MSP.py](./configs/MSP.py)). 
