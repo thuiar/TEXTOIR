@@ -4,18 +4,20 @@ This package provides the toolkit for open intent detection implemented with PyT
 ## Introduction
 Open intent detection aims to identify n-class known intents, and detect one-class open intent. We collect benchmark intent datasets, and reproduce related methods to our best. For the convenience of users, we provide flexible and extensible interfaces to add new methods. Welcome to contact us to add your methods!
 
-## Datasets
+![Example](figs/open_intent_detection.png "Open Intent Detection:")
+
+## Benchmark Datasets
 * [BANKING](https://arxiv.org/pdf/2003.04807.pdf)
 * [OOS](https://arxiv.org/pdf/1909.02027.pdf) 
 * [StackOverflow](https://aclanthology.org/W15-1509.pdf)
 
 ## Models
 
-* [Maximum Softmax Probability](https://arxiv.org/pdf/1610.02136.pdf) (MSP) 
-* [DOC: Deep Open Classification of Text Documents](https://aclanthology.org/D17-1314.pdf) (DOC)
-* [Towards Open Set Deep Networks](https://openaccess.thecvf.com/content_cvpr_2016/papers/Bendale_Towards_Open_Set_CVPR_2016_paper.pdf) (OpenMax)
-* [Deep Unknown Intent Detection with Margin Loss](https://aclanthology.org/P19-1548.pdf) (DeepUnk)
-* [Deep Open Intent Classification with Adaptive Decision Boundary](https://arxiv.org/pdf/2012.10209.pdf) (ADB)
+* [Deep Open Intent Classification with Adaptive Decision Boundary](https://ojs.aaai.org/index.php/AAAI/article/view/17690) (ADB, AAAI 2021)
+* [Deep Unknown Intent Detection with Margin Loss](https://aclanthology.org/P19-1548.pdf) (DeepUnk, ACL 2019)
+* [DOC: Deep Open Classification of Text Documents](https://aclanthology.org/D17-1314.pdf) (DOC, EMNLP 2017)
+* [A Baseline For Detecting Misclassified and Out-of-distribution Examples in Neural Networks](https://arxiv.org/pdf/1610.02136.pdf) (MSP, ICLR 2017) 
+* [Towards Open Set Deep Networks](https://openaccess.thecvf.com/content_cvpr_2016/papers/Bendale_Towards_Open_Set_CVPR_2016_paper.pdf) (OpenMax, CVPR 2016)
 
 We welcome any issues and requests for model implementation and bug fix. 
 
@@ -34,28 +36,7 @@ python run.py --dataset xxx --known_cls_ratio xxx --labeled_ratio xxx --config_f
 ```
 Notice that if you want to train the model, save the model, or save the testing results, you need to add related parameters (--train, --save_model, --save_results)
 
-## Usage
-### Installation
-1. Install PyTorch (Cuda version 11.2)
-```
-conda install pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch -c conda-forge  
-```
-2. Clone the TEXTOIR repository.
-```
-git clone https://github.com/TEXTOIR
-cd TEXTOIR
-```
-3. Install related environmental dependencies
-```
-pip install -r requirements.txt
-```
-4. Quick Start
-```
-sh examples/run_ADB.sh
-```
-
-## How to add a new method?
-### How to add a new method? (Take MSP as an example)
+## How to add your own method? (Take MSP as an example)
 
 1. Configs Setting   
 1.1 Create a new file, named "MSP.py" in the [configs](./configs) directory, and set the hyper-parameters for the method (an example can be seen in [MSP.py](./configs/MSP.py)).  
