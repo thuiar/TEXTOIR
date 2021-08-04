@@ -1,13 +1,34 @@
 # TEXTOIR
-TEXTOIR is an Integrated and Extensible Platform for Text Open Intent Recognition.
+TEXTOIR is an Integrated and Extensible Platform for Text Open Intent Recognition. 
+
+If you are insterested in this work, and want to use the codes or results in this repository, please **star** and **fork** this repository and **cite** by:
+```
+@inproceedings{zhang-etal-2021-textoir,
+    title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
+    author = "Zhang, Hanlei  and
+      Li, Xiaoteng  and
+      Xu, Hua  and
+      Zhang, Panpan  and
+      Zhao, Kang  and
+      Gao, Kai",
+    booktitle = "Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing: System Demonstrations",
+    year = "2021",
+    pages = "167--174",
+}
+```
+
+If you have any questions, feel free to open issues, pull request, or contact us (zhang-hl20@mails.tsinghua.edu.cn). Please illustrate your problems as detailed as possible. 
 
 ## Introduction
-TEXTOIR contains two tasks, which are defined as open intent detection and open intent discovery. Open intent detection aims to identify n-class known intents, and detect one-class open intent. Open intent discovery aims to leverage limited prior knowledge of known intents to find fine-grained known and open intent-wise clusters.
+TEXTOIR aims to provide a convenience toolkit for researchers to reproduce the related text open classification and clustering methods. It contains two tasks, which are defined as open intent detection and open intent discovery. Open intent detection aims to identify n-class known intents, and detect one-class open intent. Open intent discovery aims to leverage limited prior knowledge of known intents to find fine-grained known and open intent-wise clusters.
 
+![](figs/Intro.png "Open Intent Detection and Discovery:")
 ## Benmark Datasets
 * [BANKING](https://arxiv.org/pdf/2003.04807.pdf)
 * [OOS / CLINC150 (without OOD samples)](https://arxiv.org/pdf/1909.02027.pdf) 
 * [StackOverflow](https://aclanthology.org/W15-1509.pdf)
+
+ **We strongly recommend you to use the framework with standard and unified interfaces (especially data setting) to obtain fair and persuable results on benchmark intent datasets!**
 
 ## Integrated Models
 ### Open Intent Detection
@@ -15,13 +36,13 @@ TEXTOIR contains two tasks, which are defined as open intent detection and open 
 * [Deep Open Intent Classification with Adaptive Decision Boundary](https://ojs.aaai.org/index.php/AAAI/article/view/17690) (ADB)
 * [Deep Unknown Intent Detection with Margin Loss](https://aclanthology.org/P19-1548.pdf) (DeepUnk)
 * [DOC: Deep Open Classification of Text Documents](https://aclanthology.org/D17-1314.pdf) (DOC)
-* [Maximum Softmax Probability](https://arxiv.org/pdf/1610.02136.pdf) (MSP) 
+* [A Baseline For Detecting Misclassified and Out-of-distribution Examples in Neural Networks](https://arxiv.org/pdf/1610.02136.pdf) (MSP) 
 * [Towards Open Set Deep Networks](https://openaccess.thecvf.com/content_cvpr_2016/papers/Bendale_Towards_Open_Set_CVPR_2016_paper.pdf) (OpenMax)
 
 
 ### Open Intent Discovery
 
-* Semi-supervised Clustering Methods (* denotes CV models replaced with BERT backbone)
+* Semi-supervised Clustering Methods
     - [Discovering New Intents with Deep Aligned Clustering](https://ojs.aaai.org/index.php/AAAI/article/view/17689) (DeepAligned)
     - [Discovering New Intents via Constrained Deep Adaptive Clustering with Cluster Refinement](https://ojs.aaai.org/index.php/AAAI/article/view/6353) (CDACPlus)
     - [Learning to Discover Novel Visual Categories via Deep Transfer Clustering](https://www.robots.ox.ac.uk/~vgg/research/DTC/files/iccv2019_DTC.pdf) (DTC*)
@@ -33,74 +54,5 @@ TEXTOIR contains two tasks, which are defined as open intent detection and open 
     - Stacked auto-encoder K-Means (SAE-KM)
     - Agglomerative clustering (AG)
     - K-Means (KM)
-    
-    
 
-
-
-
-## Environments
-
-PyTorch  (Cuda version 11.2)  
-conda install pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch -c conda-forge
-### open intent detection
-pip install pytorch_pretrained_bert, matplotlib, sklearn
-### open intent discovery
-pip install nltk, gensim, seaborn, tensorflow-gpu, keras, wordcloud, keybert
-
-## Supported Components
-### Methods    
-#### Open Intent Detection
-ADB [x]:  [paper]()  [code]()  
-DeepUnk [x]: [paper]()  [code]()                   
-DOC [x]:  [paper]()  [code]()    
-MSP [x]:   [paper]()  [code]()  
-OpenMax [x]:   [paper]()  [code]()  
-### Datasets
-BANKING  
-OOS  
-CLINC (OOS without ood samples)  
-StackOverflow  
-SNIPS  
-ATIS  
-
-#### Open Intent Discovery
-
-
-## Tutorials
-### How to add a new method? (Take MSP as an example)
-
-1. Configs Setting   
-1.1 Create a new file, named "MSP.py" in the [configs](./configs) directory, and set the hyper-parameters for the method (an example can be seen in [MSP.py](./configs/MSP.py)).  
-1.2 set the [configs/base.py](./configs/base.py) configs as follows:
- 
-```
-from xxx import xxx
-from .MSP import MSP_Param
-
-param_map = {
-    'xxx': xxx, 'MSP': MSP_Param
-}
-```
-2. Add Methods  
-2.1 Create a new directory, named "MSP" in the [methods](./methods) directory.  
-2.2 Add the manager file for MSP. The file should include the method manager class (e.g., MSPManager), which includes training, evalutation, and testing modules for the method. An example can be seen in [methods/MSP/manager.py](./methods/MSP/manager.py).  
-2.3 Add the related method dependency in [methods/__init__.py](./methods/__init__.py) as below:
-```
-from xxx import xxx
-from .MSP.manager import MSPManager
-
-method_map = {'xxx': xxx, 'MSP': MSPManager}
-```
-
-3. Training and Testing  
-3.1 Common Parameters (More Details in [this](./configs/base.py) file)    
-    --dataset  
-    The name of the chosen dataset. Type: str. Supported datasets can be seen in 
-
-    --known_cls_ratio (The class ratio of known intents, type: float)  
-    --train (whether to train the model)  
-    --save_model (whether to save the well-trained model)  
-3.2 An Example:  
-    python run.py --dataset banking --known_cls_ratio 0.25 --train --save_model 
-    
+(* denotes the CV model replaced with the BERT backbone)
