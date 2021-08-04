@@ -12,7 +12,7 @@ TEXTOIR contains two tasks, which are defined as open intent detection and open 
 ## Integrated Models
 ### Open Intent Detection
 
-* [Deep Open Intent Classification with Adaptive Decision Boundary](https://arxiv.org/pdf/2012.10209.pdf) (ADB)
+* [Deep Open Intent Classification with Adaptive Decision Boundary](https://ojs.aaai.org/index.php/AAAI/article/view/17690) (ADB)
 * [Deep Unknown Intent Detection with Margin Loss](https://aclanthology.org/P19-1548.pdf) (DeepUnk)
 * [DOC: Deep Open Classification of Text Documents](https://aclanthology.org/D17-1314.pdf) (DOC)
 * [Maximum Softmax Probability](https://arxiv.org/pdf/1610.02136.pdf) (MSP) 
@@ -21,7 +21,23 @@ TEXTOIR contains two tasks, which are defined as open intent detection and open 
 
 ### Open Intent Discovery
 
+* Semi-supervised Clustering Methods (* denotes CV models replaced with BERT backbone)
+    - [Discovering New Intents with Deep Aligned Clustering](https://ojs.aaai.org/index.php/AAAI/article/view/17689) (DeepAligned)
+    - [Discovering New Intents via Constrained Deep Adaptive Clustering with Cluster Refinement](https://ojs.aaai.org/index.php/AAAI/article/view/6353) (CDACPlus)
+    - [Learning to Discover Novel Visual Categories via Deep Transfer Clustering](https://www.robots.ox.ac.uk/~vgg/research/DTC/files/iccv2019_DTC.pdf) (DTC*)
+    - [Multi-class Classification Without Multi-class Labels](https://openreview.net/pdf?id=SJzR2iRcK7) (MCL*)
+    - [Learning to cluster in order to transfer across domains and tasks](https://openreview.net/pdf?id=ByRWCqvT-) (KCL*)
 * Unsupervised Clustering Methods
+    - [Deep Clustering Network](http://proceedings.mlr.press/v70/yang17b/yang17b.pdf) (DCN)
+    - [Deep Embedded Clustering](http://proceedings.mlr.press/v48/xieb16.pdf) (DEC)
+    - Stacked auto-encoder K-Means (SAE-KM)
+    - Agglomerative clustering (AG)
+    - K-Means (KM)
+    
+    
+
+
+
 
 ## Environments
 

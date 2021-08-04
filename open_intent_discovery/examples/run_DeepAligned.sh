@@ -18,7 +18,7 @@ do
             --gpu_id '0' \
             --train \
             --save_results \
-            --results_file_name 'results_DeepAligned.csv' \
+            --results_file_name 'results_DeepAligned.csv' 
         done
     done
 done

@@ -1,5 +1,4 @@
 import logging
-from math import log
 import copy
 import torch
 import torch.nn.functional as F
@@ -9,7 +8,6 @@ from sklearn.metrics import confusion_matrix
 from tqdm import trange, tqdm
 from utils.metrics import clustering_score
 from utils.functions import save_model, restore_model
-from sklearn.decomposition import PCA
 
 def target_distribution(q):
     weight = q ** 2 / q.sum(0)

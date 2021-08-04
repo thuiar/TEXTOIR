@@ -18,7 +18,7 @@ do
             --gpu_id '0' \
             --train \
             --save_results \
-            --results_file_name 'results_KCL_BERT.csv' \
+            --results_file_name 'results_KCL_BERT.csv' 
         done
     done
 done
