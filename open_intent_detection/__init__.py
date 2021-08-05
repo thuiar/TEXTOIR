@@ -1,5 +1,7 @@
 '''
-The open intent detection module of the TEXTOIR toolkit. If you use this code, please cite the following papers:
+The open intent detection module of the TEXTOIR toolkit @THUIAR. 
+
+If you use this code, please cite the following papers:
 @inproceedings{zhang-etal-2021-textoir,
     title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
     author = "Zhang, Hanlei  and

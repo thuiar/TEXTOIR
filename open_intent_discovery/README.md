@@ -6,6 +6,10 @@ This package provides the toolkit for open intent discovery implemented with PyT
 
 Open intent discovery aims to leverage limited labeled data of known intents to help find discover open intent clusters. We regard it as a clustering problem, and classifies the related methods into two categories, semi-supervised clustering (with some labeled known intent data as prior knowledge), and unsupervised clustering (without any prior knowledge).
 
+Open Intent Discovery Example:
+
+<img src="figs/open_intent_discovery.png" width="360" height = "200">
+
 We collect benchmark intent datasets, and reproduce related methods to our best. For the convenience of users, we provide flexible and extensible interfaces to add new methods. Welcome to contact us (zhang-hl20@mails.tsinghua.edu.cn) to add your methods!
 
 ## Basic Information

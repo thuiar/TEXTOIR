@@ -6,9 +6,9 @@ This package provides the toolkit for open intent detection implemented with PyT
 
 Open intent detection aims to identify n-class known intents, and detect the one-class open intent, which is regarded as an open classification problem.
 
-Open Intent Detection:
+Open Intent Detection Example:
 
-<img src="fig/open_intent_detection.png" width="200" height = "100">
+<img src="figs/open_intent_detection.png" width="400" height = "200">
 
 We collect benchmark intent datasets, and reproduce related methods to our best. For the convenience of users, we provide flexible and extensible interfaces to add new methods. Welcome to contact us (zhang-hl20@mails.tsinghua.edu.cn) to add your methods!
 
