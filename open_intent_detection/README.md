@@ -4,10 +4,13 @@ This package provides the toolkit for open intent detection implemented with PyT
 
 ## Introduction
 
-Open intent detection aims to identify n-class known intents, and detect one-class open intent. We collect benchmark intent datasets, and reproduce related methods to our best. For the convenience of users, we provide flexible and extensible interfaces to add new methods. Welcome to contact us (zhang-hl20@mails.tsinghua.edu.cn) to add your methods!
+Open intent detection aims to identify n-class known intents, and detect the one-class open intent, which is regarded as an open classification problem.
 
-Open Intent Detection:  
-![Example](figs/open_intent_detection.png=100x "Example")
+Open Intent Detection:
+
+<img src="fig/open_intent_detection.png" width="200" height = "100">
+
+We collect benchmark intent datasets, and reproduce related methods to our best. For the convenience of users, we provide flexible and extensible interfaces to add new methods. Welcome to contact us (zhang-hl20@mails.tsinghua.edu.cn) to add your methods!
 
 ## Basic Information
 
@@ -29,7 +32,7 @@ We welcome any issues and requests for model implementation and bug fix.
 
 ### Data Settings
 
-Each dataset is split to training, development, and testing sets. We select partial intents as known (the labeled ratio can be changed) for training, and use all intents for testing. All the unknown intents are regarded as one open class (with token \<UNK> or \<OOS> in our codes).
+Each dataset is split to training, development, and testing sets. We select partial intents as known (the labeled ratio can be changed) for training, and use all intents for testing. All the unknown intents are regarded as one open class (with token \<UNK> or \<OOS> in our codes). More detailed information can be seen in the [paper](https://ojs.aaai.org/index.php/AAAI/article/view/17690).
 
 ### Parameter Configurations
 
@@ -39,8 +42,9 @@ An example can be seen in [configs/ADB.py](./configs/ADB.py). Notice that the co
 
 Normally, the input commands are as follows:
 ```
-python run.py --dataset xxx --known_cls_ratio xxx --labeled_ratio xxx --config_file_name xxx --train --save_model --save_results
+python run.py --dataset xxx --known_cls_ratio xxx --labeled_ratio xxx --config_file_name xxx
 ```
+
 Notice that if you want to train the model, save the model, or save the testing results, you need to add related parameters (--train, --save_model, --save_results)
 
 ## Tutorials
@@ -82,24 +86,30 @@ Add the dataloader mapping if you use new backbone for the method. For example, 
 ```
 from .bert_loader import BERT_Loader
 backbone_loader_map = {
-    'bert': BERT_Loader
+    'bert': BERT_Loader,
+    'bert_xxx': BERT_Loader,
 }
 ```
 
-3. Add Methods  
-3.1 Create a new directory, named "MSP" in the [methods](./methods) directory.  
+3. Add Methods  (Take MSP as an example)
+3.1 Create a new directory, named "MSP" in the [methods](./methods) directory. 
+
 3.2 Add the manager file for MSP. The file should include the method manager class (e.g., MSPManager), which includes training, evalutation, and testing modules for the method. An example can be seen in [methods/MSP/manager.py](./methods/MSP/manager.py).  
+
 3.3 Add the related method dependency in [methods/__init__.py](./methods/__init__.py) as below:
 ```
-from .xxx.manager import xxxManager
+from .MSP.manager import xxxManager
 method_map = {
-    'xxx': xxxManager
+    'MSP': MSPManager
 }
 ```
-xxx denotes the name of the new method.
+(The key corresponds to the input parameter "method")
+
+4. Run Examples
+Add a script in the [examples](./examples) directory, and configure the parsing parameters in the [run.py](./run.py). You can also run the programs serially by setting the combination of different parameters. A running example is shown in [./examples/run_MSP.sh].
 
 ## Citation
-If you are interested in this work, and want to use the codes in this repo, please cite our following works:
+If you are interested in this work, and want to use the codes in this repo, please star/fork this repo and cite the following works:
 ```
 @inproceedings{zhang-etal-2021-textoir,
     title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",

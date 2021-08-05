@@ -73,9 +73,4 @@ benchmark_labels = {
                             "matlab", "oracle", "osx", "qt", "scala", 
                             "sharepoint", "spring", "svn", "visual-studio", "wordpress"
                         ],
-    'snips':
-                [
-                    "AddToPlaylist", "BookRestaurant", "GetWeather", "PlayMusic", "RateBook", 
-                    "SearchCreativeWork", "SearchScreeningEvent"
-                ]
 }

@@ -1,6 +1,6 @@
 # TEXTOIR
 
-TEXTOIR is the first high-quality Text Open Intent Recognition platform. This repo contains a convenient and extensible toolkit, integrating a series of algorithms of two tasks (open intent detection and open intent discovery).
+TEXTOIR is the first high-quality Text Open Intent Recognition platform. This repo contains a convenient toolkit with extensible interfaces, integrating a series of algorithms of two tasks (open intent detection and open intent discovery).
 
 If you want to use the codes in this repository to reproduce the algorithms in the two tasks, please cite our [ACL 2021 demo paper](https://aclanthology.org/2021.acl-demo.20.pdf):
 ```
@@ -20,17 +20,19 @@ If you want to use the codes in this repository to reproduce the algorithms in t
 This toolkit is contributed by Hanlei Zhang, Ting-En Lin, Qianrui Zhou, Shaojie Zhao, Xin Wang, and Huisheng Mao. The supervisor is Hua Xu.
 
 ## Introduction
-TEXTOIR aims to provide a convenience toolkit for researchers to reproduce the related text open classification and clustering methods. It contains two tasks, which are defined as open intent detection and open intent discovery. Open intent detection aims to identify n-class known intents, and detect one-class open intent. Open intent discovery aims to leverage limited prior knowledge of known intents to find fine-grained known and open intent-wise clusters.
+TEXTOIR aims to provide a convenience toolkit for researchers to reproduce the related text open classification and clustering methods. It contains two tasks, which are defined as open intent detection and open intent discovery. Open intent detection aims to identify n-class known intents, and detect one-class open intent. Open intent discovery aims to leverage limited prior knowledge of known intents to find fine-grained known and open intent-wise clusters. Related papers are collected in our previous released [reading list](https://github.com/thuiar/OKD-Reading-List).
 
 Open Intent Recognition:  
 ![Example](figs/Intro.png "Example")
+
+ **We strongly recommend you to use our TEXTOIR toolkit with standard and unified interfaces (especially data setting) to obtain fair and persuable results on benchmark intent datasets!**
 
 ## Benmark Datasets
 * [BANKING](https://arxiv.org/pdf/2003.04807.pdf)
 * [OOS / CLINC150 (without OOD samples)](https://arxiv.org/pdf/1909.02027.pdf) 
 * [StackOverflow](https://aclanthology.org/W15-1509.pdf)
 
- **We strongly recommend you to use our TEXTOIR toolkit with standard and unified interfaces (especially data setting) to obtain fair and persuable results on benchmark intent datasets!**
+
 
 ## Integrated Models
 ### Open Intent Detection
@@ -86,9 +88,11 @@ sh examples/run_ADB.sh
 
 ## Extensibility and Reliability
 
-This toolkit is extensible, which supports adding new methods, datasets, configurations, backbones, dataloaders, losses conveniently. More usage details can be seen in the directory [open_intent_detection](./open_intent_detection/README.md) and [open_intent_discovery](./open_intent_discovery/README.md) respectively. 
+### Extensibility
+This toolkit is extensible and supports adding new methods, datasets, configurations, backbones, dataloaders, losses conveniently. More detailed information can be seen in the directory [open_intent_detection](./open_intent_detection/README.md) and [open_intent_discovery](./open_intent_discovery/README.md) respectively. 
 
-The codes in this repo have been confirmed and are reliable. The experimental results are close to the reported ones in the [paper](https://arxiv.org/pdf/2012.08987.pdf) and the [paper](https://arxiv.org/pdf/2012.10209.pdf). Note that the results of some baselines may fluctuate in a small range due to the selected random seeds, hyper-parameters, optimizers, etc.  
+### Reliability
+The codes in this repo have been confirmed and are reliable. The experimental results are close to the reported ones in the [paper](https://arxiv.org/pdf/2012.08987.pdf) and the [paper](https://arxiv.org/pdf/2012.10209.pdf). Note that the results of some methods may fluctuate in a small range due to the selected random seeds, hyper-parameters, optimizers, etc. The final results are the average of 10 random seeds to reduce the influence of different selected known classes.
 
 ## Bugs or questions?
 

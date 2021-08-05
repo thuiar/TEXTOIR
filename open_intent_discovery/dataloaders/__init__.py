@@ -69,17 +69,4 @@ benchmark_labels = {
                     "verify_source_of_funds", "verify_top_up", "virtual_card_not_working", "visa_or_mastercard", "why_verify_identity", 
                     "wrong_amount_of_cash_received", "wrong_exchange_rate_for_cash_withdrawal"
                 ], 
-
-    'stackoverflow':
-                        [
-                            "ajax", "apache", "bash", "cocoa", "drupal", 
-                            "excel", "haskell", "hibernate", "linq", "magento", 
-                            "matlab", "oracle", "osx", "qt", "scala", 
-                            "sharepoint", "spring", "svn", "visual-studio", "wordpress"
-                        ],
-    'snips':
-                [
-                    "AddToPlaylist", "BookRestaurant", "GetWeather", "PlayMusic", "RateBook", 
-                    "SearchCreativeWork", "SearchScreeningEvent"
-                ]
 }

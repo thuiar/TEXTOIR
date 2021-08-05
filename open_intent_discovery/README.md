@@ -4,10 +4,9 @@ This package provides the toolkit for open intent discovery implemented with PyT
 
 ## Introduction
 
-Open intent discovery aims to identify n-class known intents, and detect one-class open intent. We collect benchmark intent datasets, and reproduce related methods to our best. For the convenience of users, we provide flexible and extensible interfaces to add new methods. Welcome to contact us (zhang-hl20@mails.tsinghua.edu.cn) to add your methods!
+Open intent discovery aims to leverage limited labeled data of known intents to help find discover open intent clusters. We regard it as a clustering problem, and classifies the related methods into two categories, semi-supervised clustering (with some labeled known intent data as prior knowledge), and unsupervised clustering (without any prior knowledge).
 
-Open Intent Discovery:  
-![Example](figs/open_intent_detection.png =100x "Example")
+We collect benchmark intent datasets, and reproduce related methods to our best. For the convenience of users, we provide flexible and extensible interfaces to add new methods. Welcome to contact us (zhang-hl20@mails.tsinghua.edu.cn) to add your methods!
 
 ## Basic Information
 
@@ -35,21 +34,22 @@ We welcome any issues and requests for model implementation and bug fix.
 
 ### Data Settings
 
-Each dataset is split to training, development, and testing sets. We select partial intents as known (the labeled ratio can be changed) for training, and use all intents for testing. All the unknown intents are regarded as one open class (with token \<UNK> or \<OOS> in our codes).
+Each dataset is split to training, development, and testing sets. We select partial intents as known (the labeled ratio can be changed) intents. Notably, we uniformly select 10% as labeled from known intent data. We use all training data (both labeled and unlabeled) to train the model. During testing, we evaluate the clustering performance of all intent classes. More detailed information can be seen in the [paper](https://ojs.aaai.org/index.php/AAAI/article/view/17689).
 
 ### Parameter Configurations
 
 The basic parameters include parsing parameters about selected dataset, method, setting, etc. More details can be seen in [run.py](./run.py). For specific parameters of each method, we support add configuration files with different hyper-parameters in the [configs](./configs) directory. 
 
-An example can be seen in [configs/ADB.py](./configs/ADB.py). Notice that the config file name is corresponding to the parsing parameter.
+An example can be seen in [configs/DeepAligned.py](./configs/DeepAligned.py). Notice that the config file name is corresponding to the parsing parameter.
 
 Normally, the input commands are as follows:
 ```
-python run.py --dataset xxx --known_cls_ratio xxx --labeled_ratio xxx --config_file_name xxx --train --save_model --save_results
+python run.py --setting xxx --dataset xxx --known_cls_ratio xxx --labeled_ratio xxx --cluster_num_factor xxx --config_file_name xxx
 ```
+
 Notice that if you want to train the model, save the model, or save the testing results, you need to add related parameters (--train, --save_model, --save_results)
 
-## Tutorials
+## Tutorials (Almost the same as the Detection toolkit)
 ### a. How to add a new dataset? 
 1. Prepare Data  
 Create a new directory to store your dataset in the [data](../data) directory. You should provide the train.tsv, dev.tsv, and test.tsv, with the same formats as in the provided [datasets](./data/banking).
@@ -67,7 +67,7 @@ benchmark_labels = {
 
 ### b. How to add a new backbone?
 
-1. Add a new backbone in the [backbones](./backbones) directory. For example, we provide some bert-based backbones in the [file](./backbones/bert.py).
+1. Add a new backbone in the [backbones](./backbones) directory. For example, we provide [bert-based](./backbones/bert.py), [glove-based](./backbones/glove.py), and [sae-based](./backbones/sae.py) backbones.
 
 2. Add the new backbone mapping in the [file](./backbones/__init__.py) as follows:
 ```
@@ -81,31 +81,45 @@ Add a new loss in the [losses](./losses) directory is almost the same as adding 
 ### c. How to add a new method?
 
 1. Configuration Setting   
-Create a new file, named "method_name.py" in the [configs](./configs) directory, and set the hyper-parameters for the method (an example can be seen in [MSP.py](./configs/MSP.py)). 
+Create a new file, named "method_name.py" in the [configs](./configs) directory, and set the hyper-parameters for the method (an example can be seen in [configs/DeepAligned.py](./configs/DeepAligned.py)). 
 
 2. Dataloader Setting  
 Add the dataloader mapping if you use new backbone for the method. For example, the bert-based model corresponds to the bert dataloader as follows.
 ```
 from .bert_loader import BERT_Loader
 backbone_loader_map = {
-    'bert': BERT_Loader
+    'bert': BERT_Loader,
+    'bert_xxx': BERT_Loader
+}
+```
+The unsupervised clustering methods use the unified dataloader as follows:
+```
+from .unsup_loader import UNSUP_Loader
+backbone_loader_map = {
+    'glove': UNSUP_Loader,
+    'sae': UNSUP_Loader
 }
 ```
 
-3. Add Methods  
-3.1 Create a new directory, named "MSP" in the [methods](./methods) directory.  
-3.2 Add the manager file for MSP. The file should include the method manager class (e.g., MSPManager), which includes training, evalutation, and testing modules for the method. An example can be seen in [methods/MSP/manager.py](./methods/MSP/manager.py).  
+3. Add Methods  (Take DeepAligned as an example)
+3.1 Classify the method into the corresponding category in the [methods](./methods) directory. For example, DeepAligned belongs to the [semi-supervised](./methods/semi_supervised) directory, and creates a subdirectory under it, named "DeepAligned". 
+
+3.2 Add the manager file for DeepAligned. The file should include the method manager class (e.g., DeepAlignedManager), which includes training, evalutation, and testing modules for the method. An example can be seen in [methods/semi_supervised/DeepAligned/manager.py](./methods/semi_supervised/DeepAligned/manager.py).  
+
 3.3 Add the related method dependency in [methods/__init__.py](./methods/__init__.py) as below:
 ```
-from .xxx.manager import xxxManager
+from .semi_supervised.DeepAligned.manager import DeepAlignedManager
 method_map = {
-    'xxx': xxxManager
+    'DeepAligned': DeepAlignedManager
 }
 ```
-xxx denotes the name of the new method.
+(The key corresponds to the input parameter "method")
+
+4. Run Examples
+Add a script in the [examples](./examples) directory, and configure the parsing parameters in the [run.py](./run.py). You can also run the programs serially by setting the combination of different parameters. A running example is shown in [./examples/run_DeepAligned.sh].
 
 ## Citation
-If you are interested in this work, and want to use the codes in this repo, please cite our following works:
+If you are interested in this work, and want to use the codes in this repo, please star/fork this repo, and cite the following works:
 ```
 @inproceedings{zhang-etal-2021-textoir,
     title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
