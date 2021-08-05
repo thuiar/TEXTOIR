@@ -88,8 +88,8 @@ class ADBManager:
 
             eval_results = {
                 'train_loss': loss,
-                'eval_acc': eval_score,
-                'best_acc':best_eval_score,
+                'eval_score': eval_score,
+                'best_eval_score':best_eval_score,
             }
             self.logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
             for key in sorted(eval_results.keys()):
@@ -159,8 +159,8 @@ class ADBManager:
 
             eval_results = {
                 'train_loss': loss,
-                'eval_acc': eval_score,
-                'best_acc':best_eval_score,
+                'eval_score': eval_score,
+                'best_eval_score':best_eval_score,
             }
             self.logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
             for key in sorted(eval_results.keys()):
@@ -209,10 +209,7 @@ class ADBManager:
             input_ids, input_mask, segment_ids, label_ids = batch
             with torch.set_grad_enabled(False):
 
-                if args.backbone == 'bert_disaware':
-                    pooled_output, logits = self.model(input_ids, segment_ids, input_mask, centroids = self.centroids)
-                else:
-                    pooled_output, logits = self.model(input_ids, segment_ids, input_mask)
+                pooled_output, logits = self.model(input_ids, segment_ids, input_mask)
                 
                 if not pre_train:
                     preds = self.open_classify(data, pooled_output)

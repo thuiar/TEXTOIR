@@ -47,7 +47,7 @@ def parse_arguments():
     parser.add_argument("--output_dir", default= '/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs', type=str, 
                         help="The output directory where all train data will be written.") 
 
-    parser.add_argument("--model_dir", default='msodels', type=str, 
+    parser.add_argument("--model_dir", default='models', type=str, 
                         help="The output directory where the model predictions and checkpoints will be written.") 
 
     parser.add_argument("--result_dir", type=str, default = 'results', help="The path to save results")

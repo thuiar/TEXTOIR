@@ -21,7 +21,7 @@ We collect benchmark intent datasets, and reproduce related methods to our best.
 
 * Semi-supervised Clustering Methods
     - [Discovering New Intents with Deep Aligned Clustering](https://ojs.aaai.org/index.php/AAAI/article/view/17689) (DeepAligned, AAAI 2021)
-    - [Discovering New Intents via Constrained Deep Adaptive Clustering with Cluster Refinement](https://ojs.aaai.org/index.php/AAAI/article/view/6353) (CDACPlus, AAAI 2020)
+    - [Discovering New Intents via Constrained Deep Adaptive Clustering with Cluster Refinement](https://ojs.aaai.org/index.php/AAAI/article/view/6353) (CDAC+, AAAI 2020)
     - [Learning to Discover Novel Visual Categories via Deep Transfer Clustering](https://www.robots.ox.ac.uk/~vgg/research/DTC/files/iccv2019_DTC.pdf) (DTC*, ICCV 2019)
     - [Multi-class Classification Without Multi-class Labels](https://openreview.net/pdf?id=SJzR2iRcK7) (MCL*, ICLR 2019)
     - [Learning to cluster in order to transfer across domains and tasks](https://openreview.net/pdf?id=ByRWCqvT-) (KCL*, ICLR 2018)
@@ -146,6 +146,16 @@ If you are interested in this work, and want to use the codes in this repo, plea
     month={May}, 
     pages={14365-14373}
 }
+@inproceedings{lin2020discovering,
+  title={Discovering new intents via constrained deep adaptive clustering with cluster refinement},
+  author={Lin, Ting-En and Xu, Hua and Zhang, Hanlei},
+  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume={34},
+  number={05},
+  pages={8360--8367},
+  year={2020}
+}
+
 ```
 
 
