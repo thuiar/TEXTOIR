@@ -146,16 +146,6 @@ If you are interested in this work, and want to use the codes in this repo, plea
     month={May}, 
     pages={14365-14373}
 }
-@inproceedings{lin2020discovering,
-  title={Discovering new intents via constrained deep adaptive clustering with cluster refinement},
-  author={Lin, Ting-En and Xu, Hua and Zhang, Hanlei},
-  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
-  volume={34},
-  number={05},
-  pages={8360--8367},
-  year={2020}
-}
-
 ```
 
 

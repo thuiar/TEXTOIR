@@ -31,7 +31,7 @@ class DataManager:
         self.logger.info('The number of known intents is %s', self.n_known_cls)
         self.logger.info('Lists of known labels are: %s', str(self.known_label_list))
 
-        self.num_labels = len(self.known_label_list)
+        args.num_labels = self.num_labels = len(self.known_label_list)
 
         if args.dataset == 'oos':
             self.unseen_label = 'oos'

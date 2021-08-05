@@ -131,15 +131,6 @@ If you are interested in this work, and want to use the codes in this repo, plea
       month={May}, 
       pages={14374-14382} 
 }
-@inproceedings{lin-xu-2019-deep,
-    title = "Deep Unknown Intent Detection with Margin Loss",
-    author = "Lin, Ting-En  and
-      Xu, Hua",
-    booktitle = "Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics",
-    month = jul,
-    year = "2019",
-    pages = "5491--5496",
-}
 ```
 
 

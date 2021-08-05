@@ -29,6 +29,7 @@ class BERT_Loader:
         self.eval_loader = get_loader(self.eval_examples, args, base_attrs['label_list'], 'eval')
         self.test_loader = get_loader(self.test_examples, args, base_attrs['label_list'], 'test')
 
+        self.num_train_examples = len(self.train_labeled_examples)
 
 def get_examples(args, base_attrs, mode):
 

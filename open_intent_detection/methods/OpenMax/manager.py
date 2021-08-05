@@ -33,9 +33,75 @@ class OpenMaxManager:
 
         if args.train:
             self.weibull_model = None
+            self.train_results = []
             
         else:
             restore_model(self.model, args.model_output_dir)
+
+
+    def train(self, args, data):     
+        
+        self.logger.info('Training Start...')
+        best_model = None
+        wait = 0
+        best_eval_score = 0
+        train_results = []
+
+        for epoch in trange(int(args.num_train_epochs), desc="Epoch"):
+            self.model.train()
+            tr_loss = 0
+            nb_tr_examples, nb_tr_steps = 0, 0
+            
+            for step, batch in enumerate(tqdm(self.train_dataloader, desc="Iteration")):
+
+                batch = tuple(t.to(self.device) for t in batch)
+                input_ids, input_mask, segment_ids, label_ids = batch
+                with torch.set_grad_enabled(True):
+                    
+                    loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode='train', loss_fct=self.loss_fct)
+                    loss.backward()
+                    tr_loss += loss.item()
+
+                    self.optimizer.step()
+                    self.optimizer.zero_grad()   
+                    
+                    nb_tr_examples += input_ids.size(0)
+                    nb_tr_steps += 1
+
+            loss = tr_loss / nb_tr_steps
+
+            y_true, y_pred = self.get_outputs(args, data, mode = 'eval') 
+            eval_score = round(accuracy_score(y_true, y_pred) * 100, 2)
+            
+            eval_results = {
+                'train_loss': loss,
+                'eval_score': eval_score,
+                'best_eval_score': best_eval_score,
+            }
+            train_results.append(eval_results)
+
+            self.logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
+            for key in sorted(eval_results.keys()):
+                self.logger.info("  %s = %s", key, str(eval_results[key]))
+
+            if eval_score > best_eval_score:
+
+                best_model = copy.deepcopy(self.model)
+                wait = 0
+                best_eval_score = eval_score
+
+            elif eval_score > 0:
+                wait += 1
+                if wait >= args.wait_patient:
+                    break
+        
+        self.model = best_model
+        self.train_results = train_results
+        
+        if args.save_model: 
+            save_model(self.model, args.model_output_dir)
+
+        self.logger.info('Training finished...')
 
     def get_outputs(self, args, data, mode = 'eval', get_feats = False, compute_centroids=False):
         
@@ -104,69 +170,7 @@ class OpenMaxManager:
 
                 
             return y_true, y_pred
-
-
-    def train(self, args, data):     
-        
-        self.logger.info('Training Start...')
-        best_model = None
-        wait = 0
-        best_eval_score = 0
-
-        for epoch in trange(int(args.num_train_epochs), desc="Epoch"):
-            self.model.train()
-            tr_loss = 0
-            nb_tr_examples, nb_tr_steps = 0, 0
             
-            for step, batch in enumerate(tqdm(self.train_dataloader, desc="Iteration")):
-
-                batch = tuple(t.to(self.device) for t in batch)
-                input_ids, input_mask, segment_ids, label_ids = batch
-                with torch.set_grad_enabled(True):
-                    
-                    loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode='train', loss_fct=self.loss_fct)
-                    loss.backward()
-                    tr_loss += loss.item()
-
-                    self.optimizer.step()
-                    self.optimizer.zero_grad()   
-                    
-                    nb_tr_examples += input_ids.size(0)
-                    nb_tr_steps += 1
-
-            loss = tr_loss / nb_tr_steps
-
-            y_true, y_pred = self.get_outputs(args, data, mode = 'eval') 
-            eval_score = round(accuracy_score(y_true, y_pred) * 100, 2)
-            
-            eval_results = {
-                'train_loss': loss,
-                'eval_acc': eval_score,
-                'best_acc': best_eval_score,
-            }
-            self.logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
-            for key in sorted(eval_results.keys()):
-                self.logger.info("  %s = %s", key, str(eval_results[key]))
-
-            if eval_score > best_eval_score:
-
-                best_model = copy.deepcopy(self.model)
-                wait = 0
-                best_eval_score = eval_score
-
-            elif eval_score > 0:
-                wait += 1
-                if wait >= args.wait_patient:
-                    break
-        
-        self.model = best_model
-        
-        if args.save_model: 
-            save_model(self.model, args.model_output_dir)
-
-        self.logger.info('Training finished...')
-
-
     def test(self, args, data, show = False):
             
         self.weibull_model = self.get_outputs(args, data, mode = 'train', compute_centroids=True)

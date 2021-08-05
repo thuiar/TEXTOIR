@@ -48,6 +48,7 @@ class ModelManager:
             model = backbone.from_pretrained(args.bert_model, cache_dir = "", args = args)    
 
             if args.freeze_bert_parameters:
+                self.logger.info('Freeze all parameters but the last layer for efficiency')
                 model = freeze_bert_parameters(model)
             
             model.to(self.device)

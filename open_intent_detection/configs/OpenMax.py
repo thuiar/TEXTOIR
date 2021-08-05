@@ -9,6 +9,7 @@ class Param():
         Args:
             bert_model (directory): The path for the pre-trained bert model.
             num_train_epochs (int): The number of training epochs.
+            num_labels (autofill): The output dimension.
             max_seq_len (autofill): The maximum total input sequence length after tokenization. Sequences longer than this will be truncated, sequences shorter will be padded.
             freeze_bert_parameters (binary): Whether to freeze all parameters but the last layer.
             feat_dim (int): The feature dimension.
@@ -29,6 +30,7 @@ class Param():
 
             'bert_model': "/home/sharing/disk1/pretrained_embedding/bert/uncased_L-12_H-768_A-12/",
             'num_train_epochs': 100,
+            'num_labels': None,
             'max_seq_length': None, 
             'freeze_bert_parameters': True,
             'feat_dim': 768,
