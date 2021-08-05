@@ -4,11 +4,9 @@ This package provides the toolkit for open intent discovery implemented with PyT
 
 ## Introduction
 
-Open intent discovery aims to leverage limited labeled data of known intents to help find discover open intent clusters. We regard it as a clustering problem, and classifies the related methods into two categories, semi-supervised clustering (with some labeled known intent data as prior knowledge), and unsupervised clustering (without any prior knowledge).
+Open intent discovery aims to leverage limited labeled data of known intents to help find discover open intent clusters. We regard it as a clustering problem, and classifies the related methods into two categories, semi-supervised clustering (with some labeled known intent data as prior knowledge), and unsupervised clustering (without any prior knowledge). An example is as follows:
 
-Open Intent Discovery Example:
-
-<img src="figs/open_intent_discovery.png" width="360" height = "200">
+<img src="figs/open_intent_discovery.png" width="340" height = "200">
 
 We collect benchmark intent datasets, and reproduce related methods to our best. For the convenience of users, we provide flexible and extensible interfaces to add new methods. Welcome to contact us (zhang-hl20@mails.tsinghua.edu.cn) to add your methods!
 
@@ -28,8 +26,8 @@ We collect benchmark intent datasets, and reproduce related methods to our best.
     - [Multi-class Classification Without Multi-class Labels](https://openreview.net/pdf?id=SJzR2iRcK7) (MCL*, ICLR 2019)
     - [Learning to cluster in order to transfer across domains and tasks](https://openreview.net/pdf?id=ByRWCqvT-) (KCL*, ICLR 2018)
 * Unsupervised Clustering Methods
-    - [Deep Clustering Network](http://proceedings.mlr.press/v70/yang17b/yang17b.pdf) (DCN, ICML 2017)
-    - [Deep Embedded Clustering](http://proceedings.mlr.press/v48/xieb16.pdf) (DEC, ICML 2016)
+    - [Towards K-means-friendly Spaces: Simultaneous Deep Learning and Clustering](http://proceedings.mlr.press/v70/yang17b/yang17b.pdf) (DCN, ICML 2017)
+    - [Unsupervised Deep Embedding for Clustering Analysis](http://proceedings.mlr.press/v48/xieb16.pdf) (DEC, ICML 2016)
     - Stacked auto-encoder K-Means (SAE-KM)
     - Agglomerative clustering (AG)
     - K-Means (KM)
@@ -44,7 +42,7 @@ Each dataset is split to training, development, and testing sets. We select part
 
 The basic parameters include parsing parameters about selected dataset, method, setting, etc. More details can be seen in [run.py](./run.py). For specific parameters of each method, we support add configuration files with different hyper-parameters in the [configs](./configs) directory. 
 
-An example can be seen in [configs/DeepAligned.py](./configs/DeepAligned.py). Notice that the config file name is corresponding to the parsing parameter.
+An example can be seen in [DeepAligned.py](./configs/DeepAligned.py). Notice that the config file name is corresponding to the parsing parameter.
 
 Normally, the input commands are as follows:
 ```
@@ -53,10 +51,10 @@ python run.py --setting xxx --dataset xxx --known_cls_ratio xxx --labeled_ratio 
 
 Notice that if you want to train the model, save the model, or save the testing results, you need to add related parameters (--train, --save_model, --save_results)
 
-## Tutorials (Almost the same as the Detection toolkit)
+## Tutorials
 ### a. How to add a new dataset? 
 1. Prepare Data  
-Create a new directory to store your dataset in the [data](../data) directory. You should provide the train.tsv, dev.tsv, and test.tsv, with the same formats as in the provided [datasets](./data/banking).
+Create a new directory to store your dataset in the [data](../data) directory. You should provide the train.tsv, dev.tsv, and test.tsv, with the same formats as in the provided [datasets](../data/banking).
 
 2. Dataloader Setting  
 Calculate the maximum sentence length (token unit) and count the labels of the dataset. Add them in the [file](./configs/__init__.py) as follows:  
@@ -85,7 +83,7 @@ Add a new loss in the [losses](./losses) directory is almost the same as adding 
 ### c. How to add a new method?
 
 1. Configuration Setting   
-Create a new file, named "method_name.py" in the [configs](./configs) directory, and set the hyper-parameters for the method (an example can be seen in [configs/DeepAligned.py](./configs/DeepAligned.py)). 
+Create a new file, named "method_name.py" in the [configs](./configs) directory, and set the hyper-parameters for the method (an example can be seen in [DeepAligned.py](./configs/DeepAligned.py)). 
 
 2. Dataloader Setting  
 Add the dataloader mapping if you use new backbone for the method. For example, the bert-based model corresponds to the bert dataloader as follows.
@@ -106,11 +104,12 @@ backbone_loader_map = {
 ```
 
 3. Add Methods  (Take DeepAligned as an example)
-3.1 Classify the method into the corresponding category in the [methods](./methods) directory. For example, DeepAligned belongs to the [semi-supervised](./methods/semi_supervised) directory, and creates a subdirectory under it, named "DeepAligned". 
 
-3.2 Add the manager file for DeepAligned. The file should include the method manager class (e.g., DeepAlignedManager), which includes training, evalutation, and testing modules for the method. An example can be seen in [methods/semi_supervised/DeepAligned/manager.py](./methods/semi_supervised/DeepAligned/manager.py).  
+- Classify the method into the corresponding category in the [methods](./methods) directory. For example, DeepAligned belongs to the [semi-supervised](./methods/semi_supervised) directory, and creates a subdirectory under it, named "DeepAligned". 
 
-3.3 Add the related method dependency in [methods/__init__.py](./methods/__init__.py) as below:
+- Add the manager file for DeepAligned. The file should include the method manager class (e.g., DeepAlignedManager), which includes training, evalutation, and testing modules for the method. An example can be seen in [manager.py](./methods/semi_supervised/DeepAligned/manager.py).  
+
+- Add the related method dependency in [__init__.py](./methods/__init__.py) as below:
 ```
 from .semi_supervised.DeepAligned.manager import DeepAlignedManager
 method_map = {
@@ -120,7 +119,7 @@ method_map = {
 (The key corresponds to the input parameter "method")
 
 4. Run Examples
-Add a script in the [examples](./examples) directory, and configure the parsing parameters in the [run.py](./run.py). You can also run the programs serially by setting the combination of different parameters. A running example is shown in [./examples/run_DeepAligned.sh].
+Add a script in the [examples](./examples) directory, and configure the parsing parameters in the [run.py](./run.py). You can also run the programs serially by setting the combination of different parameters. A running example is shown in [run_DeepAligned.sh](./examples/run_DeepAligned.sh).
 
 ## Citation
 If you are interested in this work, and want to use the codes in this repo, please star/fork this repo, and cite the following works:

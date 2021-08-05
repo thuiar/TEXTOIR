@@ -69,4 +69,9 @@ benchmark_labels = {
                     "verify_source_of_funds", "verify_top_up", "virtual_card_not_working", "visa_or_mastercard", "why_verify_identity", 
                     "wrong_amount_of_cash_received", "wrong_exchange_rate_for_cash_withdrawal"
                 ], 
+    'snips':
+                [
+                    "AddToPlaylist", "BookRestaurant", "GetWeather", "PlayMusic", "RateBook", 
+                    "SearchCreativeWork", "SearchScreeningEvent"
+                ]
 }

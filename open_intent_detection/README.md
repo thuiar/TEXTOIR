@@ -4,11 +4,9 @@ This package provides the toolkit for open intent detection implemented with PyT
 
 ## Introduction
 
-Open intent detection aims to identify n-class known intents, and detect the one-class open intent, which is regarded as an open classification problem.
+Open intent detection aims to identify n-class known intents, and detect the one-class open intent, which is regarded as an open classification problem. The following is an example:
 
-Open Intent Detection Example:
-
-<img src="figs/open_intent_detection.png" width="400" height = "200">
+<img src="figs/open_intent_detection.png" width="360" height = "200">
 
 We collect benchmark intent datasets, and reproduce related methods to our best. For the convenience of users, we provide flexible and extensible interfaces to add new methods. Welcome to contact us (zhang-hl20@mails.tsinghua.edu.cn) to add your methods!
 
@@ -38,7 +36,7 @@ Each dataset is split to training, development, and testing sets. We select part
 
 The basic parameters include parsing parameters about selected dataset, method, setting, etc. More details can be seen in [run.py](./run.py). For specific parameters of each method, we support add configuration files with different hyper-parameters in the [configs](./configs) directory. 
 
-An example can be seen in [configs/ADB.py](./configs/ADB.py). Notice that the config file name is corresponding to the parsing parameter.
+An example can be seen in [ADB.py](./configs/ADB.py). Notice that the config file name is corresponding to the parsing parameter.
 
 Normally, the input commands are as follows:
 ```
@@ -50,7 +48,7 @@ Notice that if you want to train the model, save the model, or save the testing 
 ## Tutorials
 ### a. How to add a new dataset? 
 1. Prepare Data  
-Create a new directory to store your dataset in the [data](../data) directory. You should provide the train.tsv, dev.tsv, and test.tsv, with the same formats as in the provided [datasets](./data/banking).
+Create a new directory to store your dataset in the [data](../data) directory. You should provide the train.tsv, dev.tsv, and test.tsv, with the same formats as in the provided [datasets](../data/banking).
 
 2. Dataloader Setting  
 Calculate the maximum sentence length (token unit) and count the labels of the dataset. Add them in the [file](./configs/__init__.py) as follows:  
@@ -92,11 +90,11 @@ backbone_loader_map = {
 ```
 
 3. Add Methods  (Take MSP as an example)
-3.1 Create a new directory, named "MSP" in the [methods](./methods) directory. 
+- Create a new directory, named "MSP" in the [methods](./methods) directory. 
 
-3.2 Add the manager file for MSP. The file should include the method manager class (e.g., MSPManager), which includes training, evalutation, and testing modules for the method. An example can be seen in [methods/MSP/manager.py](./methods/MSP/manager.py).  
+- Add the manager file for MSP. The file should include the method manager class (e.g., MSPManager), which includes training, evalutation, and testing modules for the method. An example can be seen in [manager.py](./methods/MSP/manager.py).  
 
-3.3 Add the related method dependency in [methods/__init__.py](./methods/__init__.py) as below:
+- Add the related method dependency in [__init__.py](./methods/__init__.py) as below:
 ```
 from .MSP.manager import xxxManager
 method_map = {
@@ -106,7 +104,7 @@ method_map = {
 (The key corresponds to the input parameter "method")
 
 4. Run Examples
-Add a script in the [examples](./examples) directory, and configure the parsing parameters in the [run.py](./run.py). You can also run the programs serially by setting the combination of different parameters. A running example is shown in [./examples/run_MSP.sh].
+Add a script in the [examples](./examples) directory, and configure the parsing parameters in the [run.py](./run.py). You can also run the programs serially by setting the combination of different parameters. A running example is shown in [run_MSP.sh](./examples/run_MSP.sh).
 
 ## Citation
 If you are interested in this work, and want to use the codes in this repo, please star/fork this repo and cite the following works:

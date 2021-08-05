@@ -1,4 +1,4 @@
-# TEXTOIR
+# TEXT Open Intent Recognition (TEXTOIR)
 
 TEXTOIR is the first high-quality Text Open Intent Recognition platform. This repo contains a convenient toolkit with extensible interfaces, integrating a series of algorithms of two tasks (open intent detection and open intent discovery).
 
@@ -53,8 +53,8 @@ Open Intent Recognition:
     - [Multi-class Classification Without Multi-class Labels](https://openreview.net/pdf?id=SJzR2iRcK7) (MCL*, ICLR 2019)
     - [Learning to cluster in order to transfer across domains and tasks](https://openreview.net/pdf?id=ByRWCqvT-) (KCL*, ICLR 2018)
 * Unsupervised Clustering Methods
-    - [Deep Clustering Network](http://proceedings.mlr.press/v70/yang17b/yang17b.pdf) (DCN, ICML 2017)
-    - [Deep Embedded Clustering](http://proceedings.mlr.press/v48/xieb16.pdf) (DEC, ICML 2016)
+    - [Towards K-means-friendly Spaces: Simultaneous Deep Learning and Clustering](http://proceedings.mlr.press/v70/yang17b/yang17b.pdf) (DCN, ICML 2017)
+    - [Unsupervised Deep Embedding for Clustering Analysis](http://proceedings.mlr.press/v48/xieb16.pdf) (DEC, ICML 2016)
     - Stacked auto-encoder K-Means (SAE-KM)
     - Agglomerative clustering (AG)
     - K-Means (KM)
