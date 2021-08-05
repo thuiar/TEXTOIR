@@ -1,8 +1,8 @@
 # TEXTOIR
 
-TEXTOIR is an Integrated and Extensible Platform for Text Open Intent Recognition. 
+TEXTOIR is the first high-quality Text Open Intent Recognition platform. This repo contains a convenient and extensible toolkit, integrating a series of algorithms of two tasks (open intent detection and open intent discovery).
 
-If you are insterested in this work, and want to use the codes or results in this repository, please **star**, **fork** this repository, and **cite** our [ACL 2021 demo paper](https://aclanthology.org/2021.acl-demo.20.pdf):
+If you want to use the codes in this repository to reproduce the algorithms in the two tasks, please cite our [ACL 2021 demo paper](https://aclanthology.org/2021.acl-demo.20.pdf):
 ```
 @inproceedings{zhang-etal-2021-textoir,
     title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
@@ -17,8 +17,7 @@ If you are insterested in this work, and want to use the codes or results in thi
     pages = "167--174",
 }
 ```
-This toolkit is mainly contributed by: Hanlei Zhang, Ting-En Lin, Shaojie Zhao, Xin Wang, Qianrui Zhou, and Huisheng Mao.
-
+This toolkit is contributed by Hanlei Zhang, Ting-En Lin, Qianrui Zhou, Shaojie Zhao, Xin Wang, and Huisheng Mao. The supervisor is Hua Xu.
 
 ## Introduction
 TEXTOIR aims to provide a convenience toolkit for researchers to reproduce the related text open classification and clustering methods. It contains two tasks, which are defined as open intent detection and open intent discovery. Open intent detection aims to identify n-class known intents, and detect one-class open intent. Open intent discovery aims to leverage limited prior knowledge of known intents to find fine-grained known and open intent-wise clusters.
@@ -85,7 +84,11 @@ pip install -r requirements.txt
 sh examples/run_ADB.sh
 ```
 
-More usage details can be seen in the directory [open_intent_detection](./open_intent_detection/README.md) and [open_intent_discovery](./open_intent_discovery/README.md) respectively.
+## Extensibility and Reliability
+
+This toolkit is extensible, which supports adding new methods, datasets, configurations, backbones, dataloaders, losses conveniently. More usage details can be seen in the directory [open_intent_detection](./open_intent_detection/README.md) and [open_intent_discovery](./open_intent_discovery/README.md) respectively. 
+
+The codes in this repo have been confirmed and are reliable. The experimental results are close to the reported ones in the [paper](https://arxiv.org/pdf/2012.08987.pdf) and the [paper](https://arxiv.org/pdf/2012.10209.pdf). Note that the results of some baselines may fluctuate in a small range due to the selected random seeds, hyper-parameters, optimizers, etc.  
 
 ## Bugs or questions?
 

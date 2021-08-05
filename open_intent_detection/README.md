@@ -7,7 +7,7 @@ This package provides the toolkit for open intent detection implemented with PyT
 Open intent detection aims to identify n-class known intents, and detect one-class open intent. We collect benchmark intent datasets, and reproduce related methods to our best. For the convenience of users, we provide flexible and extensible interfaces to add new methods. Welcome to contact us (zhang-hl20@mails.tsinghua.edu.cn) to add your methods!
 
 Open Intent Detection:  
-![Example](figs/open_intent_detection.png =100x "Example")
+![Example](figs/open_intent_detection.png=100x "Example")
 
 ## Basic Information
 
@@ -97,7 +97,33 @@ method_map = {
 }
 ```
 xxx denotes the name of the new method.
-    
+
+## Citation
+If you are interested in this work, and want to use the codes in this repo, please cite our following works:
+```
+@inproceedings{zhang-etal-2021-textoir,
+    title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
+    author = "Zhang, Hanlei  and
+      Li, Xiaoteng  and
+      Xu, Hua  and
+      Zhang, Panpan  and
+      Zhao, Kang  and
+      Gao, Kai",
+    booktitle = "Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing: System Demonstrations",
+    year = "2021",
+    pages = "167--174",
+}
+@article{Zhang_Xu_Lin_2021, 
+      title={Deep Open Intent Classification with Adaptive Decision Boundary}, 
+      volume={35}, 
+      number={16}, 
+      journal={Proceedings of the AAAI Conference on Artificial Intelligence}, 
+      author={Zhang, Hanlei and Xu, Hua and Lin, Ting-En}, 
+      year={2021}, 
+      month={May}, 
+      pages={14374-14382} 
+}
+```
 
 
 
