@@ -1,6 +1,6 @@
 #!/usr/bin bash
 
-for dataset in 'banking' 'clinc'
+for dataset in 'snips'
 do
     for known_cls_ratio in 0.75
     do

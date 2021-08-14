@@ -1,0 +1,46 @@
+2021-08-10 09:45:58,174 - Discovery - Open Intent Discovery Begin...
+2021-08-10 09:45:58,174 - Discovery - Parameters Initialization...
+2021-08-10 09:45:58,175 - Discovery - ============================== Params ==============================
+2021-08-10 09:45:58,175 - Discovery - type:	open_intent_discovery
+2021-08-10 09:45:58,175 - Discovery - logger_name:	Discovery
+2021-08-10 09:45:58,175 - Discovery - log_dir:	logs
+2021-08-10 09:45:58,175 - Discovery - dataset:	stackoverflow
+2021-08-10 09:45:58,175 - Discovery - known_cls_ratio:	0.75
+2021-08-10 09:45:58,175 - Discovery - labeled_ratio:	0.1
+2021-08-10 09:45:58,175 - Discovery - cluster_num_factor:	1.0
+2021-08-10 09:45:58,175 - Discovery - method:	DeepAligned
+2021-08-10 09:45:58,175 - Discovery - train:	True
+2021-08-10 09:45:58,175 - Discovery - save_model:	False
+2021-08-10 09:45:58,175 - Discovery - backbone:	bert
+2021-08-10 09:45:58,175 - Discovery - setting:	semi_supervised
+2021-08-10 09:45:58,175 - Discovery - config_file_name:	DeepAligned
+2021-08-10 09:45:58,175 - Discovery - seed:	3
+2021-08-10 09:45:58,175 - Discovery - gpu_id:	0
+2021-08-10 09:45:58,175 - Discovery - pipe_results_path:	pipe_results
+2021-08-10 09:45:58,175 - Discovery - data_dir:	/home/zhanghanlei/git/submit/TEXTOIR/open_intent_discovery/../data
+2021-08-10 09:45:58,175 - Discovery - output_dir:	/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs
+2021-08-10 09:45:58,175 - Discovery - model_dir:	models
+2021-08-10 09:45:58,175 - Discovery - result_dir:	results
+2021-08-10 09:45:58,175 - Discovery - results_file_name:	results_DeepAligned.csv
+2021-08-10 09:45:58,175 - Discovery - save_results:	True
+2021-08-10 09:45:58,175 - Discovery - task_output_dir:	/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs/open_intent_discovery
+2021-08-10 09:45:58,175 - Discovery - method_output_dir:	/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs/open_intent_discovery/DeepAligned_stackoverflow_0.75_0.1_bert_3
+2021-08-10 09:45:58,175 - Discovery - model_output_dir:	/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs/open_intent_discovery/DeepAligned_stackoverflow_0.75_0.1_bert_3/models
+2021-08-10 09:45:58,175 - Discovery - bert_model:	/home/sharing/disk1/pretrained_embedding/bert/uncased_L-12_H-768_A-12/
+2021-08-10 09:45:58,175 - Discovery - max_seq_length:	None
+2021-08-10 09:45:58,175 - Discovery - num_pretrain_epochs:	100
+2021-08-10 09:45:58,175 - Discovery - num_train_epochs:	100
+2021-08-10 09:45:58,175 - Discovery - num_labels:	None
+2021-08-10 09:45:58,175 - Discovery - freeze_bert_parameters:	True
+2021-08-10 09:45:58,175 - Discovery - feat_dim:	768
+2021-08-10 09:45:58,175 - Discovery - warmup_proportion:	0.1
+2021-08-10 09:45:58,176 - Discovery - lr_pre:	5e-05
+2021-08-10 09:45:58,176 - Discovery - lr:	5e-05
+2021-08-10 09:45:58,176 - Discovery - loss_fct:	CrossEntropyLoss
+2021-08-10 09:45:58,176 - Discovery - activation:	tanh
+2021-08-10 09:45:58,176 - Discovery - train_batch_size:	128
+2021-08-10 09:45:58,176 - Discovery - eval_batch_size:	64
+2021-08-10 09:45:58,176 - Discovery - test_batch_size:	64
+2021-08-10 09:45:58,176 - Discovery - wait_patient:	20
+2021-08-10 09:45:58,176 - Discovery - ============================== End Params ==============================
+2021-08-10 09:45:58,176 - Discovery - Data and Model Preparation...

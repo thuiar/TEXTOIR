@@ -4,6 +4,7 @@ from .unsup_loader import UNSUP_Loader
 max_seq_lengths = {
                         'clinc':30, 
                         'banking':55, 
+                        'snips': 35,
                     }
                     
 backbone_loader_map = {

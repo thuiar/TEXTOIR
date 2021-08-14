@@ -1,0 +1,174 @@
+2021-08-10 10:36:07,931 - Discovery - Open Intent Discovery Begin...
+2021-08-10 10:36:07,931 - Discovery - Parameters Initialization...
+2021-08-10 10:36:07,931 - Discovery - ============================== Params ==============================
+2021-08-10 10:36:07,931 - Discovery - type:	open_intent_discovery
+2021-08-10 10:36:07,931 - Discovery - logger_name:	Discovery
+2021-08-10 10:36:07,931 - Discovery - log_dir:	logs
+2021-08-10 10:36:07,931 - Discovery - dataset:	snips
+2021-08-10 10:36:07,931 - Discovery - known_cls_ratio:	0.75
+2021-08-10 10:36:07,931 - Discovery - labeled_ratio:	0.1
+2021-08-10 10:36:07,931 - Discovery - cluster_num_factor:	1.0
+2021-08-10 10:36:07,931 - Discovery - method:	DTC_BERT
+2021-08-10 10:36:07,931 - Discovery - train:	True
+2021-08-10 10:36:07,931 - Discovery - save_model:	False
+2021-08-10 10:36:07,932 - Discovery - backbone:	bert_DTC
+2021-08-10 10:36:07,932 - Discovery - setting:	semi_supervised
+2021-08-10 10:36:07,932 - Discovery - config_file_name:	DTC_BERT
+2021-08-10 10:36:07,932 - Discovery - seed:	0
+2021-08-10 10:36:07,932 - Discovery - gpu_id:	0
+2021-08-10 10:36:07,932 - Discovery - pipe_results_path:	pipe_results
+2021-08-10 10:36:07,932 - Discovery - data_dir:	/home/zhanghanlei/git/submit/TEXTOIR/open_intent_discovery/../data
+2021-08-10 10:36:07,932 - Discovery - output_dir:	/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs
+2021-08-10 10:36:07,932 - Discovery - model_dir:	models
+2021-08-10 10:36:07,932 - Discovery - result_dir:	results
+2021-08-10 10:36:07,932 - Discovery - results_file_name:	results_DTC_BERT.csv
+2021-08-10 10:36:07,932 - Discovery - save_results:	True
+2021-08-10 10:36:07,932 - Discovery - task_output_dir:	/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs/open_intent_discovery
+2021-08-10 10:36:07,932 - Discovery - method_output_dir:	/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs/open_intent_discovery/DTC_BERT_snips_0.75_0.1_bert_DTC_0
+2021-08-10 10:36:07,932 - Discovery - model_output_dir:	/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs/open_intent_discovery/DTC_BERT_snips_0.75_0.1_bert_DTC_0/models
+2021-08-10 10:36:07,932 - Discovery - bert_model:	/home/sharing/disk1/pretrained_embedding/bert/uncased_L-12_H-768_A-12/
+2021-08-10 10:36:07,932 - Discovery - max_seq_length:	None
+2021-08-10 10:36:07,932 - Discovery - num_train_epochs:	100
+2021-08-10 10:36:07,932 - Discovery - num_pretrain_epochs:	100
+2021-08-10 10:36:07,932 - Discovery - num_warmup_train_epochs:	10
+2021-08-10 10:36:07,932 - Discovery - update_interval:	5
+2021-08-10 10:36:07,932 - Discovery - alpha:	0.6
+2021-08-10 10:36:07,932 - Discovery - num_labels:	None
+2021-08-10 10:36:07,932 - Discovery - freeze_bert_parameters:	True
+2021-08-10 10:36:07,932 - Discovery - feat_dim:	768
+2021-08-10 10:36:07,932 - Discovery - warmup_proportion:	0.1
+2021-08-10 10:36:07,932 - Discovery - lr_pre:	2e-05
+2021-08-10 10:36:07,932 - Discovery - lr:	2e-05
+2021-08-10 10:36:07,932 - Discovery - loss_fct:	CrossEntropyLoss
+2021-08-10 10:36:07,932 - Discovery - activation:	relu
+2021-08-10 10:36:07,932 - Discovery - train_batch_size:	128
+2021-08-10 10:36:07,932 - Discovery - eval_batch_size:	64
+2021-08-10 10:36:07,932 - Discovery - test_batch_size:	64
+2021-08-10 10:36:07,932 - Discovery - wait_patient:	10
+2021-08-10 10:36:07,932 - Discovery - ============================== End Params ==============================
+2021-08-10 10:36:07,932 - Discovery - Data and Model Preparation...
+2021-08-10 10:36:07,933 - Discovery - The number of known intents is 5
+2021-08-10 10:36:07,933 - Discovery - Lists of known labels are: ['SearchScreeningEvent', 'GetWeather', 'BookRestaurant', 'PlayMusic', 'AddToPlaylist']
+2021-08-10 10:36:09,597 - Discovery - Number of labeled training samples = 936
+2021-08-10 10:36:09,597 - Discovery - Number of unlabeled training samples = 12148
+2021-08-10 10:36:09,599 - Discovery - Number of evaluation samples = 500
+2021-08-10 10:36:09,600 - Discovery - Number of testing samples = 700
+2021-08-10 10:36:15,846 - Discovery - Freeze all parameters but the last layer for efficiency
+2021-08-10 10:36:36,288 - Discovery - Freeze all parameters but the last layer for efficiency
+2021-08-10 10:36:38,105 - Discovery - Pre-raining start...
+2021-08-10 10:36:49,554 - Discovery - ***** Epoch: 1: Eval results *****
+2021-08-10 10:36:49,555 - Discovery -   best_score = 0
+2021-08-10 10:36:49,555 - Discovery -   eval_score = 0.198
+2021-08-10 10:36:49,555 - Discovery -   train_loss = 1.6139600425958633
+2021-08-10 10:36:57,610 - Discovery - ***** Epoch: 2: Eval results *****
+2021-08-10 10:36:57,610 - Discovery -   best_score = 0.198
+2021-08-10 10:36:57,610 - Discovery -   eval_score = 0.602
+2021-08-10 10:36:57,610 - Discovery -   train_loss = 1.5906008183956146
+2021-08-10 10:37:05,675 - Discovery - ***** Epoch: 3: Eval results *****
+2021-08-10 10:37:05,675 - Discovery -   best_score = 0.602
+2021-08-10 10:37:05,675 - Discovery -   eval_score = 0.808
+2021-08-10 10:37:05,675 - Discovery -   train_loss = 1.5338030308485031
+2021-08-10 10:37:13,710 - Discovery - ***** Epoch: 4: Eval results *****
+2021-08-10 10:37:13,711 - Discovery -   best_score = 0.808
+2021-08-10 10:37:13,711 - Discovery -   eval_score = 0.844
+2021-08-10 10:37:13,711 - Discovery -   train_loss = 1.4379119277000427
+2021-08-10 10:37:21,879 - Discovery - ***** Epoch: 5: Eval results *****
+2021-08-10 10:37:21,879 - Discovery -   best_score = 0.844
+2021-08-10 10:37:21,879 - Discovery -   eval_score = 0.912
+2021-08-10 10:37:21,879 - Discovery -   train_loss = 1.2657059878110886
+2021-08-10 10:37:29,943 - Discovery - ***** Epoch: 6: Eval results *****
+2021-08-10 10:37:29,943 - Discovery -   best_score = 0.912
+2021-08-10 10:37:29,943 - Discovery -   eval_score = 0.938
+2021-08-10 10:37:29,943 - Discovery -   train_loss = 0.9495737552642822
+2021-08-10 10:37:37,996 - Discovery - ***** Epoch: 7: Eval results *****
+2021-08-10 10:37:37,996 - Discovery -   best_score = 0.938
+2021-08-10 10:37:37,996 - Discovery -   eval_score = 0.974
+2021-08-10 10:37:37,996 - Discovery -   train_loss = 0.551177766174078
+2021-08-10 10:37:45,998 - Discovery - ***** Epoch: 8: Eval results *****
+2021-08-10 10:37:45,998 - Discovery -   best_score = 0.974
+2021-08-10 10:37:45,998 - Discovery -   eval_score = 0.98
+2021-08-10 10:37:45,998 - Discovery -   train_loss = 0.2331074085086584
+2021-08-10 10:37:54,041 - Discovery - ***** Epoch: 9: Eval results *****
+2021-08-10 10:37:54,041 - Discovery -   best_score = 0.98
+2021-08-10 10:37:54,041 - Discovery -   eval_score = 0.982
+2021-08-10 10:37:54,041 - Discovery -   train_loss = 0.09914047783240676
+2021-08-10 10:38:02,080 - Discovery - ***** Epoch: 10: Eval results *****
+2021-08-10 10:38:02,080 - Discovery -   best_score = 0.982
+2021-08-10 10:38:02,080 - Discovery -   eval_score = 0.988
+2021-08-10 10:38:02,080 - Discovery -   train_loss = 0.04673589114099741
+2021-08-10 10:38:10,141 - Discovery - ***** Epoch: 11: Eval results *****
+2021-08-10 10:38:10,142 - Discovery -   best_score = 0.988
+2021-08-10 10:38:10,142 - Discovery -   eval_score = 0.988
+2021-08-10 10:38:10,142 - Discovery -   train_loss = 0.029758030781522393
+2021-08-10 10:38:18,168 - Discovery - ***** Epoch: 12: Eval results *****
+2021-08-10 10:38:18,168 - Discovery -   best_score = 0.988
+2021-08-10 10:38:18,168 - Discovery -   eval_score = 0.988
+2021-08-10 10:38:18,168 - Discovery -   train_loss = 0.02396429015789181
+2021-08-10 10:38:26,231 - Discovery - ***** Epoch: 13: Eval results *****
+2021-08-10 10:38:26,231 - Discovery -   best_score = 0.988
+2021-08-10 10:38:26,231 - Discovery -   eval_score = 0.99
+2021-08-10 10:38:26,231 - Discovery -   train_loss = 0.020732566597871482
+2021-08-10 10:38:34,289 - Discovery - ***** Epoch: 14: Eval results *****
+2021-08-10 10:38:34,289 - Discovery -   best_score = 0.99
+2021-08-10 10:38:34,289 - Discovery -   eval_score = 0.988
+2021-08-10 10:38:34,289 - Discovery -   train_loss = 0.012913015787489712
+2021-08-10 10:38:42,332 - Discovery - ***** Epoch: 15: Eval results *****
+2021-08-10 10:38:42,332 - Discovery -   best_score = 0.99
+2021-08-10 10:38:42,332 - Discovery -   eval_score = 0.988
+2021-08-10 10:38:42,332 - Discovery -   train_loss = 0.010836599045433104
+2021-08-10 10:38:50,288 - Discovery - ***** Epoch: 16: Eval results *****
+2021-08-10 10:38:50,289 - Discovery -   best_score = 0.99
+2021-08-10 10:38:50,289 - Discovery -   eval_score = 0.99
+2021-08-10 10:38:50,289 - Discovery -   train_loss = 0.010163742816075683
+2021-08-10 10:38:58,355 - Discovery - ***** Epoch: 17: Eval results *****
+2021-08-10 10:38:58,355 - Discovery -   best_score = 0.99
+2021-08-10 10:38:58,355 - Discovery -   eval_score = 0.992
+2021-08-10 10:38:58,355 - Discovery -   train_loss = 0.01008650433504954
+2021-08-10 10:39:06,389 - Discovery - ***** Epoch: 18: Eval results *****
+2021-08-10 10:39:06,389 - Discovery -   best_score = 0.992
+2021-08-10 10:39:06,389 - Discovery -   eval_score = 0.99
+2021-08-10 10:39:06,389 - Discovery -   train_loss = 0.006316076061921194
+2021-08-10 10:39:14,413 - Discovery - ***** Epoch: 19: Eval results *****
+2021-08-10 10:39:14,413 - Discovery -   best_score = 0.992
+2021-08-10 10:39:14,413 - Discovery -   eval_score = 0.988
+2021-08-10 10:39:14,414 - Discovery -   train_loss = 0.005571932531893253
+2021-08-10 10:39:22,430 - Discovery - ***** Epoch: 20: Eval results *****
+2021-08-10 10:39:22,430 - Discovery -   best_score = 0.992
+2021-08-10 10:39:22,430 - Discovery -   eval_score = 0.992
+2021-08-10 10:39:22,430 - Discovery -   train_loss = 0.00647001905599609
+2021-08-10 10:39:30,496 - Discovery - ***** Epoch: 21: Eval results *****
+2021-08-10 10:39:30,496 - Discovery -   best_score = 0.992
+2021-08-10 10:39:30,496 - Discovery -   eval_score = 0.992
+2021-08-10 10:39:30,496 - Discovery -   train_loss = 0.005161235865671188
+2021-08-10 10:39:38,559 - Discovery - ***** Epoch: 22: Eval results *****
+2021-08-10 10:39:38,559 - Discovery -   best_score = 0.992
+2021-08-10 10:39:38,559 - Discovery -   eval_score = 0.994
+2021-08-10 10:39:38,559 - Discovery -   train_loss = 0.004879123007413
+2021-08-10 10:39:46,621 - Discovery - ***** Epoch: 23: Eval results *****
+2021-08-10 10:39:46,621 - Discovery -   best_score = 0.994
+2021-08-10 10:39:46,621 - Discovery -   eval_score = 0.992
+2021-08-10 10:39:46,621 - Discovery -   train_loss = 0.003895411908160895
+2021-08-10 10:39:54,651 - Discovery - ***** Epoch: 24: Eval results *****
+2021-08-10 10:39:54,651 - Discovery -   best_score = 0.994
+2021-08-10 10:39:54,651 - Discovery -   eval_score = 0.994
+2021-08-10 10:39:54,651 - Discovery -   train_loss = 0.004452077846508473
+2021-08-10 10:40:02,685 - Discovery - ***** Epoch: 25: Eval results *****
+2021-08-10 10:40:02,685 - Discovery -   best_score = 0.994
+2021-08-10 10:40:02,685 - Discovery -   eval_score = 0.992
+2021-08-10 10:40:02,685 - Discovery -   train_loss = 0.003702524278196506
+2021-08-10 10:40:10,715 - Discovery - ***** Epoch: 26: Eval results *****
+2021-08-10 10:40:10,715 - Discovery -   best_score = 0.994
+2021-08-10 10:40:10,716 - Discovery -   eval_score = 0.994
+2021-08-10 10:40:10,716 - Discovery -   train_loss = 0.003052295040106401
+2021-08-10 10:40:18,671 - Discovery - ***** Epoch: 27: Eval results *****
+2021-08-10 10:40:18,671 - Discovery -   best_score = 0.994
+2021-08-10 10:40:18,671 - Discovery -   eval_score = 0.994
+2021-08-10 10:40:18,671 - Discovery -   train_loss = 0.003129433491267264
+2021-08-10 10:40:26,707 - Discovery - ***** Epoch: 28: Eval results *****
+2021-08-10 10:40:26,708 - Discovery -   best_score = 0.994
+2021-08-10 10:40:26,708 - Discovery -   eval_score = 0.994
+2021-08-10 10:40:26,708 - Discovery -   train_loss = 0.002903297427110374
+2021-08-10 10:40:34,746 - Discovery - ***** Epoch: 29: Eval results *****
+2021-08-10 10:40:34,746 - Discovery -   best_score = 0.994
+2021-08-10 10:40:34,746 - Discovery -   eval_score = 0.994
+2021-08-10 10:40:34,746 - Discovery -   train_loss = 0.0032600118865957484
