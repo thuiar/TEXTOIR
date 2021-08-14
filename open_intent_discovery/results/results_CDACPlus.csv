@@ -2,3 +2,10 @@ ACC,ARI,NMI,dataset,method,backbone,known_cls_ratio,labeled_ratio,cluster_num_fa
 93.14,85.65,88.31,snips,CDACPlus,bert_CDAC,0.75,0.1,1.0,0
 86.86,76.09,82.59,snips,CDACPlus,bert_CDAC,0.75,0.1,1.0,1
 74.43,61.87,74.95,snips,CDACPlus,bert_CDAC,0.75,0.1,1.0,2
+95.43,89.88,91.57,snips,CDACPlus,bert_CDAC,0.75,0.1,1.0,3
+93.71,86.68,89.02,snips,CDACPlus,bert_CDAC,0.75,0.1,1.0,4
+90.43,81.67,85.85,snips,CDACPlus,bert_CDAC,0.75,0.1,1.0,5
+95.29,89.62,91.31,snips,CDACPlus,bert_CDAC,0.75,0.1,1.0,6
+94.57,87.94,90.24,snips,CDACPlus,bert_CDAC,0.75,0.1,1.0,7
+95.57,90.29,91.49,snips,CDACPlus,bert_CDAC,0.75,0.1,1.0,8
+94.57,88.21,90.71,snips,CDACPlus,bert_CDAC,0.75,0.1,1.0,9

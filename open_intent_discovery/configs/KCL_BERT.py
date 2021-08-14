@@ -8,9 +8,9 @@ class Param():
         """
         Args:
             bert_model (directory): The path for the pre-trained bert model.
-            max_seq_len (autofill): The maximum total input sequence length after tokenization. Sequences longer than this will be truncated, sequences shorter will be padded.
-            num_train_epochs: The number of training epochs.
-            num_pretrain_epochs: The number of pre-training epochs.
+            max_seq_length (autofill): The maximum total input sequence length after tokenization. Sequences longer than this will be truncated, sequences shorter will be padded.
+            num_train_epochs (int): The number of training epochs.
+            num_pretrain_epochs (int): The number of pre-training epochs.
             num_labels (autofill): The output dimension.
             freeze_bert_parameters (binary): Whether to freeze all parameters but the last layer.
             feat_dim (int): The feature dimension.

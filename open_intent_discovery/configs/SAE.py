@@ -7,11 +7,13 @@ class Param():
     def get_hyper_parameters(self, args):
         """
         Args:
-            glove_model (directory): The path for the pre-trained glove embedding.
-            max_num_words (int): The maximum number of words.
+            num_train_epochs (int): The number of training epochs.
+            feat_dim (int): The feature dimension.
+            batch_size (int): The batch size for training.
+            model_name (str): The name of the Stacked auto-encoder model to be saved.
         """
         hyper_parameters = {
-            'num_train_epochs': 5000,
+            'num_train_epochs': 5000,   
             'feat_dim': 2000,
             'batch_size': 4096,
             'model_name': 'SAE.h5'

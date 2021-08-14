@@ -200,3 +200,206 @@
 2021-08-10 10:40:06,658 - Discovery -   train_labeled_loss = 0.01990100648254156
 2021-08-10 10:40:06,658 - Discovery -   train_loss = 0.2824831089148155
 2021-08-10 10:40:06,658 - Discovery -   u_threshold = 0.752
+2021-08-10 10:41:21,600 - Discovery - ***** Epoch: 21: Eval results *****
+2021-08-10 10:41:21,600 - Discovery -   delta_label = 0.022
+2021-08-10 10:41:21,600 - Discovery -   eval_score = 79.96
+2021-08-10 10:41:21,600 - Discovery -   l_threshold = 0.4758
+2021-08-10 10:41:21,600 - Discovery -   train_labeled_loss = 0.01837375690229237
+2021-08-10 10:41:21,600 - Discovery -   train_loss = 0.2717699305369304
+2021-08-10 10:41:21,600 - Discovery -   u_threshold = 0.7421
+2021-08-10 10:42:38,848 - Discovery - ***** Epoch: 22: Eval results *****
+2021-08-10 10:42:38,848 - Discovery -   delta_label = 0.014
+2021-08-10 10:42:38,848 - Discovery -   eval_score = 80.24
+2021-08-10 10:42:38,848 - Discovery -   l_threshold = 0.4768
+2021-08-10 10:42:38,848 - Discovery -   train_labeled_loss = 0.018827685387805104
+2021-08-10 10:42:38,848 - Discovery -   train_loss = 0.2608910340529222
+2021-08-10 10:42:38,848 - Discovery -   u_threshold = 0.7322
+2021-08-10 10:43:53,065 - Discovery - ***** Epoch: 23: Eval results *****
+2021-08-10 10:43:53,066 - Discovery -   delta_label = 0.026
+2021-08-10 10:43:53,066 - Discovery -   eval_score = 80.56
+2021-08-10 10:43:53,066 - Discovery -   l_threshold = 0.4778
+2021-08-10 10:43:53,066 - Discovery -   train_labeled_loss = 0.016784105449914932
+2021-08-10 10:43:53,066 - Discovery -   train_loss = 0.2494958581832739
+2021-08-10 10:43:53,066 - Discovery -   u_threshold = 0.7223
+2021-08-10 10:45:07,225 - Discovery - ***** Epoch: 24: Eval results *****
+2021-08-10 10:45:07,225 - Discovery -   delta_label = 0.016
+2021-08-10 10:45:07,225 - Discovery -   eval_score = 80.26
+2021-08-10 10:45:07,225 - Discovery -   l_threshold = 0.4788
+2021-08-10 10:45:07,225 - Discovery -   train_labeled_loss = 0.02430772315710783
+2021-08-10 10:45:07,225 - Discovery -   train_loss = 0.23868379226097694
+2021-08-10 10:45:07,225 - Discovery -   u_threshold = 0.7124
+2021-08-10 10:46:21,338 - Discovery - ***** Epoch: 25: Eval results *****
+2021-08-10 10:46:21,339 - Discovery -   delta_label = 0.012
+2021-08-10 10:46:21,339 - Discovery -   eval_score = 80.31
+2021-08-10 10:46:21,339 - Discovery -   l_threshold = 0.4798
+2021-08-10 10:46:21,339 - Discovery -   train_labeled_loss = 0.014143311884254217
+2021-08-10 10:46:21,339 - Discovery -   train_loss = 0.22763382013027483
+2021-08-10 10:46:21,339 - Discovery -   u_threshold = 0.7025
+2021-08-10 10:47:35,502 - Discovery - ***** Epoch: 26: Eval results *****
+2021-08-10 10:47:35,502 - Discovery -   delta_label = 0.02
+2021-08-10 10:47:35,502 - Discovery -   eval_score = 80.48
+2021-08-10 10:47:35,502 - Discovery -   l_threshold = 0.4807
+2021-08-10 10:47:35,503 - Discovery -   train_labeled_loss = 0.058225549990311265
+2021-08-10 10:47:35,503 - Discovery -   train_loss = 0.21678829536988184
+2021-08-10 10:47:35,503 - Discovery -   u_threshold = 0.6926
+2021-08-10 10:48:49,641 - Discovery - ***** Epoch: 27: Eval results *****
+2021-08-10 10:48:49,641 - Discovery -   delta_label = 0.03
+2021-08-10 10:48:49,641 - Discovery -   eval_score = 80.56
+2021-08-10 10:48:49,641 - Discovery -   l_threshold = 0.4817
+2021-08-10 10:48:49,641 - Discovery -   train_labeled_loss = 0.013238766230642796
+2021-08-10 10:48:49,641 - Discovery -   train_loss = 0.20570931067833534
+2021-08-10 10:48:49,641 - Discovery -   u_threshold = 0.6827
+2021-08-10 10:50:03,776 - Discovery - ***** Epoch: 28: Eval results *****
+2021-08-10 10:50:03,776 - Discovery -   delta_label = 0.032
+2021-08-10 10:50:03,776 - Discovery -   eval_score = 81.11
+2021-08-10 10:50:03,776 - Discovery -   l_threshold = 0.4827
+2021-08-10 10:50:03,776 - Discovery -   train_labeled_loss = 0.02366159134544432
+2021-08-10 10:50:03,776 - Discovery -   train_loss = 0.1951605070095796
+2021-08-10 10:50:03,776 - Discovery -   u_threshold = 0.6728
+2021-08-10 10:51:17,941 - Discovery - ***** Epoch: 29: Eval results *****
+2021-08-10 10:51:17,942 - Discovery -   delta_label = 0.022
+2021-08-10 10:51:17,942 - Discovery -   eval_score = 81.07
+2021-08-10 10:51:17,942 - Discovery -   l_threshold = 0.4837
+2021-08-10 10:51:17,942 - Discovery -   train_labeled_loss = 0.052870269399136305
+2021-08-10 10:51:17,942 - Discovery -   train_loss = 0.1837766021490097
+2021-08-10 10:51:17,942 - Discovery -   u_threshold = 0.6629
+2021-08-10 10:52:32,103 - Discovery - ***** Epoch: 30: Eval results *****
+2021-08-10 10:52:32,103 - Discovery -   delta_label = 0.022
+2021-08-10 10:52:32,103 - Discovery -   eval_score = 81.25
+2021-08-10 10:52:32,103 - Discovery -   l_threshold = 0.4847
+2021-08-10 10:52:32,103 - Discovery -   train_labeled_loss = 0.01249219267629087
+2021-08-10 10:52:32,103 - Discovery -   train_loss = 0.172699348284648
+2021-08-10 10:52:32,103 - Discovery -   u_threshold = 0.653
+2021-08-10 10:53:46,328 - Discovery - ***** Epoch: 31: Eval results *****
+2021-08-10 10:53:46,328 - Discovery -   delta_label = 0.016
+2021-08-10 10:53:46,328 - Discovery -   eval_score = 80.46
+2021-08-10 10:53:46,328 - Discovery -   l_threshold = 0.4857
+2021-08-10 10:53:46,328 - Discovery -   train_labeled_loss = 0.012629986042156816
+2021-08-10 10:53:46,328 - Discovery -   train_loss = 0.16192966241102952
+2021-08-10 10:53:46,328 - Discovery -   u_threshold = 0.6431
+2021-08-10 10:55:00,455 - Discovery - ***** Epoch: 32: Eval results *****
+2021-08-10 10:55:00,455 - Discovery -   delta_label = 0.008
+2021-08-10 10:55:00,455 - Discovery -   eval_score = 80.54
+2021-08-10 10:55:00,455 - Discovery -   l_threshold = 0.4867
+2021-08-10 10:55:00,455 - Discovery -   train_labeled_loss = 0.011652390006929636
+2021-08-10 10:55:00,455 - Discovery -   train_loss = 0.15089938503045303
+2021-08-10 10:55:00,455 - Discovery -   u_threshold = 0.6332
+2021-08-10 10:56:14,576 - Discovery - ***** Epoch: 33: Eval results *****
+2021-08-10 10:56:14,576 - Discovery -   delta_label = 0.006
+2021-08-10 10:56:14,576 - Discovery -   eval_score = 81.1
+2021-08-10 10:56:14,576 - Discovery -   l_threshold = 0.4877
+2021-08-10 10:56:14,576 - Discovery -   train_labeled_loss = 0.01004996639676392
+2021-08-10 10:56:14,576 - Discovery -   train_loss = 0.1397706648478141
+2021-08-10 10:56:14,576 - Discovery -   u_threshold = 0.6233
+2021-08-10 10:57:29,208 - Discovery - ***** Epoch: 34: Eval results *****
+2021-08-10 10:57:29,208 - Discovery -   delta_label = 0.01
+2021-08-10 10:57:29,209 - Discovery -   eval_score = 81.34
+2021-08-10 10:57:29,209 - Discovery -   l_threshold = 0.4887
+2021-08-10 10:57:29,209 - Discovery -   train_labeled_loss = 0.019130682107061148
+2021-08-10 10:57:29,209 - Discovery -   train_loss = 0.12898886776887453
+2021-08-10 10:57:29,209 - Discovery -   u_threshold = 0.6134
+2021-08-10 10:58:44,087 - Discovery - ***** Epoch: 35: Eval results *****
+2021-08-10 10:58:44,087 - Discovery -   delta_label = 0.002
+2021-08-10 10:58:44,087 - Discovery -   eval_score = 81.31
+2021-08-10 10:58:44,087 - Discovery -   l_threshold = 0.4897
+2021-08-10 10:58:44,087 - Discovery -   train_labeled_loss = 0.011783131631091237
+2021-08-10 10:58:44,087 - Discovery -   train_loss = 0.11821355384129745
+2021-08-10 10:58:44,087 - Discovery -   u_threshold = 0.6035
+2021-08-10 10:59:59,893 - Discovery - ***** Epoch: 36: Eval results *****
+2021-08-10 10:59:59,893 - Discovery -   delta_label = 0.0
+2021-08-10 10:59:59,893 - Discovery -   eval_score = 81.31
+2021-08-10 10:59:59,893 - Discovery -   l_threshold = 0.4906
+2021-08-10 10:59:59,893 - Discovery -   train_labeled_loss = 0.010822462849318981
+2021-08-10 10:59:59,893 - Discovery -   train_loss = 0.10696197014588577
+2021-08-10 10:59:59,893 - Discovery -   u_threshold = 0.5936
+2021-08-10 11:01:14,647 - Discovery - ***** Epoch: 37: Eval results *****
+2021-08-10 11:01:14,648 - Discovery -   delta_label = 0.012
+2021-08-10 11:01:14,648 - Discovery -   eval_score = 81.39
+2021-08-10 11:01:14,648 - Discovery -   l_threshold = 0.4916
+2021-08-10 11:01:14,648 - Discovery -   train_labeled_loss = 0.010452923364937305
+2021-08-10 11:01:14,648 - Discovery -   train_loss = 0.09628086250561935
+2021-08-10 11:01:14,648 - Discovery -   u_threshold = 0.5837
+2021-08-10 11:02:30,259 - Discovery - ***** Epoch: 38: Eval results *****
+2021-08-10 11:02:30,259 - Discovery -   delta_label = 0.004
+2021-08-10 11:02:30,259 - Discovery -   eval_score = 81.32
+2021-08-10 11:02:30,259 - Discovery -   l_threshold = 0.4926
+2021-08-10 11:02:30,259 - Discovery -   train_labeled_loss = 0.011399810900911689
+2021-08-10 11:02:30,259 - Discovery -   train_loss = 0.08529117703437805
+2021-08-10 11:02:30,259 - Discovery -   u_threshold = 0.5738
+2021-08-10 11:03:46,443 - Discovery - ***** Epoch: 39: Eval results *****
+2021-08-10 11:03:46,443 - Discovery -   delta_label = 0.016
+2021-08-10 11:03:46,443 - Discovery -   eval_score = 81.45
+2021-08-10 11:03:46,443 - Discovery -   l_threshold = 0.4936
+2021-08-10 11:03:46,443 - Discovery -   train_labeled_loss = 0.01290905848145485
+2021-08-10 11:03:46,443 - Discovery -   train_loss = 0.07456606282637669
+2021-08-10 11:03:46,443 - Discovery -   u_threshold = 0.5639
+2021-08-10 11:05:00,621 - Discovery - ***** Epoch: 40: Eval results *****
+2021-08-10 11:05:00,621 - Discovery -   delta_label = 0.004
+2021-08-10 11:05:00,621 - Discovery -   eval_score = 81.35
+2021-08-10 11:05:00,621 - Discovery -   l_threshold = 0.4946
+2021-08-10 11:05:00,621 - Discovery -   train_labeled_loss = 0.008500433526933193
+2021-08-10 11:05:00,621 - Discovery -   train_loss = 0.06374481549629799
+2021-08-10 11:05:00,621 - Discovery -   u_threshold = 0.554
+2021-08-10 11:06:16,743 - Discovery - ***** Epoch: 41: Eval results *****
+2021-08-10 11:06:16,743 - Discovery -   delta_label = 0.002
+2021-08-10 11:06:16,743 - Discovery -   eval_score = 81.3
+2021-08-10 11:06:16,743 - Discovery -   l_threshold = 0.4956
+2021-08-10 11:06:16,743 - Discovery -   train_labeled_loss = 0.010990940849296749
+2021-08-10 11:06:16,743 - Discovery -   train_loss = 0.0526799364731862
+2021-08-10 11:06:16,743 - Discovery -   u_threshold = 0.5441
+2021-08-10 11:07:32,290 - Discovery - ***** Epoch: 42: Eval results *****
+2021-08-10 11:07:32,290 - Discovery -   delta_label = 0.0
+2021-08-10 11:07:32,290 - Discovery -   eval_score = 81.3
+2021-08-10 11:07:32,290 - Discovery -   l_threshold = 0.4966
+2021-08-10 11:07:32,290 - Discovery -   train_labeled_loss = 0.011261950945481658
+2021-08-10 11:07:32,290 - Discovery -   train_loss = 0.04205131760010353
+2021-08-10 11:07:32,290 - Discovery -   u_threshold = 0.5342
+2021-08-10 11:08:47,030 - Discovery - ***** Epoch: 43: Eval results *****
+2021-08-10 11:08:47,030 - Discovery -   delta_label = 0.0
+2021-08-10 11:08:47,031 - Discovery -   eval_score = 81.3
+2021-08-10 11:08:47,031 - Discovery -   l_threshold = 0.4976
+2021-08-10 11:08:47,031 - Discovery -   train_labeled_loss = 0.010556199587881565
+2021-08-10 11:08:47,031 - Discovery -   train_loss = 0.030783715156408455
+2021-08-10 11:08:47,031 - Discovery -   u_threshold = 0.5243
+2021-08-10 11:10:03,197 - Discovery - ***** Epoch: 44: Eval results *****
+2021-08-10 11:10:03,197 - Discovery -   delta_label = 0.0
+2021-08-10 11:10:03,197 - Discovery -   eval_score = 81.3
+2021-08-10 11:10:03,197 - Discovery -   l_threshold = 0.4986
+2021-08-10 11:10:03,197 - Discovery -   train_labeled_loss = 0.009118876769207418
+2021-08-10 11:10:03,197 - Discovery -   train_loss = 0.020067700972923867
+2021-08-10 11:10:03,197 - Discovery -   u_threshold = 0.5144
+2021-08-10 11:11:18,120 - Discovery - ***** Epoch: 45: Eval results *****
+2021-08-10 11:11:18,120 - Discovery -   delta_label = 0.0
+2021-08-10 11:11:18,120 - Discovery -   eval_score = 81.3
+2021-08-10 11:11:18,120 - Discovery -   l_threshold = 0.4996
+2021-08-10 11:11:18,120 - Discovery -   train_labeled_loss = 0.009832116193138063
+2021-08-10 11:11:18,120 - Discovery -   train_loss = 0.00947847618506505
+2021-08-10 11:11:18,120 - Discovery -   u_threshold = 0.5045
+2021-08-10 11:11:18,120 - Discovery - Pairwise-similarity Learning finished...
+2021-08-10 11:11:18,120 - Discovery - Cluster refining begin...
+2021-08-10 11:11:18,120 - Discovery - Initialize centroids...
+2021-08-10 11:11:55,456 - Discovery - Initialization finished...
+2021-08-10 11:13:25,462 - Discovery - ***** Epoch: 0: Eval results *****
+2021-08-10 11:13:25,462 - Discovery -   best_eval_score = 88.47
+2021-08-10 11:13:25,464 - Discovery -   delta_label = 1.0
+2021-08-10 11:13:25,464 - Discovery -   eval_score = 88.47
+2021-08-10 11:13:25,464 - Discovery -   kl_loss = 0.037
+2021-08-10 11:13:56,222 - Discovery - Break at epoch: 2 and delta_label: 0.000000.
+2021-08-10 11:13:56,222 - Discovery - Cluster refining finished...
+2021-08-10 11:13:56,222 - Discovery - Training Finished...
+2021-08-10 11:13:56,222 - Discovery - Testing begin...
+2021-08-10 11:13:58,229 - Discovery - ***** Test: Confusion Matrix *****
+2021-08-10 11:13:58,229 - Discovery - [[  0   0   1   0   0   0 123]
+ [  0   0   0  92   0   0   0]
+ [102   0   1   1   0   0   0]
+ [  0   0   2   0  83   0   1]
+ [  0   0   0   0   0  80   0]
+ [  0   2  99   0   6   0   0]
+ [  0  89  18   0   0   0   0]]
+2021-08-10 11:13:58,229 - Discovery - ***** Test results *****
+2021-08-10 11:13:58,229 - Discovery -   ACC = 95.43
+2021-08-10 11:13:58,229 - Discovery -   ARI = 89.88
+2021-08-10 11:13:58,229 - Discovery -   NMI = 91.57
+2021-08-10 11:13:58,229 - Discovery - Testing finished...
+2021-08-10 11:13:58,229 - Discovery - Results saved in results/results_CDACPlus.csv
+2021-08-10 11:13:58,268 - Discovery - Open Intent Discovery Finished...

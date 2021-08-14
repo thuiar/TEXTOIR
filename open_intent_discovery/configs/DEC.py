@@ -1,4 +1,5 @@
 import os
+    
 class Param():
     
     def __init__(self, args):
@@ -8,18 +9,17 @@ class Param():
     def get_hyper_parameters(self, args):
         """
         Args:
-            SAE_feats_path (directory): The path for pre-trained stacked auto-encoder features.
             num_train_epochs_SAE (int): The number of epochs for training stacked auto-encoder.
             num_train_epochs_DEC (int): The number of epochs for training DEC model.
             feat_dim (int): The feature dimension.
             update_interval (int): The number of intervals between contiguous updates.
+            batch_size (int): The batch size for training.
             lr (float): The learning rate for training DCN.
             momentum (float): The momentum value of SGD optimizer.
             tol (float): The tolerance threshold to stop training for DCN.
             model_name (str): The name of the DCN model (saved in the format of keras).
         """
         hyper_parameters = {
-            'SAE_feats_path': os.path.join('_'.join([str(x) for x in ['SAE', args.dataset, 'sae', str(args.seed)]]), 'models', 'SAE.h5'),
             'num_train_epochs_SAE': 5000,
             'num_train_epochs_DEC': 12000,
             'feat_dim': 2000,

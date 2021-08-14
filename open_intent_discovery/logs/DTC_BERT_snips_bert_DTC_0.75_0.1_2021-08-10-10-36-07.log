@@ -172,3 +172,163 @@
 2021-08-10 10:40:34,746 - Discovery -   best_score = 0.994
 2021-08-10 10:40:34,746 - Discovery -   eval_score = 0.994
 2021-08-10 10:40:34,746 - Discovery -   train_loss = 0.0032600118865957484
+2021-08-10 10:40:42,792 - Discovery - ***** Epoch: 30: Eval results *****
+2021-08-10 10:40:42,792 - Discovery -   best_score = 0.994
+2021-08-10 10:40:42,792 - Discovery -   eval_score = 0.992
+2021-08-10 10:40:42,792 - Discovery -   train_loss = 0.0028008096560370177
+2021-08-10 10:40:50,833 - Discovery - ***** Epoch: 31: Eval results *****
+2021-08-10 10:40:50,833 - Discovery -   best_score = 0.994
+2021-08-10 10:40:50,833 - Discovery -   eval_score = 0.992
+2021-08-10 10:40:50,833 - Discovery -   train_loss = 0.002970448666019365
+2021-08-10 10:40:58,877 - Discovery - ***** Epoch: 32: Eval results *****
+2021-08-10 10:40:58,877 - Discovery -   best_score = 0.994
+2021-08-10 10:40:58,877 - Discovery -   eval_score = 0.992
+2021-08-10 10:40:58,877 - Discovery -   train_loss = 0.0025427806831430644
+2021-08-10 10:40:58,877 - Discovery - Pre-training finished...
+2021-08-10 10:41:01,619 - Discovery - Freeze all parameters but the last layer for efficiency
+2021-08-10 10:41:03,372 - Discovery - Initialize centroids...
+2021-08-10 10:41:45,239 - Discovery - Initialization finished...
+2021-08-10 10:41:45,254 - Discovery - WarmUp Training start...
+2021-08-10 10:43:46,635 - Discovery - ***** Epoch: 0: Eval results *****
+2021-08-10 10:43:46,635 - Discovery -   eval_score = 96.1
+2021-08-10 10:43:46,635 - Discovery -   loss = 1.0445912508293986
+2021-08-10 10:45:06,403 - Discovery - ***** Epoch: 1: Eval results *****
+2021-08-10 10:45:06,403 - Discovery -   eval_score = 95.54
+2021-08-10 10:45:06,403 - Discovery -   loss = 0.8940851637162268
+2021-08-10 10:46:26,166 - Discovery - ***** Epoch: 2: Eval results *****
+2021-08-10 10:46:26,167 - Discovery -   eval_score = 95.89
+2021-08-10 10:46:26,167 - Discovery -   loss = 0.8486170177347958
+2021-08-10 10:47:45,960 - Discovery - ***** Epoch: 3: Eval results *****
+2021-08-10 10:47:45,960 - Discovery -   eval_score = 96.1
+2021-08-10 10:47:45,960 - Discovery -   loss = 0.8261150880716741
+2021-08-10 10:49:05,707 - Discovery - ***** Epoch: 4: Eval results *****
+2021-08-10 10:49:05,707 - Discovery -   eval_score = 96.1
+2021-08-10 10:49:05,707 - Discovery -   loss = 0.8081142329610884
+2021-08-10 10:50:25,517 - Discovery - ***** Epoch: 5: Eval results *****
+2021-08-10 10:50:25,517 - Discovery -   eval_score = 96.1
+2021-08-10 10:50:25,517 - Discovery -   loss = 0.7956437920220196
+2021-08-10 10:51:45,231 - Discovery - ***** Epoch: 6: Eval results *****
+2021-08-10 10:51:45,231 - Discovery -   eval_score = 95.89
+2021-08-10 10:51:45,231 - Discovery -   loss = 0.7895537298172712
+2021-08-10 10:53:04,947 - Discovery - ***** Epoch: 7: Eval results *****
+2021-08-10 10:53:04,947 - Discovery -   eval_score = 95.89
+2021-08-10 10:53:04,947 - Discovery -   loss = 0.7842227341607213
+2021-08-10 10:54:24,706 - Discovery - ***** Epoch: 8: Eval results *****
+2021-08-10 10:54:24,706 - Discovery -   eval_score = 95.7
+2021-08-10 10:54:24,706 - Discovery -   loss = 0.779815343208611
+2021-08-10 10:55:44,431 - Discovery - ***** Epoch: 9: Eval results *****
+2021-08-10 10:55:44,431 - Discovery -   eval_score = 95.89
+2021-08-10 10:55:44,431 - Discovery -   loss = 0.7762840576469898
+2021-08-10 10:55:44,431 - Discovery - WarmUp Training finished...
+2021-08-10 10:55:44,435 - Discovery - Training Begin...
+2021-08-10 10:57:43,011 - Discovery - updating target ...
+2021-08-10 10:57:43,013 - Discovery - updating finished ...
+2021-08-10 10:57:45,020 - Discovery - ***** Epoch: 1: Eval results *****
+2021-08-10 10:57:45,020 - Discovery -   best_eval_score = 0
+2021-08-10 10:57:45,020 - Discovery -   eval_score = 95.7
+2021-08-10 10:57:45,020 - Discovery -   train_loss = 0.00819152610768613
+2021-08-10 10:59:44,776 - Discovery - ***** Epoch: 2: Eval results *****
+2021-08-10 10:59:44,776 - Discovery -   best_eval_score = 95.7
+2021-08-10 10:59:44,776 - Discovery -   eval_score = 95.73
+2021-08-10 10:59:44,776 - Discovery -   train_loss = 0.01698290957628112
+2021-08-10 11:01:44,830 - Discovery - ***** Epoch: 3: Eval results *****
+2021-08-10 11:01:44,830 - Discovery -   best_eval_score = 95.73
+2021-08-10 11:01:44,830 - Discovery -   eval_score = 95.19
+2021-08-10 11:01:44,830 - Discovery -   train_loss = 0.016707374988810014
+2021-08-10 11:03:45,023 - Discovery - ***** Epoch: 4: Eval results *****
+2021-08-10 11:03:45,023 - Discovery -   best_eval_score = 95.73
+2021-08-10 11:03:45,023 - Discovery -   eval_score = 96.25
+2021-08-10 11:03:45,023 - Discovery -   train_loss = 0.016540183166140005
+2021-08-10 11:05:45,162 - Discovery - ***** Epoch: 5: Eval results *****
+2021-08-10 11:05:45,164 - Discovery -   best_eval_score = 96.25
+2021-08-10 11:05:45,164 - Discovery -   eval_score = 96.25
+2021-08-10 11:05:45,164 - Discovery -   train_loss = 0.016327020565145893
+2021-08-10 11:07:43,135 - Discovery - updating target ...
+2021-08-10 11:07:43,137 - Discovery - updating finished ...
+2021-08-10 11:07:45,119 - Discovery - ***** Epoch: 6: Eval results *****
+2021-08-10 11:07:45,119 - Discovery -   best_eval_score = 96.25
+2021-08-10 11:07:45,119 - Discovery -   eval_score = 96.22
+2021-08-10 11:07:45,120 - Discovery -   train_loss = 0.01618142158381249
+2021-08-10 11:09:45,254 - Discovery - ***** Epoch: 7: Eval results *****
+2021-08-10 11:09:45,254 - Discovery -   best_eval_score = 96.25
+2021-08-10 11:09:45,254 - Discovery -   eval_score = 95.03
+2021-08-10 11:09:45,254 - Discovery -   train_loss = 0.017438465631321856
+2021-08-10 11:11:46,656 - Discovery - ***** Epoch: 8: Eval results *****
+2021-08-10 11:11:46,656 - Discovery -   best_eval_score = 96.25
+2021-08-10 11:11:46,656 - Discovery -   eval_score = 95.21
+2021-08-10 11:11:46,656 - Discovery -   train_loss = 0.01711429465366037
+2021-08-10 11:13:34,919 - Discovery - ***** Epoch: 9: Eval results *****
+2021-08-10 11:13:34,920 - Discovery -   best_eval_score = 96.25
+2021-08-10 11:13:34,920 - Discovery -   eval_score = 96.05
+2021-08-10 11:13:34,920 - Discovery -   train_loss = 0.016849977895617485
+2021-08-10 11:14:54,154 - Discovery - ***** Epoch: 10: Eval results *****
+2021-08-10 11:14:54,154 - Discovery -   best_eval_score = 96.25
+2021-08-10 11:14:54,154 - Discovery -   eval_score = 96.05
+2021-08-10 11:14:54,154 - Discovery -   train_loss = 0.01657076860336881
+2021-08-10 11:16:05,268 - Discovery - updating target ...
+2021-08-10 11:16:05,270 - Discovery - updating finished ...
+2021-08-10 11:16:06,456 - Discovery - ***** Epoch: 11: Eval results *****
+2021-08-10 11:16:06,456 - Discovery -   best_eval_score = 96.25
+2021-08-10 11:16:06,456 - Discovery -   eval_score = 96.4
+2021-08-10 11:16:06,456 - Discovery -   train_loss = 0.016389540200562852
+2021-08-10 11:17:18,889 - Discovery - ***** Epoch: 12: Eval results *****
+2021-08-10 11:17:18,889 - Discovery -   best_eval_score = 96.4
+2021-08-10 11:17:18,889 - Discovery -   eval_score = 93.63
+2021-08-10 11:17:18,889 - Discovery -   train_loss = 0.018100687998690104
+2021-08-10 11:18:31,254 - Discovery - ***** Epoch: 13: Eval results *****
+2021-08-10 11:18:31,254 - Discovery -   best_eval_score = 96.4
+2021-08-10 11:18:31,254 - Discovery -   eval_score = 96.4
+2021-08-10 11:18:31,254 - Discovery -   train_loss = 0.017909777419347513
+2021-08-10 11:19:43,640 - Discovery - ***** Epoch: 14: Eval results *****
+2021-08-10 11:19:43,640 - Discovery -   best_eval_score = 96.4
+2021-08-10 11:19:43,640 - Discovery -   eval_score = 95.8
+2021-08-10 11:19:43,640 - Discovery -   train_loss = 0.017604573737633855
+2021-08-10 11:20:55,928 - Discovery - ***** Epoch: 15: Eval results *****
+2021-08-10 11:20:55,928 - Discovery -   best_eval_score = 96.4
+2021-08-10 11:20:55,928 - Discovery -   eval_score = 95.6
+2021-08-10 11:20:55,928 - Discovery -   train_loss = 0.017376939452400333
+2021-08-10 11:22:07,093 - Discovery - updating target ...
+2021-08-10 11:22:07,095 - Discovery - updating finished ...
+2021-08-10 11:22:08,281 - Discovery - ***** Epoch: 16: Eval results *****
+2021-08-10 11:22:08,281 - Discovery -   best_eval_score = 96.4
+2021-08-10 11:22:08,281 - Discovery -   eval_score = 95.89
+2021-08-10 11:22:08,281 - Discovery -   train_loss = 0.01706079504403629
+2021-08-10 11:23:20,680 - Discovery - ***** Epoch: 17: Eval results *****
+2021-08-10 11:23:20,680 - Discovery -   best_eval_score = 96.4
+2021-08-10 11:23:20,680 - Discovery -   eval_score = 92.56
+2021-08-10 11:23:20,680 - Discovery -   train_loss = 0.018964203309855963
+2021-08-10 11:24:33,013 - Discovery - ***** Epoch: 18: Eval results *****
+2021-08-10 11:24:33,013 - Discovery -   best_eval_score = 96.4
+2021-08-10 11:24:33,013 - Discovery -   eval_score = 93.67
+2021-08-10 11:24:33,013 - Discovery -   train_loss = 0.018650469419203307
+2021-08-10 11:25:31,794 - Discovery - ***** Epoch: 19: Eval results *****
+2021-08-10 11:25:31,794 - Discovery -   best_eval_score = 96.4
+2021-08-10 11:25:31,794 - Discovery -   eval_score = 90.65
+2021-08-10 11:25:31,794 - Discovery -   train_loss = 0.01847506645870836
+2021-08-10 11:25:58,102 - Discovery - ***** Epoch: 20: Eval results *****
+2021-08-10 11:25:58,102 - Discovery -   best_eval_score = 96.4
+2021-08-10 11:25:58,102 - Discovery -   eval_score = 91.67
+2021-08-10 11:25:58,102 - Discovery -   train_loss = 0.01828974375599309
+2021-08-10 11:26:22,263 - Discovery - updating target ...
+2021-08-10 11:26:22,265 - Discovery - updating finished ...
+2021-08-10 11:26:22,716 - Discovery - ***** Epoch: 21: Eval results *****
+2021-08-10 11:26:22,716 - Discovery -   best_eval_score = 96.4
+2021-08-10 11:26:22,716 - Discovery -   eval_score = 94.51
+2021-08-10 11:26:22,716 - Discovery -   train_loss = 0.018135540932416917
+2021-08-10 11:26:22,717 - Discovery - Training Finished...
+2021-08-10 11:26:22,717 - Discovery - Testing begin...
+2021-08-10 11:26:23,329 - Discovery - ***** Test: Confusion Matrix *****
+2021-08-10 11:26:23,329 - Discovery - [[  1   0   0   0   0 123   0]
+ [  0   0  92   0   0   0   0]
+ [  0   0   2 102   0   0   0]
+ [ 85   0   0   0   0   1   0]
+ [  2   8  37   0   5  26   2]
+ [ 32   0   0   2  60   0  13]
+ [  1   0   0   0 103   0   3]]
+2021-08-10 11:26:23,330 - Discovery - ***** Test results *****
+2021-08-10 11:26:23,330 - Discovery -   ACC = 75.14
+2021-08-10 11:26:23,330 - Discovery -   ARI = 65.28
+2021-08-10 11:26:23,330 - Discovery -   NMI = 74.18
+2021-08-10 11:26:23,330 - Discovery - Testing finished...
+2021-08-10 11:26:23,330 - Discovery - Results saved in results/results_DTC_BERT.csv
+2021-08-10 11:26:23,355 - Discovery - Open Intent Discovery Finished...

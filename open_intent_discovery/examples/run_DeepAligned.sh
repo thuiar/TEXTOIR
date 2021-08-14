@@ -1,7 +1,7 @@
 #!/usr/bin bash
 
 
-for dataset in 'stackoverflow'
+for dataset in 'banking' 'clinc'
 do
     for known_cls_ratio in 0.75
     do
