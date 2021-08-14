@@ -1,6 +1,6 @@
 # TEXT Open Intent Recognition (TEXTOIR)
 
-TEXTOIR is the first high-quality Text Open Intent Recognition platform. This repo contains a convenient toolkit with extensible interfaces, integrating a series of algorithms of two tasks (open intent detection and open intent discovery). More information can be seen on our [ACL 2021 demo paper](https://aclanthology.org/2021.acl-demo.20.pdf).
+TEXTOIR is the first high-quality Text Open Intent Recognition platform. This repo contains a convenient toolkit with extensible interfaces, integrating a series of algorithms of two tasks (open intent detection and open intent discovery). We also release the pipeline framework and the visualized platform in the repo [TEXTOIR-DEMO](https://github.com/thuiar/TEXTOIR-DEMO). 
 
 If you are interested in this work, and want to use the codes in this repo, please **star** and **fork** this repo, and cite the following paper:
 ```
@@ -102,4 +102,3 @@ Supervisor: Hua Xu.
 ## Bugs or questions?
 
 If you have any questions, feel free to open issues and pull request. Please illustrate your problems as detailed as possible. If you want to integrate your method in our repo, please contact us (zhang-hl20@mails.tsinghua.edu.cn).
-
