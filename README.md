@@ -26,7 +26,7 @@ Open Intent Recognition:
 
  **We strongly recommend you to use our TEXTOIR toolkit, which has standard and unified interfaces (especially data setting) to obtain fair and persuable results on benchmark intent datasets!**
 
-## Benmark Datasets
+## Benchmark Datasets
 * [BANKING](https://arxiv.org/pdf/2003.04807.pdf)
 * [OOS / CLINC150 (without OOD samples)](https://arxiv.org/pdf/1909.02027.pdf) 
 * [StackOverflow](https://aclanthology.org/W15-1509.pdf)
