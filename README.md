@@ -93,7 +93,7 @@ This toolkit is extensible and supports adding new methods, datasets, configurat
 ### Reliability
 The codes in this repo have been confirmed and are reliable. The experimental results are close to the reported ones in our AAAI 2021 papers [Discovering New Intents with DeepAligned Clustering](https://ojs.aaai.org/index.php/AAAI/article/view/17689) and [Deep Open Intent Classification with Adaptive Decision Boundary](https://ojs.aaai.org/index.php/AAAI/article/view/17690). Note that the results of some methods may fluctuate in a small range due to the selected random seeds, hyper-parameters, optimizers, etc. The final results are the average of 10 random seeds to reduce the influence of different selected known classes.
 
-## Ackownledgements
+## Acknowledgements
 
 Toolkit Contributors: Hanlei Zhang, Ting-En Lin, Qianrui Zhou, Shaojie Zhao, Xin Wang, Huisheng Mao. 
 
