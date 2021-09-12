@@ -90,7 +90,7 @@ sklearn==0.0
 smart-open==4.2.0
 sortedcontainers==2.4.0
 SQLAlchemy==1.4.19
-sqlparse==0.4.1
+sqlparse==0.4.2
 svgwrite==1.4.1
 tensorboard==2.4.1
 tensorboard-plugin-wit==1.8.0
