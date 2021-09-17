@@ -3,6 +3,7 @@ import torch
 import math
 import logging
 from pytorch_pretrained_bert.optimization import BertAdam
+from transformers import AdamW, get_linear_schedule_with_warmup
 from .utils import freeze_bert_parameters
 from .__init__ import backbones_map
 
@@ -15,7 +16,7 @@ class ModelManager:
         
         if args.backbone.startswith('bert'):
             self.model = self.set_model(args, data, 'bert')
-            self.optimizer = self.set_optimizer(self.model, data.dataloader.num_train_examples, args.train_batch_size, \
+            self.optimizer, self.scheduler = self.set_optimizer(self.model, data.dataloader.num_train_examples, args.train_batch_size, \
                 args.num_train_epochs, args.lr, args.warmup_proportion) 
     
     def set_optimizer(self, model, num_train_examples, train_batch_size, num_train_epochs, lr, warmup_proportion):
@@ -29,11 +30,19 @@ class ModelManager:
             {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
         ]
 
+        optimizer = AdamW(optimizer_grouped_parameters, lr = lr)
+        num_warmup_steps= int(num_train_examples * num_train_epochs * warmup_proportion / train_batch_size)
+        scheduler = get_linear_schedule_with_warmup(optimizer, 
+                                                    num_warmup_steps=num_warmup_steps, 
+                                                    num_training_steps=num_train_optimization_steps)
+
+        """
         optimizer = BertAdam(optimizer_grouped_parameters,
                         lr = lr,
                         warmup = warmup_proportion,
-                        t_total = num_train_optimization_steps)  
-        return optimizer
+                        t_total = num_train_optimization_steps)
+        """
+        return optimizer, scheduler
     
     def set_model(self, args, data, pattern):
             
@@ -41,7 +50,7 @@ class ModelManager:
 
         if pattern == 'bert':
             self.device = torch.device('cuda:%d' % int(args.gpu_id) if torch.cuda.is_available() else 'cpu')   
-            model = backbone.from_pretrained(args.bert_model, cache_dir = "", args = args)    
+            model = backbone.from_pretrained('bert-base-uncased', cache_dir = "cache", args = args)    
 
             if args.freeze_bert_parameters:
                 self.logger.info('Freeze all parameters but the last layer for efficiency')

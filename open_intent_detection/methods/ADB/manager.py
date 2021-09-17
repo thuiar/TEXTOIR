@@ -30,6 +30,7 @@ class ADBManager:
 
         self.model = model.model
         self.optimizer = model.optimizer
+        self.scheduler = model.scheduler
         self.device = model.device
         
         self.data = data
@@ -76,6 +77,7 @@ class ADBManager:
                     self.optimizer.zero_grad()
                     loss.backward()
                     self.optimizer.step()
+                    self.scheduler.step()
                     
                     tr_loss += loss.item()
                     nb_tr_examples += input_ids.size(0)

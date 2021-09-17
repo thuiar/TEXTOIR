@@ -2,7 +2,7 @@ import torch
 import math
 import torch.nn.functional as F
 from torch import nn
-from pytorch_pretrained_bert.modeling import BertPreTrainedModel, BertModel
+from transformers import BertPreTrainedModel, BertModel
 from torch.nn.parameter import Parameter
 from .utils import L2_normalization
 
@@ -19,13 +19,16 @@ class BERT(BertPreTrainedModel):
         self.activation = activation_map[args.activation]
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
         self.classifier = nn.Linear(config.hidden_size, args.num_labels)
-        self.apply(self.init_bert_weights)
+        self.init_weights()
 
     def forward(self, input_ids=None, token_type_ids=None, attention_mask=None, labels=None,
                 feature_ext=False, mode=None, loss_fct=None):
 
-        encoded_layer_12, pooled_output = self.bert(
-            input_ids, token_type_ids, attention_mask, output_all_encoded_layers=True)
+        outputs = self.bert(
+            input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask, output_hidden_states=True)
+        encoded_layer_12 = outputs.hidden_states
+        pooled_output = outputs.pooler_output
+        
         pooled_output = self.dense(encoded_layer_12[-1].mean(dim=1))
         pooled_output = self.activation(pooled_output)
         pooled_output = self.dropout(pooled_output)
@@ -55,13 +58,15 @@ class BERT_Norm(BertPreTrainedModel):
         self.norm = L2_normalization()
         self.classifier = weight_norm(
             nn.Linear(config.hidden_size, args.num_labels), name='weight')
-        self.apply(self.init_bert_weights)
+        self.init_weights()
 
     def forward(self, input_ids=None, token_type_ids=None, attention_mask=None, labels=None,
                 feature_ext=False, mode=None, loss_fct=None):
 
-        encoded_layer_12, pooled_output = self.bert(
-            input_ids, token_type_ids, attention_mask, output_all_encoded_layers=True)
+        outputs = self.bert(
+            input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask, output_hidden_states=True)
+        encoded_layer_12 = outputs.hidden_states
+        pooled_output = outputs.pooler_output
         pooled_output = self.dense(encoded_layer_12[-1].mean(dim=1))
         pooled_output = self.dropout(pooled_output)
         pooled_output = self.norm(pooled_output)
