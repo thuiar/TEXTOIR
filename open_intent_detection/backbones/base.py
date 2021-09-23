@@ -2,7 +2,6 @@ import os
 import torch
 import math
 import logging
-from pytorch_pretrained_bert.optimization import BertAdam
 from transformers import AdamW, get_linear_schedule_with_warmup
 from .utils import freeze_bert_parameters
 from .__init__ import backbones_map

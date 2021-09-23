@@ -61,6 +61,11 @@ class ADBManager:
         best_model = None
         best_eval_score = 0
 
+        if args.loss_fct == 'CenterLoss':
+            from losses.CenterLoss import CenterLoss
+            center_loss = CenterLoss(num_classes=data.num_labels, feat_dim=args.feat_dim, device = self.device)
+            optimizer_centloss = torch.optim.Adam(center_loss.parameters(), lr = 0.05)
+
         for epoch in trange(int(args.num_train_epochs), desc="Epoch"):
 
             self.model.train()
@@ -72,13 +77,30 @@ class ADBManager:
                 input_ids, input_mask, segment_ids, label_ids = batch
 
                 with torch.set_grad_enabled(True):
-                    loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct = self.loss_fct)
+                    if args.loss_fct == 'CenterLoss':
+                        alpha = 0.05
+                        loss_fct = nn.CrossEntropyLoss()
+                        loss_softmax = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct =  loss_fct)
+                        features = self.model(input_ids, segment_ids, input_mask, label_ids, feature_ext = True)
+                        loss = center_loss(features, label_ids) * alpha  + loss_softmax
+                    else:
+                        loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct = self.loss_fct)
 
                     self.optimizer.zero_grad()
+
+                    if args.loss_fct == 'CenterLoss':
+                        optimizer_centloss.zero_grad()
+
                     loss.backward()
                     self.optimizer.step()
                     self.scheduler.step()
                     
+                    if args.loss_fct == 'CenterLoss':
+                        for param in center_loss.parameters():
+                            param.grad.data *= (1./alpha)
+
+                        optimizer_centloss.step()
+
                     tr_loss += loss.item()
                     nb_tr_examples += input_ids.size(0)
                     nb_tr_steps += 1
