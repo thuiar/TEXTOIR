@@ -18,6 +18,7 @@ class MSPManager:
 
         self.model = model.model 
         self.optimizer = model.optimizer
+        self.scheduler = model.scheduler
         self.device = model.device
 
         self.data = data 
@@ -53,6 +54,7 @@ class MSPManager:
                     self.optimizer.zero_grad()
                     loss.backward()
                     self.optimizer.step()
+                    self.scheduler.step()
                     
                     tr_loss += loss.item()
                     
