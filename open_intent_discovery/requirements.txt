@@ -43,7 +43,7 @@ mkl-random==1.2.0
 mkl-service==2.3.0
 mpu==0.23.1
 ninja==1.10.0.post2
-nltk==3.5
+nltk==3.6.4
 numba==0.53.0
 numpy==1.19.5
 oauthlib==3.1.0
