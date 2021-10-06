@@ -7,6 +7,9 @@ from .utils import freeze_bert_parameters
 from .__init__ import backbones_map
 
 
+
+
+
 class ModelManager:
 
     def __init__(self, args, data, logger_name):
@@ -28,19 +31,20 @@ class ModelManager:
             {'params': [p for n, p in param_optimizer if not any(nd in n for nd in no_decay)], 'weight_decay': 0.01},
             {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
         ]
-
-        optimizer = AdamW(optimizer_grouped_parameters, lr = lr)
+        
+        optimizer = AdamW(optimizer_grouped_parameters, lr = lr, correct_bias=False)
         num_warmup_steps= int(num_train_examples * num_train_epochs * warmup_proportion / train_batch_size)
-        scheduler = get_linear_schedule_with_warmup(optimizer, 
-                                                    num_warmup_steps=num_warmup_steps, 
+        
+        scheduler = get_linear_schedule_with_warmup(optimizer,
+                                                    num_warmup_steps=num_warmup_steps,
                                                     num_training_steps=num_train_optimization_steps)
-
-        """
+        
+        '''
         optimizer = BertAdam(optimizer_grouped_parameters,
                         lr = lr,
                         warmup = warmup_proportion,
                         t_total = num_train_optimization_steps)
-        """
+        '''
         return optimizer, scheduler
     
     def set_model(self, args, data, pattern):
