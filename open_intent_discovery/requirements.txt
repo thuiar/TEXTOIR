@@ -12,7 +12,7 @@ cryptacular==1.5.5
 cycler==0.10.0
 deepspeed==0.4.1
 defusedxml==0.7.1
-Django==3.1.13
+Django==3.1.14
 easydict==1.9
 filelock==3.0.12
 flatbuffers==1.12
