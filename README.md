@@ -79,10 +79,6 @@ The codes in this repo have been confirmed and are reliable. The experimental re
 
 ## Acknowledgements
 
-Toolkit Contributors: Hanlei Zhang, Ting-En Lin, Qianrui Zhou, Shaojie Zhao, Xin Wang, Huisheng Mao. 
-
-Supervisor: Hua Xu.
-
 If you are interested in this work, and use the codes in this repo, please **star**  this repository, and **cite** our [ACL 2021 demo paper](https://aclanthology.org/2021.acl-demo.20.pdf):
 ```
 @inproceedings{zhang-etal-2021-textoir,
@@ -98,6 +94,7 @@ If you are interested in this work, and use the codes in this repo, please **sta
     pages = "167--174",
 }
 ```
+We also thank Ting-En Lin, Qianrui Zhou, Shaojie Zhao, Xin Wang and Huisheng Mao for their contributions for this codes.
 
 ## Bugs or questions?
 
