@@ -94,7 +94,7 @@ If you are interested in this work, and use the codes in this repo, please **sta
     pages = "167--174",
 }
 ```
-We also thank Ting-En Lin, Qianrui Zhou, Shaojie Zhao, Xin Wang and Huisheng Mao for their contributions for this codes.
+We also thank [Ting-En Lin](https://github.com/tnlin), [Qianrui Zhou](https://github.com/zhougr18), [Shaojie Zhao](https://github.com/MurraryZhao), [Xin Wang](https://github.com/mrFocusXin) and [Huisheng Mao](https://github.com/FlameSky-S) for their contributions on this codes.
 
 ## Bugs or questions?
 
