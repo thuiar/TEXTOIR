@@ -96,7 +96,7 @@ tensorboard==2.4.1
 tensorboard-plugin-wit==1.8.0
 tensorboardX==1.8
 tensorflow-estimator==2.4.0
-tensorflow-gpu==2.5.2
+tensorflow-gpu==2.5.3
 termcolor==1.1.0
 threadpoolctl==2.2.0
 tokenizers==0.10.1
