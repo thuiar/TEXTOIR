@@ -6,8 +6,8 @@ from torch import nn
 
 loss_map = {
                 'CrossEntropyLoss': nn.CrossEntropyLoss(), 
+                'Binary_CrossEntropyLoss': nn.BCELoss(),
                 'CosineFaceLoss': CosineFaceLoss(),
-                'CenterLoss': CenterLoss(),
                 'ArcFaceLoss': ArcFaceLoss(),
-                'SphereFaceLoss': SphereFaceLoss()
+                'SphereFaceLoss': SphereFaceLoss(),
             }

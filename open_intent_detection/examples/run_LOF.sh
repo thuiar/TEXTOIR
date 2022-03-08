@@ -1,6 +1,6 @@
 #!/usr/bin bash
 
-for dataset in 'banking'
+for dataset in 'banking' 
 do
     for known_cls_ratio in 0.25
     do
@@ -10,18 +10,17 @@ do
             do
                 python run.py \
                 --dataset $dataset \
-                --method 'DOC' \
+                --method 'DeepUnk' \
                 --known_cls_ratio $known_cls_ratio \
                 --labeled_ratio $labeled_ratio \
                 --seed $seed \
-                --backbone 'bert_doc' \
-                --config_file_name 'DOC' \
-                --loss_fct 'Binary_CrossEntropyLoss' \
-                --train \
+                --backbone 'bert' \
+                --config_file_name 'LOF' \
+                --loss_fct 'CrossEntropyLoss' \
                 --gpu_id '0' \
+                --train \
                 --save_results \
-                --results_file_name 'results_DOC.csv' \
-                --save_model
+                --results_file_name 'results_LOF.csv'
             done
         done
     done

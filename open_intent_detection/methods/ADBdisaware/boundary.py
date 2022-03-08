@@ -8,11 +8,11 @@ class BoundaryLoss(nn.Module):
     Deep Open Intent Classification with Adaptive Decision Boundary.
     https://arxiv.org/pdf/2012.10209.pdf
     """
-    def __init__(self, num_labels=10, feat_dim=2, device = None):
+    def __init__(self, num_labels=10, feat_dim=2):
         super(BoundaryLoss, self).__init__()
         self.num_labels = num_labels
         self.feat_dim = feat_dim
-        self.delta = nn.Parameter(torch.randn(num_labels).to(device))
+        self.delta = nn.Parameter(torch.randn(num_labels).cuda())
         nn.init.normal_(self.delta)
         
     def forward(self, pooled_output, centroids, labels, w = 1):

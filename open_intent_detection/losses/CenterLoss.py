@@ -15,7 +15,8 @@ class CenterLoss(nn.Module):
         super(CenterLoss, self).__init__()
         self.num_classes = num_classes
         self.feat_dim = feat_dim
-        self.centers = nn.Parameter(torch.randn(self.num_classes, self.feat_dim).to(device))
+        # self.centers = nn.Parameter(torch.randn(self.num_classes, self.feat_dim).to(device))
+        self.centers = nn.Parameter(torch.ones(self.num_classes, self.feat_dim).to(device))
         self.device = device
 
     def forward(self, x, labels):
@@ -26,7 +27,7 @@ class CenterLoss(nn.Module):
         """
         batch_size = x.size(0)
         distmat = torch.pow(x, 2).sum(dim=1, keepdim=True).expand(batch_size, self.num_classes) + \
-                  torch.pow(self.centers, 2).sum(dim=1, keepdim=True).expand(self.num_classes, batch_size).t()
+                    torch.pow(self.centers, 2).sum(dim=1, keepdim=True).expand(self.num_classes, batch_size).t()
         distmat.addmm_(1, -2, x, self.centers.t())
 
         classes = torch.arange(self.num_classes).long()

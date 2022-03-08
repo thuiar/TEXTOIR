@@ -15,6 +15,12 @@ def parse_arguments():
 
     parser.add_argument('--type', type=str, default='open_intent_detection', help="Type style.")
 
+    parser.add_argument('--scale', type=float, default=5.0, help="Type style.")
+
+    parser.add_argument('--alpha', type=float, default=0.2, help="Type style.")
+
+    parser.add_argument('--rampup_epoch', type=float, default=10.0, help="Type style.")
+
     parser.add_argument('--logger_name', type=str, default='Detection', help="Logger name for open intent detection.")
 
     parser.add_argument('--log_dir', type=str, default='logs', help="Logger directory.")
@@ -27,7 +33,9 @@ def parse_arguments():
     
     parser.add_argument("--method", type=str, default='ADB', help="which method to use")
 
-    parser.add_argument("--train", action="store_true", help="Whether train the model")
+    parser.add_argument("--train", action="store_true", help="Whether to train the model")
+
+    parser.add_argument("--pretrain", action="store_true", help="Whether to pre-train the model")
 
     parser.add_argument("--save_model", action="store_true", help="save trained-model for open intent detection")
 
@@ -44,10 +52,13 @@ def parse_arguments():
     parser.add_argument("--data_dir", default = sys.path[0]+'/../data', type=str,
                         help="The input data dir. Should contain the .csv files (or other data files) for the task.")
 
-    parser.add_argument("--output_dir", default= '/home/sharing/disk2/zhanghanlei/save_data_162/TEXTOIR/outputs', type=str, 
+    parser.add_argument("--output_dir", default= '/home/sharing/disk2/zhaoshaojie/baseline_test/TEXTOIR/outputs', type=str, 
                         help="The output directory where all train data will be written.") 
 
     parser.add_argument("--model_dir", default='models', type=str, 
+                        help="The output directory where the model predictions and checkpoints will be written.") 
+
+    parser.add_argument("--load_pretrained_method", default=None, type=str, 
                         help="The output directory where the model predictions and checkpoints will be written.") 
 
     parser.add_argument("--result_dir", type=str, default = 'results', help="The path to save results")
@@ -56,10 +67,13 @@ def parse_arguments():
 
     parser.add_argument("--save_results", action="store_true", help="save final results for open intent detection")
 
+    parser.add_argument("--loss_fct", default="CrossEntropyLoss", help="The loss function for training.")
+
+    parser.add_argument("--dataset_neg", default="SQUAD", help="")
+    
     args = parser.parse_args()
 
     return args
-
 
 def set_logger(args):
 
@@ -124,7 +138,7 @@ if __name__ == '__main__':
     logger.debug("="*30+" End Params "+"="*30)
 
     logger.info('Data and Model Preparation...')
-    data = DataManager(args)
+    data = DataManager(args, logger_name = args.logger_name)
     model = ModelManager(args, data, logger_name = args.logger_name)
 
     run(args, data, model, logger)

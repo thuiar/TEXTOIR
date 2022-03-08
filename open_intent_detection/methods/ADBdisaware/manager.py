@@ -17,7 +17,7 @@ from utils.metrics import F_measure
 from utils.functions import restore_model, centroids_cal
 from .pretrain import PretrainManager
 
-class ADBManager:
+class ADBdisawareManager:
     
     def __init__(self, args, data, model, logger_name = 'Detection'):
 
@@ -26,7 +26,6 @@ class ADBManager:
         pretrain_model = PretrainManager(args, data, model)
         self.model = pretrain_model.model
         self.centroids = pretrain_model.centroids
-        self.pretrain_best_eval_score = pretrain_model.best_eval_score
 
         if args.pretrain:
         
@@ -42,7 +41,7 @@ class ADBManager:
         self.eval_dataloader = data.dataloader.eval_loader
         self.test_dataloader = data.dataloader.test_loader
 
-        self.loss_fct = loss_map[args.loss_fct]
+        self.loss_fct = loss_map[args.loss_fct]  
         self.best_eval_score = None
 
         if args.train:
@@ -57,7 +56,12 @@ class ADBManager:
             self.centroids = torch.from_numpy(self.centroids).to(self.device)
 
     def train(self, args, data):  
-        criterion_boundary = BoundaryLoss(num_labels = data.num_labels, feat_dim = args.feat_dim, device = self.device)
+
+        from dataloaders.bert_loader import get_loader
+        print(len(data.dataloader.base_attrs['label_list']))
+        self.train_dataloader = get_loader(data.dataloader.train_labeled_examples, args, data.dataloader.base_attrs['label_list'], 'train_labeled', sampler_mode = 'cycle')
+
+        criterion_boundary = BoundaryLoss(num_labels = data.num_labels, feat_dim = args.feat_dim).to(self.device)
         
         self.delta = F.softplus(criterion_boundary.delta)
         optimizer = torch.optim.Adam(criterion_boundary.parameters(), lr = args.lr_boundary)
@@ -114,13 +118,10 @@ class ADBManager:
                     if wait >= args.wait_patient:
                         break
 
-            self.test(args, data)
-
         if best_eval_score > 0:
             self.delta = best_delta
             self.centroids = best_centroids
-            self.best_eval_score = best_eval_score
-
+        
         if args.save_model:
             np.save(os.path.join(args.method_output_dir, 'centroids.npy'), self.centroids.detach().cpu().numpy())
             np.save(os.path.join(args.method_output_dir, 'deltas.npy'), self.delta.detach().cpu().numpy())
@@ -150,7 +151,7 @@ class ADBManager:
 
                 preds = self.open_classify(data, pooled_output)
                 total_preds = torch.cat((total_preds, preds))
-                total_labels = torch.cat((total_labels, label_ids))
+                total_labels = torch.cat((total_labels,label_ids))
                 total_features = torch.cat((total_features, pooled_output))
 
         if get_feats:  
@@ -188,9 +189,6 @@ class ADBManager:
 
         test_results['y_true'] = y_true
         test_results['y_pred'] = y_pred
-        test_results['scale'] = args.scale
         test_results['best_eval_score'] = self.best_eval_score
-        test_results['pretrain_best_eval_score'] = self.pretrain_best_eval_score
-        test_results['loss'] = args.loss_fct
 
         return test_results

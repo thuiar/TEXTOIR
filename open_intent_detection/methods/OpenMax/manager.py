@@ -250,13 +250,3 @@ class OpenMaxManager:
 
         return class_data_num
         
-
-
-    
-
-
-
-  
-
-    
-    

@@ -8,42 +8,37 @@ class Param():
         """
         Args:
             bert_model (directory): The path for the pre-trained bert model.
-            num_train_epochs (int): The number of training epochs.
-            num_labels (autofill): The output dimension.
-            max_seq_length (autofill): The maximum total input sequence length after tokenization. Sequences longer than this will be truncated, sequences shorter will be padded.
-            freeze_backbone_parameters (binary): Whether to freeze all parameters but the last layer.
+            num_train_epochs: The training epochs.
+            max_seq_len (int): The maximum total input sequence length after tokenization. Sequences longer than this will be truncated, sequences shorter will be padded.
             feat_dim (int): The feature dimension.
             warmup_proportion (float): The warmup ratio for learning rate.
             lr (float): The learning rate of backbone.
-            activation (str): The activation function of the hidden layer (support 'relu' and 'tanh').
-            weibull_tail_size (int): The factor of weibull model.
-            alpharank (int): The factor of alpha rank.
-            distance_type (str): The distance_type.
             threshold (float): The probability threshold for detecting the open samples.
             train_batch_size (int): The batch size for training.
             eval_batch_size (int): The batch size for evaluation. 
-            test_batch_size (int): The batch size for testing.
             wait_patient (int): Patient steps for Early Stop.
+            lr_mlp (float): The learning rate of mlp.
+            multiple_convex (int): The multiple of gen ood of training stage.
+            multiple_convex_eval (int): The multiple of gen ood of eval stage.
         """
         hyper_parameters = {
 
             'bert_model': "/home/sharing/disk1/pretrained_embedding/bert/uncased_L-12_H-768_A-12/",
             'num_train_epochs': 100,
-            'num_labels': None,
             'max_seq_length': None, 
             'freeze_backbone_parameters': True,
             'feat_dim': 768,
             'warmup_proportion': 0.1,
             'lr': 2e-5, 
-            'activation': 'tanh',
-            'weibull_tail_size': 20,
-            'alpharank': 10,
-            'distance_type': 'cosine',
-            'threshold': 0.5, 
-            'train_batch_size': 128,
+            'activation': 'relu',
+            'train_batch_size': 64,
             'eval_batch_size': 64,
             'test_batch_size': 64,
-            'wait_patient': 15
+            'wait_patient': 10,
+            'multiple_convex': 1,
+            'multiple_convex_eval': 1,
+            'dataset_neg': 'SQUAD',
+            'temp': 0.2
 
         }
 

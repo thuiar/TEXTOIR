@@ -1,8 +1,8 @@
 #!/usr/bin bash
 
-for dataset in 'stackoverflow' 'oos' 'banking'
+for dataset in 'banking' 'oos' 'stackoverflow'
 do
-    for known_cls_ratio in 0.25 0.5 0.75 
+    for known_cls_ratio in 0.25 0.5 0.75
     do
         for labeled_ratio in 1.0
         do
@@ -16,10 +16,12 @@ do
                 --seed $seed \
                 --backbone 'bert' \
                 --config_file_name 'ADB' \
+                --loss_fct 'CrossEntropyLoss' \
                 --gpu_id '0' \
+                --pretrain \
                 --train \
-                --save_results \
                 --results_file_name 'results_ADB.csv' \
+                --save_results \
                 --save_model
             done
         done
