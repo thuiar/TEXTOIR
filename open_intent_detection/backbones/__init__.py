@@ -6,5 +6,5 @@ backbones_map = {
                     'bert_mixup': BERT_MixUp,
                     'bert_seg': BERT_SEG,
                     'bert_disaware': BERT_Disaware,
-                    'bert_doc': BERT_DOC,
+                    'bert_doc': BERT_DOC
                 }

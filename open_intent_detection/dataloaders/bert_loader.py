@@ -10,7 +10,6 @@ from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler, Tens
 
 class BERT_Loader:
     def __init__(self, args, base_attrs, logger_name = 'Detection'):
-
         self.logger = logging.getLogger(logger_name)
         self.train_examples, self.train_labeled_examples, self.train_unlabeled_examples  = get_examples(args, base_attrs, 'train')
         self.logger.info("Number of labeled training samples = %s", str(len(self.train_labeled_examples)))
@@ -21,7 +20,6 @@ class BERT_Loader:
 
         self.test_examples = get_examples(args, base_attrs, 'test')
         self.logger.info("Number of testing samples = %s", str(len(self.test_examples)))
-
         self.base_attrs = base_attrs
         self.init_loader(args)
 
@@ -37,11 +35,11 @@ def get_examples(args, base_attrs, mode):
 
     processor = DatasetProcessor()
     ori_examples = processor.get_examples(base_attrs['data_dir'], mode)
-    
     if mode == 'train':
 
         labeled_examples, unlabeled_examples = [], []
         for example in ori_examples:
+
             if (example.label in base_attrs['known_label_list']) and (np.random.uniform(0, 1) <= args.labeled_ratio):
                 labeled_examples.append(example)
             else:
@@ -97,6 +95,7 @@ def get_loader(examples, args, label_list, mode, sampler_mode = 'sequential'):
 
     if mode == 'train_labeled':   
         dataloader = DataLoader(datatensor, sampler = sampler, batch_size = args.train_batch_size)    
+        # dataloader = DataLoader(datatensor, shuffle=False, batch_size = args.train_batch_size)    
 
     else:
         if mode == 'train_unlabeled':

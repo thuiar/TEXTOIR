@@ -141,6 +141,7 @@ if __name__ == '__main__':
     data = DataManager(args, logger_name = args.logger_name)
     model = ModelManager(args, data, logger_name = args.logger_name)
 
+
     run(args, data, model, logger)
     logger.info('Open Intent Detection Finished...')
     

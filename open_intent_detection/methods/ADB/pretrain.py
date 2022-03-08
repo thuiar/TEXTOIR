@@ -39,11 +39,12 @@ class PretrainManager:
                 self.train_plain(args, data)
 
             self.logger.info('Pre-training finished...')
-        
+                
         else:
             self.model = restore_model(self.model, args.model_output_dir)
 
     def train_plain(self, args, data):
+
         wait = 0
         best_model = None
         best_eval_score = 0
@@ -100,7 +101,7 @@ class PretrainManager:
         if args.save_model:
             self.logger.info('Trained models are saved in %s', args.model_output_dir)
             save_model(self.model, args.model_output_dir)
-    
+
     def train_disaware(self, args, data):
 
         wait = 0
@@ -134,9 +135,9 @@ class PretrainManager:
                     nb_tr_steps += 1
             
             loss = tr_loss / nb_tr_steps
-            
+
             y_true, y_pred = self.get_outputs(args, data, mode = 'eval')
-            eval_score = round(accuracy_score(y_true, y_pred) * 100, 2)
+            eval_score = round(f1_score(y_true, y_pred, average = 'macro') * 100, 2)
 
             eval_results = {
                 'train_loss': loss,
@@ -166,9 +167,11 @@ class PretrainManager:
 
         if args.save_model:
             self.logger.info('Trained models are saved in %s', args.model_output_dir)
-            save_model(self.model, args.model_output_dir) 
-    
-    def get_outputs(self, args, data, mode = 'eval', get_feats = False, alpha = None):
+            save_model(self.model, args.model_output_dir)       
+        
+
+    def get_outputs(self, args, data, mode = 'eval', get_feats = False):
+        
         if mode == 'eval':
             dataloader = self.eval_dataloader
         elif mode == 'test':
@@ -185,6 +188,7 @@ class PretrainManager:
         for batch in tqdm(dataloader, desc="Iteration"):
 
             batch = tuple(t.to(self.device) for t in batch)
+            
             input_ids, input_mask, segment_ids, label_ids = batch
             with torch.set_grad_enabled(False):
 

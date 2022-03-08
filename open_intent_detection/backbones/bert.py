@@ -111,7 +111,6 @@ class BERT_Norm(BertPreTrainedModel):
             return pooled_output
         else:
             if mode == 'train':
-                
                 loss = loss_fct(logits, labels)
                 return loss
             else:
@@ -127,7 +126,7 @@ class BERT_MixUp(BertPreTrainedModel):
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
         self.sampler = ConvexSampler(args)
         self.classifier = nn.Linear(config.hidden_size, self.num_labels + 1)
-        self.temp = args.temp
+        self.t = args.temp
         self.init_weights()
 
     def forward(self, input_ids = None, token_type_ids = None, attention_mask=None , labels = None,
@@ -145,7 +144,7 @@ class BERT_MixUp(BertPreTrainedModel):
             return pooled_output
         else:
             if mode == 'train':
-                loss = loss_fct(torch.div(logits, self.temp), labels)
+                loss = loss_fct(torch.div(logits, self.t), labels)
                 return loss
             else:
                 return pooled_output, logits, labels
@@ -225,13 +224,12 @@ class BERT_SEG(BertPreTrainedModel):
 
 class CosNorm_Classifier(nn.Module):
 
-    def __init__(self, in_dims, out_dims, scale=64, margin=0.5, init_std=0.001, device = None):
+    def __init__(self, in_dims, out_dims, scale=64, device = None):
 
         super(CosNorm_Classifier, self).__init__()
         self.in_dims = in_dims
         self.out_dims = out_dims
         self.scale = scale
-        self.margin = margin
         self.weight = Parameter(torch.Tensor(out_dims, in_dims).to(device))
         self.reset_parameters()
 
@@ -290,10 +288,9 @@ class BERT_Disaware(BertPreTrainedModel):
             dist_denominator = torch.norm(x - nearest_centers, 2, 1)
             second_nearest_centers = centroids[labels_nn[:, 1]]
             dist_numerator = torch.norm(x - second_nearest_centers, 2, 1)
-
+            
             dist_info = dist_numerator - dist_denominator
             dist_info = torch.exp(dist_info)
-
             scalar = dist_info
 
             reachability = scalar.unsqueeze(1).expand(-1, feat_size)

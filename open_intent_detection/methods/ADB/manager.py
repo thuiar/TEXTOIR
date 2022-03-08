@@ -42,9 +42,9 @@ class ADBManager:
         self.eval_dataloader = data.dataloader.eval_loader
         self.test_dataloader = data.dataloader.test_loader
 
-        self.loss_fct = loss_map[args.loss_fct]
+        self.loss_fct = loss_map[args.loss_fct]  
         self.best_eval_score = None
-
+        
         if args.train:
             self.delta = None
             self.delta_points = []
@@ -61,9 +61,10 @@ class ADBManager:
         
         self.delta = F.softplus(criterion_boundary.delta)
         optimizer = torch.optim.Adam(criterion_boundary.parameters(), lr = args.lr_boundary)
+        
         if self.centroids is None:
             self.centroids = centroids_cal(self.model, args, data, self.train_dataloader, self.device)
-
+        
         best_eval_score, best_delta, best_centroids = 0, None, None
         wait = 0
         
@@ -106,7 +107,6 @@ class ADBManager:
             if eval_score > best_eval_score:
                 wait = 0
                 best_delta = self.delta 
-                best_centroids = self.centroids
                 best_eval_score = eval_score
             else:
                 if best_eval_score > 0:
@@ -118,14 +118,10 @@ class ADBManager:
 
         if best_eval_score > 0:
             self.delta = best_delta
-            self.centroids = best_centroids
             self.best_eval_score = best_eval_score
 
-        if args.save_model:
-            np.save(os.path.join(args.method_output_dir, 'centroids.npy'), self.centroids.detach().cpu().numpy())
-            np.save(os.path.join(args.method_output_dir, 'deltas.npy'), self.delta.detach().cpu().numpy())
-
     def get_outputs(self, args, data, mode = 'eval', get_feats = False, pre_train= False, delta = None):
+        
         if mode == 'eval':
             dataloader = self.eval_dataloader
         elif mode == 'test':
@@ -167,6 +163,7 @@ class ADBManager:
         probs, preds = F.softmax(logits.detach(), dim = 1).max(dim = 1)
         euc_dis = torch.norm(features - self.centroids[preds], 2, 1).view(-1)
         preds[euc_dis >= self.delta[preds]] = data.unseen_label_id
+        
         return preds
     
     def test(self, args, data, show=True):
