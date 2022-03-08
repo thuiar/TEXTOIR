@@ -12,6 +12,7 @@ method_map = {
                 'ADBdisaware': ADBdisawareManager,
                 'MSP': MSPManager, 
                 'DeepUnk':DeepUnkManager, 
+                'LOF': DeepUnkManager, 
                 'DOC': DOCManager, 
                 'OpenMax': OpenMaxManager, 
                 'MixUp': MixUpManager,

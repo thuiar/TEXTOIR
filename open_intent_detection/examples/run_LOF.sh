@@ -10,7 +10,7 @@ do
             do
                 python run.py \
                 --dataset $dataset \
-                --method 'DeepUnk' \
+                --method 'LOF' \
                 --known_cls_ratio $known_cls_ratio \
                 --labeled_ratio $labeled_ratio \
                 --seed $seed \
