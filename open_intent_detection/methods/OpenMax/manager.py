@@ -22,6 +22,7 @@ class OpenMaxManager:
 
         self.model = model.model 
         self.optimizer = model.optimizer
+        self.scheduler = model.scheduler
         self.device = model.device
 
         self.data = data 
@@ -63,6 +64,7 @@ class OpenMaxManager:
                     tr_loss += loss.item()
 
                     self.optimizer.step()
+                    self.scheduler.step()
                     self.optimizer.zero_grad()   
                     
                     nb_tr_examples += input_ids.size(0)
@@ -248,13 +250,3 @@ class OpenMaxManager:
 
         return class_data_num
         
-
-
-    
-
-
-
-  
-
-    
-    

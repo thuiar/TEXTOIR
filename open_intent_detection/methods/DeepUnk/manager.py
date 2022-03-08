@@ -21,6 +21,7 @@ class DeepUnkManager:
 
         self.model = model.model 
         self.optimizer = model.optimizer
+        self.scheduler = model.scheduler
         self.device = model.device
 
         self.data = data 
@@ -60,16 +61,14 @@ class DeepUnkManager:
                     self.optimizer.zero_grad()
                     loss.backward()
                     self.optimizer.step()
-                    
+                    self.scheduler.step()
                     tr_loss += loss.item()
                     
                     nb_tr_examples += input_ids.size(0)
                     nb_tr_steps += 1
 
             loss = tr_loss / nb_tr_steps
-            train_feats = self.get_outputs(args, data, mode = 'train', get_feats = True)
-
-            y_true, y_pred = self.get_outputs(args, data, mode = 'eval', train_feats = train_feats)
+            y_true, y_pred = self.get_outputs(args, data, mode = 'eval')
             eval_score = round(accuracy_score(y_true, y_pred) * 100, 2)
             
             eval_results = {
@@ -83,7 +82,6 @@ class DeepUnkManager:
             
             if eval_score > best_eval_score:
                 
-                self.best_feats = train_feats
                 best_eval_score = eval_score
                 best_model = copy.deepcopy(self.model)
                 wait = 0
@@ -95,8 +93,6 @@ class DeepUnkManager:
                 
         self.model = best_model 
 
-        np.save(os.path.join(args.method_output_dir, 'features.npy'), self.best_feats)
-        
         if args.save_model:
             save_model(self.model, args.model_output_dir)
 
@@ -141,11 +137,8 @@ class DeepUnkManager:
             feats = total_features.cpu().numpy()
             return feats 
         else:
-
-            total_probs = F.softmax(total_logits.detach(), dim=1)
-            total_maxprobs, total_preds = total_probs.max(dim = 1)
-            
-            y_pred = total_preds.cpu().numpy()
+            total_probs, y_pred = total_logits.max(dim = 1)
+            y_pred = y_pred.cpu().numpy()
             y_true = total_labels.cpu().numpy()
             
             if train_feats is not None:
@@ -155,8 +148,10 @@ class DeepUnkManager:
             return y_true, y_pred
 
     def test(self, args, data, show=False):
-    
-        y_true, y_pred = self.get_outputs(args, data, mode = 'test', train_feats = self.best_feats)
+        
+        train_feats = self.get_outputs(args, data, mode = 'train', get_feats = True)
+        y_true, y_pred = self.get_outputs(args, data, mode = 'test', train_feats = train_feats)
+
         cm = confusion_matrix(y_true, y_pred)
         test_results = F_measure(cm)
 
@@ -175,9 +170,3 @@ class DeepUnkManager:
         test_results['y_pred'] = y_pred
 
         return test_results
-    
-
-  
-
-    
-    

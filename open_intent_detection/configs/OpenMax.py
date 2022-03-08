@@ -11,11 +11,10 @@ class Param():
             num_train_epochs (int): The number of training epochs.
             num_labels (autofill): The output dimension.
             max_seq_length (autofill): The maximum total input sequence length after tokenization. Sequences longer than this will be truncated, sequences shorter will be padded.
-            freeze_bert_parameters (binary): Whether to freeze all parameters but the last layer.
+            freeze_backbone_parameters (binary): Whether to freeze all parameters but the last layer.
             feat_dim (int): The feature dimension.
             warmup_proportion (float): The warmup ratio for learning rate.
             lr (float): The learning rate of backbone.
-            loss_fct (str): The loss function for training.
             activation (str): The activation function of the hidden layer (support 'relu' and 'tanh').
             weibull_tail_size (int): The factor of weibull model.
             alpharank (int): The factor of alpha rank.
@@ -32,11 +31,10 @@ class Param():
             'num_train_epochs': 100,
             'num_labels': None,
             'max_seq_length': None, 
-            'freeze_bert_parameters': True,
+            'freeze_backbone_parameters': True,
             'feat_dim': 768,
             'warmup_proportion': 0.1,
             'lr': 2e-5, 
-            'loss_fct': 'CrossEntropyLoss',
             'activation': 'tanh',
             'weibull_tail_size': 20,
             'alpharank': 10,
@@ -45,7 +43,7 @@ class Param():
             'train_batch_size': 128,
             'eval_batch_size': 64,
             'test_batch_size': 64,
-            'wait_patient': 10
+            'wait_patient': 15
 
         }
 

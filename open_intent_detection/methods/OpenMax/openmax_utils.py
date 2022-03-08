@@ -30,7 +30,7 @@ def computeOpenMaxProbability(openmax_fc8, openmax_score_u, n_classes):
     prob_scores += [channel_scores / total_denominator]
 
     prob_unknowns += [sp.exp(sp.sum(openmax_score_u[:]))/total_denominator]
-       
+    
     prob_scores = sp.asarray(prob_scores)
     prob_unknowns = sp.asarray(prob_unknowns) 
     
@@ -122,7 +122,7 @@ def recalibrate_scores(weibull_model, num_labels, textarr, layer = 'fc8', alphar
         modified_fc8_score = cha_scores[categoryid] * (1 - wscore * ranked_alpha[categoryid])
         openmax_fc8_channel += [modified_fc8_score]
         openmax_fc8_unknown += [cha_scores[categoryid] - modified_fc8_score]
-                          
+        
     openmax_fc8 = openmax_fc8_channel
     openmax_score_u = openmax_fc8_unknown
     openmax_fc8 = sp.asarray(openmax_fc8)
