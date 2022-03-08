@@ -4,7 +4,6 @@ import torch
 import numpy as np
 import pandas as pd
 from pytorch_pretrained_bert.modeling import WEIGHTS_NAME, CONFIG_NAME
-from tqdm import tqdm
 
 def save_npy(npy_file, path, file_name):
     npy_path = os.path.join(path, file_name)
@@ -17,15 +16,15 @@ def load_npy(path, file_name):
 
 def save_model(model, model_dir):
 
-    save_model = model.module if hasattr(model, 'module') else model 
-    model_file = os.path.join(model_dir, 'pytorch_model.bin')
-    model_config_file = os.path.join(model_dir, 'config.json')
+    save_model = model.module if hasattr(model, 'module') else model  
+    model_file = os.path.join(model_dir, WEIGHTS_NAME)
+    model_config_file = os.path.join(model_dir, CONFIG_NAME)
     torch.save(save_model.state_dict(), model_file)
     with open(model_config_file, "w") as f:
         f.write(save_model.config.to_json_string())
 
 def restore_model(model, model_dir):
-    output_model_file = os.path.join(model_dir, 'pytorch_model.bin')
+    output_model_file = os.path.join(model_dir, WEIGHTS_NAME)
     model.load_state_dict(torch.load(output_model_file))
     return model
 
@@ -67,64 +66,3 @@ def save_results(args, test_results):
     data_diagram = pd.read_csv(results_path)
     
     print('test_results', data_diagram)
-
-def class_count(labels):
-    class_data_num = []
-    for l in np.unique(labels):
-        num = len(labels[labels == l])
-        class_data_num.append(num)
-    return class_data_num
-
-def centroids_cal(model, args, data, train_dataloader, device):
-    
-    model.eval()
-    centroids = torch.zeros(data.num_labels, args.feat_dim).to(device)
-    total_labels = torch.empty(0, dtype=torch.long).to(device)
-
-    with torch.set_grad_enabled(False):
-
-        for batch in tqdm(train_dataloader, desc="Calculate centroids"):
-
-            batch = tuple(t.to(device) for t in batch)
-            input_ids, input_mask, segment_ids, label_ids = batch
-            features = model(input_ids, segment_ids, input_mask, feature_ext=True)
-            total_labels = torch.cat((total_labels, label_ids))
-
-            for i in range(len(label_ids)):
-                label = label_ids[i]
-                centroids[label] += features[i]
-            
-    total_labels = total_labels.cpu().numpy()
-    centroids /= torch.tensor(class_count(total_labels)).float().unsqueeze(1).to(device)
-    
-    return centroids
-
-def euclidean_metric(a, b):
-    n = a.shape[0]
-    m = b.shape[0]
-    a = a.unsqueeze(1).expand(n, m, -1)
-    b = b.unsqueeze(0).expand(n, m, -1)
-    logits = -((a - b)**2).sum(dim=2)
-    return logits
-
-def sigmoid_rampup(current, rampup_length):
-    """Exponential rampup from https://arxiv.org/abs/1610.02242"""
-    if rampup_length == 0:
-        return 1.0
-    else:
-        current = np.clip(current, 0.0, rampup_length)
-        phase = 1.0 - current / rampup_length
-        return float(np.exp(-5.0 * phase * phase))
-
-def linear_rampup(current, rampup_length):
-    """Linear rampup"""
-    assert current >= 0 and rampup_length >= 0
-    if current >= rampup_length:
-        return 1.0
-    else:
-        return current / rampup_length
-
-def cosine_rampdown(current, rampdown_length):
-    """Cosine rampdown from https://arxiv.org/abs/1608.03983"""
-    assert 0 <= current <= rampdown_length
-    return max(float(.5 * (np.cos(np.pi * current / rampdown_length) + 1)), 0.5)

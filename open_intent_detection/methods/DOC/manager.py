@@ -21,7 +21,6 @@ class DOCManager:
         
         self.model = model.model 
         self.optimizer = model.optimizer
-        self.scheduler = model.scheduler
         self.device = model.device
 
         self.data = data 
@@ -57,7 +56,6 @@ class DOCManager:
                     self.optimizer.zero_grad()
                     loss.backward()
                     self.optimizer.step()
-                    self.scheduler.step()
                     
                     tr_loss += loss.item()
                     
@@ -66,7 +64,8 @@ class DOCManager:
 
             loss = tr_loss / nb_tr_steps
 
-            y_true, y_pred = self.get_outputs(args, data, mode = 'eval')
+            mu_stds = self.get_outputs(args, data, mode = 'train', get_mu_stds = True)
+            y_true, y_pred = self.get_outputs(args, data, mode = 'eval', mu_stds = mu_stds)
 
             eval_score = round(accuracy_score(y_true, y_pred) * 100, 2)
             
@@ -83,6 +82,7 @@ class DOCManager:
                 best_model = copy.deepcopy(self.model)
                 wait = 0
                 best_eval_score = eval_score 
+                self.best_mu_stds = mu_stds
                 
             elif eval_score > 0:                
                 wait += 1
@@ -96,9 +96,8 @@ class DOCManager:
             np.save(os.path.join(args.method_output_dir, 'mu_stds.npy'), self.best_mu_stds)
 
     def test(self, args, data, show=False):
-        
-        mu_stds = self.get_outputs(args, data, mode = 'train', get_mu_stds = True)
-        y_true, y_pred = self.get_outputs(args, data, mode = 'test', mu_stds = mu_stds)
+
+        y_true, y_pred = self.get_outputs(args, data, mode = 'test', mu_stds = self.best_mu_stds)
 
         cm = confusion_matrix(y_true, y_pred)
         test_results = F_measure(cm)
@@ -153,22 +152,18 @@ class DOCManager:
 
         else:
             
-            total_probs, y_pred = total_logits.max(dim = 1)
+            total_probs = torch.sigmoid(total_logits.detach())
             y_true = total_labels.cpu().numpy()
-            y_logit = total_logits.cpu().numpy()
-            y_pred = y_pred.cpu().numpy()
-            
-            if mode == 'eval':
+            y_prob = total_probs.cpu().numpy()
+
+            if get_mu_stds:
+                mu_stds = self.cal_mu_std(y_prob, y_true, data.num_labels)
+                return mu_stds
+            else:
+                y_pred = self.classify_doc(data, args, y_prob, mu_stds)
                 return y_true, y_pred
 
-            else:
-                if get_mu_stds == True:
-                    mu_stds = self.cal_mu_std(y_logit, y_true, data.num_labels)
-                    return mu_stds
-                else:
-                    y_pred = self.classify_doc(data, args, y_logit, mu_stds)
 
-                    return y_true, y_pred
 
     def classify_doc(self, data, args, y_prob, mu_stds):
 
@@ -177,7 +172,7 @@ class DOCManager:
             threshold = max(0.5, 1 - args.scale * mu_stds[col][1])
             label = data.known_label_list[col]
             thresholds[label] = threshold
-        thresholds = np.array(thresholds)
+
         self.logger.info('Probability thresholds of each class: %s', thresholds)
         
         y_pred = []
@@ -185,7 +180,6 @@ class DOCManager:
             max_class = np.argmax(p)
             max_value = np.max(p)
             threshold = max(0.5, 1 - args.scale * mu_stds[max_class][1])
-
             if max_value > threshold:
                 y_pred.append(max_class)
             else:
@@ -207,3 +201,12 @@ class DOCManager:
 
         return mu_stds
         
+
+
+
+
+
+  
+
+    
+    

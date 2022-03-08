@@ -36,11 +36,10 @@ class ParamManager:
 
     def add_output_path_param(self, args):
         
-        
         task_output_dir = os.path.join(args.output_dir, args.type)
         if not os.path.exists(task_output_dir):
             os.makedirs(task_output_dir)
-        
+
         concat_names = [args.method, args.dataset, args.known_cls_ratio, args.labeled_ratio, args.backbone, args.seed]
         method_output_name = "_".join([str(x) for x in concat_names])
 
@@ -54,7 +53,7 @@ class ParamManager:
 
         output_path_param = {
             'method_output_dir': method_output_dir,
-            'model_output_dir': model_output_dir
+            'model_output_dir': model_output_dir,
         }
-            
+        
         return output_path_param

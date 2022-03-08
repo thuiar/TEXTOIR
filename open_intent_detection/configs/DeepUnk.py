@@ -11,10 +11,11 @@ class Param():
             num_train_epochs (int): The number of training epochs.
             num_labels (autofill): The output dimension.
             max_seq_length (autofill): The maximum total input sequence length after tokenization. Sequences longer than this will be truncated, sequences shorter will be padded.
-            freeze_backbone_parameters (binary): Whether to freeze all parameters but the last layer.
+            freeze_bert_parameters (binary): Whether to freeze all parameters but the last layer.
             feat_dim (int): The feature dimension.
             warmup_proportion (float): The warmup ratio for learning rate.
             lr (float): The learning rate of backbone.
+            loss_fct (str): The loss function for training.
             activation (str): The activation function of the hidden layer (support 'relu' and 'tanh').
             n_neighbors (int): The number of neighbors of LOF.
             contamination (float): The contamination factor of LOF.
@@ -29,10 +30,11 @@ class Param():
             'num_train_epochs': 100,
             'num_labels': None,
             'max_seq_length': None, 
-            'freeze_backbone_parameters': True,
+            'freeze_bert_parameters': True,
             'feat_dim': 768,
             'warmup_proportion': 0.1,
-            'lr': 2e-5, 
+            'lr': 5e-5, 
+            'loss_fct': 'CosineFaceLoss',
             'activation': 'relu',
             'n_neighbors': 20,
             'contamination': 0.05,

@@ -13,7 +13,7 @@ def F_measure(cm):
         rs.append(r * 100)
         ps.append(p * 100)
         fs.append(f * 100)
-        
+          
     f = np.mean(fs).round(4)
     f_seen = np.mean(fs[:-1]).round(4)
     f_unseen = round(fs[-1], 4)

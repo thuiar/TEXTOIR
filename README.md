@@ -2,22 +2,6 @@
 
 TEXTOIR is the first high-quality Text Open Intent Recognition platform. This repo contains a convenient toolkit with extensible interfaces, integrating a series of algorithms of two tasks (open intent detection and open intent discovery). We also release the pipeline framework and the visualized platform in the repo [TEXTOIR-DEMO](https://github.com/thuiar/TEXTOIR-DEMO). 
 
-If you are interested in this work, and want to use the codes in this repo, please **star** or **fork** this repo, and cite our [ACL 2021 demo paper](https://aclanthology.org/2021.acl-demo.20.pdf):
-```
-@inproceedings{zhang-etal-2021-textoir,
-    title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
-    author = "Zhang, Hanlei  and
-      Li, Xiaoteng  and
-      Xu, Hua  and
-      Zhang, Panpan  and
-      Zhao, Kang  and
-      Gao, Kai",
-    booktitle = "Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing: System Demonstrations",
-    year = "2021",
-    pages = "167--174",
-}
-```
-
 ## Introduction
 TEXTOIR aims to provide a convenience toolkit for researchers to reproduce the related text open classification and clustering methods. It contains two tasks, which are defined as open intent detection and open intent discovery. Open intent detection aims to identify n-class known intents, and detect one-class open intent. Open intent discovery aims to leverage limited prior knowledge of known intents to find fine-grained known and open intent-wise clusters. Related papers and codes are collected in our previous released [reading list](https://github.com/thuiar/OKD-Reading-List).
 
@@ -36,8 +20,6 @@ Open Intent Recognition:
 ## Integrated Models
 ### Open Intent Detection
 
-* [Out-of-Scope Intent Detection with Self-Supervision and Discriminative Training](https://aclanthology.org/2021.acl-long.273) (MixUp, ACL IJCNLP 2021)
-* [Unknown Intent Detection Using Gaussian Mixture Model with an Application to Zero-shot Intent Classification](https://aclanthology.org/2020.acl-main.99) (SEG, ACL 2020)
 * [Deep Open Intent Classification with Adaptive Decision Boundary](https://ojs.aaai.org/index.php/AAAI/article/view/17690) (ADB, AAAI 2021)
 * [Deep Unknown Intent Detection with Margin Loss](https://aclanthology.org/P19-1548.pdf) (DeepUnk, ACL 2019)
 * [DOC: Deep Open Classification of Text Documents](https://aclanthology.org/D17-1314.pdf) (DOC, EMNLP 2017)
@@ -97,9 +79,22 @@ The codes in this repo have been confirmed and are reliable. The experimental re
 
 ## Acknowledgements
 
-Toolkit Contributors: Hanlei Zhang, Ting-En Lin, Qianrui Zhou, Shaojie Zhao, Xin Wang, Huisheng Mao. 
-
-Supervisor: Hua Xu.
+If you are interested in this work, and use the codes in this repo, please **star**  this repository, and **cite** our [ACL 2021 demo paper](https://aclanthology.org/2021.acl-demo.20.pdf):
+```
+@inproceedings{zhang-etal-2021-textoir,
+    title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
+    author = "Zhang, Hanlei  and
+      Li, Xiaoteng  and
+      Xu, Hua  and
+      Zhang, Panpan  and
+      Zhao, Kang  and
+      Gao, Kai",
+    booktitle = "Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing: System Demonstrations",
+    year = "2021",
+    pages = "167--174",
+}
+```
+We also thank [Ting-En Lin](https://github.com/tnlin), [Qianrui Zhou](https://github.com/zhougr18), [Shaojie Zhao](https://github.com/MurraryZhao), [Xin Wang](https://github.com/mrFocusXin) and [Huisheng Mao](https://github.com/FlameSky-S) for their contributions on this repo.
 
 ## Bugs or questions?
 

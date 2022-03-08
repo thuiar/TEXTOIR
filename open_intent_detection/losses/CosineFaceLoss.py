@@ -2,12 +2,11 @@ import torch
 import math
 import torch.nn.functional as F
 from torch import nn
-from torch.nn.parameter import Parameter
 
 class CosineFaceLoss(nn.Module):
 
     """
-    cos_theta need to be normalized first
+    cos_theta and target need to be normalized first
     """ 
 
     def __init__(self, m=0.35, s=30):
