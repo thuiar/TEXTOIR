@@ -18,6 +18,7 @@ class MSPManager:
 
         self.model = model.model 
         self.optimizer = model.optimizer
+        self.scheduler = model.scheduler
         self.device = model.device
 
         self.data = data 
@@ -47,12 +48,12 @@ class MSPManager:
                 batch = tuple(t.to(self.device) for t in batch)
                 input_ids, input_mask, segment_ids, label_ids = batch
                 with torch.set_grad_enabled(True):
-                    
                     loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode='train', loss_fct=self.loss_fct)
 
                     self.optimizer.zero_grad()
                     loss.backward()
                     self.optimizer.step()
+                    self.scheduler.step()
                     
                     tr_loss += loss.item()
                     
@@ -72,7 +73,7 @@ class MSPManager:
             self.logger.info("***** Epoch: %s: Eval results *****", str(epoch + 1))
             for key in sorted(eval_results.keys()):
                 self.logger.info("  %s = %s", key, str(eval_results[key]))
-           
+            
             
             if eval_score > best_eval_score:
 
@@ -93,7 +94,7 @@ class MSPManager:
         self.logger.info('Training finished...')
 
     def get_outputs(self, args, data, mode = 'eval', get_feats = False):
-    
+        
         if mode == 'eval':
             dataloader = self.eval_dataloader
         elif mode == 'test':
@@ -110,7 +111,7 @@ class MSPManager:
             batch = tuple(t.to(self.device) for t in batch)
             input_ids, input_mask, segment_ids, label_ids = batch
             with torch.set_grad_enabled(False):
-
+                
                 pooled_output, logits = self.model(input_ids, segment_ids, input_mask)
 
                 total_labels = torch.cat((total_labels,label_ids))
@@ -136,7 +137,7 @@ class MSPManager:
         return y_true, y_pred
         
     def test(self, args, data, show=False):
-    
+
         y_true, y_pred = self.get_outputs(args, data, mode = 'test')
     
         cm = confusion_matrix(y_true, y_pred)
@@ -157,10 +158,3 @@ class MSPManager:
         test_results['y_pred'] = y_pred
 
         return test_results
-
-
-
-  
-
-    
-    

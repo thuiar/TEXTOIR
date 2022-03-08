@@ -12,7 +12,7 @@ cryptacular==1.5.5
 cycler==0.10.0
 deepspeed==0.4.1
 defusedxml==0.7.1
-Django==3.1.14
+Django==3.1.12
 easydict==1.9
 filelock==3.0.12
 flatbuffers==1.12
@@ -43,9 +43,9 @@ mkl-random==1.2.0
 mkl-service==2.3.0
 mpu==0.23.1
 ninja==1.10.0.post2
-nltk==3.6.6
+nltk==3.5
 numba==0.53.0
-numpy==1.21.0
+numpy==1.19.5
 oauthlib==3.1.0
 opt-einsum==3.3.0
 packaging==20.9
@@ -54,7 +54,7 @@ PasteDeploy==2.1.1
 pbkdf2==1.3
 pdfminer.six==20200517
 pdfplumber==0.5.28
-Pillow==9.0.0
+Pillow==8.3.2
 plaster==1.0
 plaster-pastedeploy==0.7
 plotly==4.14.3
@@ -96,7 +96,7 @@ tensorboard==2.4.1
 tensorboard-plugin-wit==1.8.0
 tensorboardX==1.8
 tensorflow-estimator==2.4.0
-tensorflow-gpu==2.5.3
+tensorflow-gpu==2.5.1
 termcolor==1.1.0
 threadpoolctl==2.2.0
 tokenizers==0.10.1

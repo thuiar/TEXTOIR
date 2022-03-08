@@ -4,15 +4,12 @@ import os
 import csv
 import sys
 import logging
-from pytorch_pretrained_bert.tokenization import BertTokenizer
+from transformers import BertTokenizer
 from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler, TensorDataset)
 
 
-
 class BERT_Loader:
-    
     def __init__(self, args, base_attrs, logger_name = 'Detection'):
-        
         self.logger = logging.getLogger(logger_name)
         self.train_examples, self.train_labeled_examples, self.train_unlabeled_examples  = get_examples(args, base_attrs, 'train')
         self.logger.info("Number of labeled training samples = %s", str(len(self.train_labeled_examples)))
@@ -23,23 +20,26 @@ class BERT_Loader:
 
         self.test_examples = get_examples(args, base_attrs, 'test')
         self.logger.info("Number of testing samples = %s", str(len(self.test_examples)))
+        self.base_attrs = base_attrs
+        self.init_loader(args)
 
-        self.train_labeled_loader = get_loader(self.train_labeled_examples, args, base_attrs['label_list'], 'train_labeled')
-        self.train_unlabeled_loader = get_loader(self.train_unlabeled_examples, args, base_attrs['label_list'], 'train_unlabeled')
-        self.eval_loader = get_loader(self.eval_examples, args, base_attrs['label_list'], 'eval')
-        self.test_loader = get_loader(self.test_examples, args, base_attrs['label_list'], 'test')
-
+    def init_loader(self, args):
+        
+        self.train_labeled_loader = get_loader(self.train_labeled_examples, args, self.base_attrs['label_list'], 'train_labeled', sampler_mode = 'random')
+        self.train_unlabeled_loader = get_loader(self.train_unlabeled_examples, args, self.base_attrs['label_list'], 'train_unlabeled', sampler_mode = 'sequential')
+        self.eval_loader = get_loader(self.eval_examples, args, self.base_attrs['label_list'], 'eval', sampler_mode = 'sequential')
+        self.test_loader = get_loader(self.test_examples, args, self.base_attrs['label_list'], 'test', sampler_mode = 'sequential')
         self.num_train_examples = len(self.train_labeled_examples)
 
 def get_examples(args, base_attrs, mode):
 
     processor = DatasetProcessor()
     ori_examples = processor.get_examples(base_attrs['data_dir'], mode)
-    
     if mode == 'train':
 
         labeled_examples, unlabeled_examples = [], []
         for example in ori_examples:
+
             if (example.label in base_attrs['known_label_list']) and (np.random.uniform(0, 1) <= args.labeled_ratio):
                 labeled_examples.append(example)
             else:
@@ -69,35 +69,41 @@ def get_examples(args, base_attrs, mode):
         
         return examples
 
-def get_loader(examples, args, label_list, mode):
+def get_loader(examples, args, label_list, mode, sampler_mode = 'sequential'):
 
-    tokenizer = BertTokenizer.from_pretrained(args.bert_model, do_lower_case=True)    
+    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)    
     features = convert_examples_to_features(examples, label_list, args.max_seq_length, tokenizer)
     input_ids = torch.tensor([f.input_ids for f in features], dtype=torch.long)
     input_mask = torch.tensor([f.input_mask for f in features], dtype=torch.long)
     segment_ids = torch.tensor([f.segment_ids for f in features], dtype=torch.long)
+
     if mode == 'train_unlabeled':
         label_ids = torch.tensor([-1 for f in features], dtype=torch.long)
     else:
         label_ids = torch.tensor([f.label_id for f in features], dtype=torch.long)
     datatensor = TensorDataset(input_ids, input_mask, segment_ids, label_ids)
 
-    if mode == 'train_labeled':   
-
+    if sampler_mode == 'random':
         sampler = RandomSampler(datatensor)
+    elif sampler_mode == 'sequential':
+        sampler = SequentialSampler(datatensor)
+    elif sampler_mode == 'cycle':
+        from .sampler import get_sampler
+        sampler_dic = {'sampler': get_sampler(), 
+                       'num_samples_cls': 4, 'num_classes': len(label_list) - 1} 
+        sampler = sampler_dic['sampler'](datatensor, sampler_dic['num_samples_cls'], sampler_dic['num_classes'])
 
-        dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.train_batch_size)    
+    if mode == 'train_labeled':   
+        dataloader = DataLoader(datatensor, sampler = sampler, batch_size = args.train_batch_size)    
+        # dataloader = DataLoader(datatensor, shuffle=False, batch_size = args.train_batch_size)    
 
     else:
-        sampler = SequentialSampler(datatensor)
-
         if mode == 'train_unlabeled':
             dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.train_batch_size)    
         elif mode == 'eval':
             dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.eval_batch_size)    
         elif mode == 'test':
             dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.test_batch_size)    
-
     
     return dataloader
 
@@ -121,7 +127,6 @@ class InputExample(object):
         self.text_b = text_b
         self.label = label
 
-
 class InputFeatures(object):
     """A single set of features of data."""
 
@@ -130,7 +135,6 @@ class InputFeatures(object):
         self.input_mask = input_mask
         self.segment_ids = segment_ids
         self.label_id = label_id
-
 
 class DataProcessor(object):
     """Base class for data converters for sequence classification data sets."""
@@ -191,8 +195,10 @@ class DatasetProcessor(DataProcessor):
 def convert_examples_to_features(examples, label_list, max_seq_length, tokenizer):
     """Loads a data file into a list of `InputBatch`s."""
     label_map = {}
-    for i, label in enumerate(label_list):
-        label_map[label] = i
+    if label_list is not None:
+        for i, label in enumerate(label_list):
+            label_map[label] = i
+
     features = []
     for (ex_index, example) in enumerate(examples):
         tokens_a = tokenizer.tokenize(example.text_a)
@@ -250,7 +256,7 @@ def convert_examples_to_features(examples, label_list, max_seq_length, tokenizer
         assert len(input_mask) == max_seq_length
         assert len(segment_ids) == max_seq_length
 
-        label_id = label_map[example.label]
+        label_id = label_map[example.label] if label_list is not None else None
         # if ex_index < 5:
         #     logger.info("*** Example ***")
         #     logger.info("guid: %s" % (example.guid))
@@ -268,7 +274,6 @@ def convert_examples_to_features(examples, label_list, max_seq_length, tokenizer
                           segment_ids=segment_ids,
                           label_id=label_id))
     return features
-
 
 def _truncate_seq_pair(tokens_a, tokens_b, max_length):
     """Truncates a sequence pair in place to the maximum length."""
