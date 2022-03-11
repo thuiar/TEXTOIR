@@ -2,22 +2,6 @@
 
 TEXTOIR is the first high-quality Text Open Intent Recognition platform. This repo contains a convenient toolkit with extensible interfaces, integrating a series of algorithms of two tasks (open intent detection and open intent discovery). We also release the pipeline framework and the visualized platform in the repo [TEXTOIR-DEMO](https://github.com/thuiar/TEXTOIR-DEMO). 
 
-If you are interested in this work, and want to use the codes in this repo, please **star** or **fork** this repo, and cite our [ACL 2021 demo paper](https://aclanthology.org/2021.acl-demo.20.pdf):
-```
-@inproceedings{zhang-etal-2021-textoir,
-    title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
-    author = "Zhang, Hanlei  and
-      Li, Xiaoteng  and
-      Xu, Hua  and
-      Zhang, Panpan  and
-      Zhao, Kang  and
-      Gao, Kai",
-    booktitle = "Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing: System Demonstrations",
-    year = "2021",
-    pages = "167--174",
-}
-```
-
 ## Introduction
 TEXTOIR aims to provide a convenience toolkit for researchers to reproduce the related text open classification and clustering methods. It contains two tasks, which are defined as open intent detection and open intent discovery. Open intent detection aims to identify n-class known intents, and detect one-class open intent. Open intent discovery aims to leverage limited prior knowledge of known intents to find fine-grained known and open intent-wise clusters. Related papers and codes are collected in our previous released [reading list](https://github.com/thuiar/OKD-Reading-List).
 
@@ -30,8 +14,6 @@ Open Intent Recognition:
 * [BANKING](https://arxiv.org/pdf/2003.04807.pdf)
 * [OOS / CLINC150 (without OOD samples)](https://arxiv.org/pdf/1909.02027.pdf) 
 * [StackOverflow](https://aclanthology.org/W15-1509.pdf)
-
-
 
 ## Integrated Models
 ### Open Intent Detection
@@ -87,17 +69,39 @@ pip install -r requirements.txt
 sh examples/run_ADB.sh
 ```
 
-## Extensibility and Reliability
+## Extensibility
 
-### Extensibility
+This toolkit is extensible and supports adding new methods, datasets, configurations, backbones, dataloaders, losses conveniently. More detailed information can be seen in the directory [open_intent_detection](./open_intent_detection/README.md) and [open_intent_discovery](./open_intent_discovery/README.md) respectively. 
+
+<!-- ### Extensibility
 This toolkit is extensible and supports adding new methods, datasets, configurations, backbones, dataloaders, losses conveniently. More detailed information can be seen in the directory [open_intent_detection](./open_intent_detection/README.md) and [open_intent_discovery](./open_intent_discovery/README.md) respectively. 
 
 ### Reliability
-The codes in this repo have been confirmed and are reliable. The experimental results are close to the reported ones in our AAAI 2021 papers [Discovering New Intents with DeepAligned Clustering](https://ojs.aaai.org/index.php/AAAI/article/view/17689) and [Deep Open Intent Classification with Adaptive Decision Boundary](https://ojs.aaai.org/index.php/AAAI/article/view/17690). Note that the results of some methods may fluctuate in a small range due to the selected random seeds, hyper-parameters, optimizers, etc. The final results are the average of 10 random seeds to reduce the influence of different selected known classes.
+The codes in this repo have been confirmed and are reliable. 
 
-## Acknowledgements
+The experimental results are close to the reported ones in our AAAI 2021 papers [Discovering New Intents with DeepAligned Clustering](https://ojs.aaai.org/index.php/AAAI/article/view/17689) and [Deep Open Intent Classification with Adaptive Decision Boundary](https://ojs.aaai.org/index.php/AAAI/article/view/17690). Note that the results of some methods may fluctuate in a small range due to the selected random seeds, hyper-parameters, optimizers, etc. The final results are the average of 10 random seeds to reduce the influence of different selected known classes. -->
 
-Toolkit Contributors: Hanlei Zhang, Ting-En Lin, Qianrui Zhou, Shaojie Zhao, Xin Wang, Huisheng Mao. 
+## Citations
+
+If you are interested in this work, please cite our [ACL 2021 demo paper](https://aclanthology.org/2021.acl-demo.20.pdf):
+```
+@inproceedings{zhang-etal-2021-textoir,
+    title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
+    author = "Zhang, Hanlei  and
+      Li, Xiaoteng  and
+      Xu, Hua  and
+      Zhang, Panpan  and
+      Zhao, Kang  and
+      Gao, Kai",
+    booktitle = "Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing: System Demonstrations",
+    year = "2021",
+    pages = "167--174",
+}
+```
+
+# Acknowledgements
+
+Toolkit Contributors: Hanlei Zhang, Shaojie Zhao, Xin Wang, Ting-En Lin, Qianrui Zhou, Huisheng Mao. 
 
 Supervisor: Hua Xu.
 
