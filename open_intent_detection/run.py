@@ -52,7 +52,7 @@ def parse_arguments():
     parser.add_argument("--data_dir", default = sys.path[0]+'/../data', type=str,
                         help="The input data dir. Should contain the .csv files (or other data files) for the task.")
 
-    parser.add_argument("--output_dir", default= '/home/sharing/disk2/zhaoshaojie/baseline_test/TEXTOIR/outputs', type=str, 
+    parser.add_argument("--output_dir", default= '/home/sharing/disk1/zhaoshaojie/baseline_test/plot/TEXTOIR', type=str, 
                         help="The output directory where all train data will be written.") 
 
     parser.add_argument("--model_dir", default='models', type=str, 

@@ -9,6 +9,7 @@ from .SEG.manager import SEGManager
 
 method_map = {
                 'ADB': ADBManager, 
+                'DA-ADB': ADBManager, 
                 'ADBdisaware': ADBdisawareManager,
                 'MSP': MSPManager, 
                 'DeepUnk':DeepUnkManager, 
