@@ -60,6 +60,7 @@ class ADBManager:
         criterion_boundary = BoundaryLoss(num_labels = data.num_labels, feat_dim = args.feat_dim, device = self.device)
         
         self.delta = F.softplus(criterion_boundary.delta)
+        self.delta_points.append(self.delta)
         optimizer = torch.optim.Adam(criterion_boundary.parameters(), lr = args.lr_boundary)
         
         if self.centroids is None:
@@ -120,6 +121,11 @@ class ADBManager:
             self.delta = best_delta
             self.best_eval_score = best_eval_score
 
+        if args.save_model:
+            np.save(os.path.join(args.method_output_dir, 'centroids.npy'), self.centroids.detach().cpu().numpy())
+            np.save(os.path.join(args.method_output_dir, 'deltas.npy'), self.delta.detach().cpu().numpy())
+            np.save(os.path.join(args.method_output_dir, 'all_deltas.npy'), self.delta_points)
+        
     def get_outputs(self, args, data, mode = 'eval', get_feats = False, pre_train= False, delta = None):
         
         if mode == 'eval':
@@ -148,6 +154,11 @@ class ADBManager:
                 total_preds = torch.cat((total_preds, preds))
                 total_labels = torch.cat((total_labels, label_ids))
                 total_features = torch.cat((total_features, pooled_output))
+        if mode == 'test':
+            np.save(os.path.join(args.method_output_dir, 'test_feats.npy'), total_features.cpu().numpy())
+            np.save(os.path.join(args.method_output_dir, 'y_pred.npy'), total_preds.cpu().numpy())
+            np.save(os.path.join(args.method_output_dir, 'y_true.npy'), total_labels.cpu().numpy())
+
 
         if get_feats:  
             feats = total_features.cpu().numpy()
@@ -155,7 +166,6 @@ class ADBManager:
         else:
             y_pred = total_preds.cpu().numpy()
             y_true = total_labels.cpu().numpy()
-
             return y_true, y_pred
 
     def open_classify(self, data, features):

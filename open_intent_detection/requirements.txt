@@ -21,6 +21,7 @@ scikit-learn==0.24.2
 scipy==1.5.4
 sklearn==0.0
 threadpoolctl==2.2.0
+transformers==4.16.2
 torch==1.7.1
 torchaudio==0.7.0a0+a853dff
 torchvision==0.8.2
