@@ -47,6 +47,9 @@ python run.py --dataset xxx --known_cls_ratio xxx --labeled_ratio xxx --config_f
 
 Notice that if you want to train the model, save the model, or save the testing results, you need to add related parameters (--train, --save_model, --save_results)
 
+### Results
+The detailed results can be seen in [results.md](results/results.md).
+
 ## Tutorials
 ### a. How to add a new dataset? 
 1. Prepare Data  
