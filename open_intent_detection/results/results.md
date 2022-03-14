@@ -1,7 +1,7 @@
 ## Detailed Results
 Results of open classification with different known intent ratios (KIR, 0.25, 0.5, 0.75), and labeled ratios (LR, 0.2, 0.4, 0.6, 0.8, 1.0) on BANKING, OOS and StackOverflow datasets. “Open” and “Known” denote the macro f1-score over open class and known classes respectively.
 
-| dataset       | method    | KIR  | LR  | F1-known | F1-open | F1    | Acc   |
+| dataset       | method    | KIR  | LR  |   Known  |   Open  | F1    | Acc   |
 |:-------------:|:---------:|:----:|:---:|:--------:|:-------:|:-----:|:-----:|
 | banking       | (K+1)-way | 0.25 | 0.2 | 64.95    | 87.99   | 66.1  | 81.77 |
 | banking       | (K+1)-way | 0.25 | 0.4 | 69.34    | 86.83   | 70.22 | 81.02 |
