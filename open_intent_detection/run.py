@@ -17,10 +17,6 @@ def parse_arguments():
 
     parser.add_argument('--scale', type=float, default=5.0, help="Type style.")
 
-    parser.add_argument('--alpha', type=float, default=0.2, help="Type style.")
-
-    parser.add_argument('--rampup_epoch', type=float, default=10.0, help="Type style.")
-
     parser.add_argument('--logger_name', type=str, default='Detection', help="Logger name for open intent detection.")
 
     parser.add_argument('--log_dir', type=str, default='logs', help="Logger directory.")
