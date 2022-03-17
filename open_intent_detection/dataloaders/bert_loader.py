@@ -87,11 +87,6 @@ def get_loader(examples, args, label_list, mode, sampler_mode = 'sequential'):
         sampler = RandomSampler(datatensor)
     elif sampler_mode == 'sequential':
         sampler = SequentialSampler(datatensor)
-    elif sampler_mode == 'cycle':
-        from .sampler import get_sampler
-        sampler_dic = {'sampler': get_sampler(), 
-                       'num_samples_cls': 4, 'num_classes': len(label_list) - 1} 
-        sampler = sampler_dic['sampler'](datatensor, sampler_dic['num_samples_cls'], sampler_dic['num_classes'])
 
     if mode == 'train_labeled':   
         dataloader = DataLoader(datatensor, sampler = sampler, batch_size = args.train_batch_size)    
