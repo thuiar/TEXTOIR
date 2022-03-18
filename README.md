@@ -83,7 +83,7 @@ The experimental results are close to the reported ones in our AAAI 2021 papers 
 
 ## Citations
 
-If you are interested in this work, please cite our [ACL 2021 paper](https://aclanthology.org/2021.acl-demo.20.pdf):
+If this work is helpful for you, please consider citing our [ACL 2021 paper](https://aclanthology.org/2021.acl-demo.20.pdf):
 ```
 @inproceedings{zhang-etal-2021-textoir,
     title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
