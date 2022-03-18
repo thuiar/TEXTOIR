@@ -90,7 +90,6 @@ def get_loader(examples, args, label_list, mode, sampler_mode = 'sequential'):
 
     if mode == 'train_labeled':   
         dataloader = DataLoader(datatensor, sampler = sampler, batch_size = args.train_batch_size)    
-        # dataloader = DataLoader(datatensor, shuffle=False, batch_size = args.train_batch_size)    
 
     else:
         if mode == 'train_unlabeled':
