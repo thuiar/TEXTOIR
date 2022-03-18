@@ -154,10 +154,6 @@ class ADBManager:
                 total_preds = torch.cat((total_preds, preds))
                 total_labels = torch.cat((total_labels, label_ids))
                 total_features = torch.cat((total_features, pooled_output))
-        if mode == 'test':
-            np.save(os.path.join(args.method_output_dir, 'test_feats.npy'), total_features.cpu().numpy())
-            np.save(os.path.join(args.method_output_dir, 'y_pred.npy'), total_preds.cpu().numpy())
-            np.save(os.path.join(args.method_output_dir, 'y_true.npy'), total_labels.cpu().numpy())
 
 
         if get_feats:  
