@@ -14,6 +14,7 @@ class Param():
             freeze_backbone_parameters (binary): Whether to freeze all parameters but the last layer.
             feat_dim (int): The feature dimension.
             warmup_proportion (float): The warmup ratio for learning rate.
+            scale (float): The scale factor of the cosine classifier.
             lr_boundary (float): The learning rate of the decision boundary.
             lr (float): The learning rate of backbone.
             activation (str): The activation function of the hidden layer (support 'relu' and 'tanh').
@@ -31,6 +32,7 @@ class Param():
             'freeze_backbone_parameters': True,
             'feat_dim': 768,
             'warmup_proportion': 0.1,
+            'scale': 4,
             'lr_boundary': 0.05,
             'lr': 2e-5, 
             'activation': 'relu',
