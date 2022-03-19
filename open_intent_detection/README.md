@@ -53,7 +53,7 @@ The detailed results can be seen in [results.md](results/results.md).
 
 ||Dataset||BANKING||||OOS||||StackOverflow|||
 |:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|:----:|
-|KIR*|Methods|F1-known|F1-open|F1-score|Accuracy|F1-known|F1-open|F1-score|Accuracy|F1-known|F1-open|F1-score|Accuracy|
+|KIR*|Methods|Known|Open|F1|Acc|Known|Open|F1|Acc|Known|Open|F1|Acc|
 |0.25|MSP|50.62|38.84|50.03|41.84|49.28|54.74|49.42|49.78|42.66|11.66|37.49|27.91|
 |0.25|SEG|51.98|52.97|52.03|49.73|47.23|60.59|47.57|53.34|40.63|4.36|34.59|23.35|
 |0.25|OpenMax|53.42|48.52|53.18|47.76|62.65|77.51|63.03|70.27|47.51|34.52|45.35|38.97|
