@@ -87,15 +87,12 @@ If this work is helpful, or you want to use the codes and results in this repo, 
 ```
 @inproceedings{zhang-etal-2021-textoir,
     title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
-    author = "Zhang, Hanlei  and
-      Li, Xiaoteng  and
-      Xu, Hua  and
-      Zhang, Panpan  and
-      Zhao, Kang  and
-      Gao, Kai",
+    author = "Zhang, Hanlei  and Li, Xiaoteng  and Xu, Hua  and Zhang, Panpan and Zhao, Kang  and Gao, Kai",
     booktitle = "Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing: System Demonstrations",
-    year = "2021",
     pages = "167--174",
+    year = "2021",
+    url = "https://aclanthology.org/2021.acl-demo.20",
+    doi = "10.18653/v1/2021.acl-demo.20",
 }
 ```
 ```
