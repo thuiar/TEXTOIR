@@ -98,10 +98,7 @@ If this work is helpful, or you want to use the codes and results in this repo, 
 ```
 @article{zhang2022towards,
   title={Towards Open Intent Detection},
-  author={Zhang, Hanlei and 
-        Xu, Hua and 
-        Zhao, Shaojie and 
-        Zhou, Qianrui},
+  author={Zhang, Hanlei and Xu, Hua and Zhao, Shaojie and Zhou, Qianrui},
   journal={arXiv preprint arXiv:2203.05823},
   year={2022}
 }
