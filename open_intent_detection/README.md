@@ -148,7 +148,8 @@ method_map = {
 Add a script in the [examples](./examples) directory, and configure the parsing parameters in the [run.py](./run.py). You can also run the programs serially by setting the combination of different parameters. A running example is shown in [run_MSP.sh](./examples/run_MSP.sh).
 
 ## Citation
-If you are interested in this work, and want to use the codes in this repo, please star/fork this repo and cite the following works:
+
+If this work is helpful, or you want to use the codes and results in this repo, please cite the following papers:
 ```
 @inproceedings{zhang-etal-2021-textoir,
     title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
@@ -162,6 +163,8 @@ If you are interested in this work, and want to use the codes in this repo, plea
     year = "2021",
     pages = "167--174",
 }
+```
+```
 @article{zhang2022towards,
   title={Towards Open Intent Detection},
   author={Zhang, Hanlei and 
@@ -172,6 +175,3 @@ If you are interested in this work, and want to use the codes in this repo, plea
   year={2022}
 }
 ```
-
-
-
