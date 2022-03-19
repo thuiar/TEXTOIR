@@ -103,11 +103,9 @@ If this work is helpful, or you want to use the codes and results in this repo, 
   year={2022}
 }
 ```
-# Acknowledgements
+# Contributors
 
-Toolkit Contributors: Hanlei Zhang, Shaojie Zhao, Xin Wang, Ting-En Lin, Qianrui Zhou, Huisheng Mao. 
-
-Supervisor: Hua Xu.
+[Hanlei Zhang](https://github.com/HanleiZhang), [Shaojie Zhao](https://github.com/MurraryZhao), [Xin Wang](https://github.com/mrFocusXin), [Ting-En Lin](https://github.com/tnlin), [Qianrui Zhou](https://github.com/zhougr18), [Huisheng Mao](https://github.com/FlameSky-S). 
 
 ## Bugs or questions?
 
