@@ -83,7 +83,7 @@ The experimental results are close to the reported ones in our AAAI 2021 papers 
 
 ## Citations
 
-If this work is helpful for you, please consider citing our [ACL 2021 paper](https://aclanthology.org/2021.acl-demo.20.pdf):
+If this work is helpful, or you want to use the codes and results in this repo, please cite the following papers:
 ```
 @inproceedings{zhang-etal-2021-textoir,
     title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
@@ -98,7 +98,17 @@ If this work is helpful for you, please consider citing our [ACL 2021 paper](htt
     pages = "167--174",
 }
 ```
-
+```
+@article{zhang2022towards,
+  title={Towards Open Intent Detection},
+  author={Zhang, Hanlei and 
+        Xu, Hua and 
+        Zhao, Shaojie and 
+        Zhou, Qianrui},
+  journal={arXiv preprint arXiv:2203.05823},
+  year={2022}
+}
+```
 # Acknowledgements
 
 Toolkit Contributors: Hanlei Zhang, Shaojie Zhao, Xin Wang, Ting-En Lin, Qianrui Zhou, Huisheng Mao. 
