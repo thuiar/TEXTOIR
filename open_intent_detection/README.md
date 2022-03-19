@@ -162,15 +162,14 @@ If you are interested in this work, and want to use the codes in this repo, plea
     year = "2021",
     pages = "167--174",
 }
-@article{Zhang_Xu_Lin_2021, 
-      title={Deep Open Intent Classification with Adaptive Decision Boundary}, 
-      volume={35}, 
-      number={16}, 
-      journal={Proceedings of the AAAI Conference on Artificial Intelligence}, 
-      author={Zhang, Hanlei and Xu, Hua and Lin, Ting-En}, 
-      year={2021}, 
-      month={May}, 
-      pages={14374-14382} 
+@article{zhang2022towards,
+  title={Towards Open Intent Detection},
+  author={Zhang, Hanlei and 
+        Xu, Hua and 
+        Zhao, Shaojie and 
+        Zhou, Qianrui},
+  journal={arXiv preprint arXiv:2203.05823},
+  year={2022}
 }
 ```
 
