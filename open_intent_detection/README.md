@@ -117,6 +117,7 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.75|(K+1)-way|62.13|85.62|82.39|87.95|47.57|81.6|
 |0.75|ADB|67.32|86.4|84.81|88.99|74.02|86.87|
 |0.75|DA-ADB|69.51|85.96|86.09|88.49|74.66|87.71|
+
 “Open” and “Known” denote the macro f1-score over open class and known classes respectively.
 
 
