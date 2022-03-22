@@ -2,6 +2,7 @@ import os
 import torch
 import numpy as np
 import pandas as pd
+from tqdm import tqdm
 
 def save_npy(npy_file, path, file_name):
     npy_path = os.path.join(path, file_name)

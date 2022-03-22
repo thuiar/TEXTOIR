@@ -1,13 +1,10 @@
-from torch.functional import _return_counts
-from torch.nn.common_types import T
 import torch
 import math
 import torch.nn.functional as F
-import copy
 from torch import nn
 from transformers import BertPreTrainedModel, BertModel
 from torch.nn.parameter import Parameter
-from .utils import L2_normalization, ConvexSampler
+from .utils import ConvexSampler
 
 activation_map = {'relu': nn.ReLU(), 'tanh': nn.Tanh()}
 
