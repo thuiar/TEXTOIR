@@ -102,7 +102,8 @@ class BERT_Norm(BertPreTrainedModel):
         pooled_output = F.normalize(pooled_output)
 
         logits = F.linear(pooled_output, F.normalize(self.weight))
-
+        logits = F.softmax(logits, dim = 1)
+        
         if feature_ext:
             return pooled_output
         else:
@@ -131,11 +132,14 @@ class BERT_MixUp(BertPreTrainedModel):
             input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask, output_hidden_states=True)
         encoded_layer_12 = outputs.hidden_states
         pooled_output = self.dense(encoded_layer_12[-1].mean(dim=1))
+        
         if mode is not 'test':
             pooled_output, labels = self.sampler(pooled_output, labels, mode=mode)
+            
         pooled_output = self.activation(pooled_output)
         pooled_output = self.dropout(pooled_output)
         logits = self.classifier(pooled_output)
+        
         if feature_ext:
             return pooled_output
         else:
