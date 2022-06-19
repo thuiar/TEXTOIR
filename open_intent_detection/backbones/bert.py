@@ -102,7 +102,6 @@ class BERT_Norm(BertPreTrainedModel):
         pooled_output = F.normalize(pooled_output)
 
         logits = F.linear(pooled_output, F.normalize(self.weight))
-        logits = F.softmax(logits, dim = 1)
 
         if feature_ext:
             return pooled_output
