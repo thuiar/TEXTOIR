@@ -109,4 +109,4 @@ If this work is helpful, or you want to use the codes and results in this repo, 
 
 ## Bugs or questions?
 
-If you have any questions, feel free to open issues and pull request. Please illustrate your problems as detailed as possible. If you want to integrate your method in our repo, please **pull request**!
+If you have any questions, please open issues and illustrate your problems as detailed as possible. If you want to integrate your method in our repo, please feel free to **pull request**!
