@@ -45,6 +45,7 @@ class DeepAlignedManager:
             self.pretrained_model = pretrain_manager.model
 
             if args.cluster_num_factor > 1:
+                self.num_labels = data.num_labels
                 self.num_labels = self.predict_k(args, data) 
             else:
                 self.num_labels = data.num_labels 
@@ -70,7 +71,7 @@ class DeepAlignedManager:
 
         for epoch in trange(int(args.num_train_epochs), desc="Epoch"):  
 
-            feats = self.get_outputs(args, mode = 'train', model = self.model, get_feats = True)
+            feats, _ = self.get_outputs(args, mode = 'train', model = self.model, get_feats = True)
             km = KMeans(n_clusters = self.num_labels).fit(feats)
             eval_score = silhouette_score(feats, km.labels_)
 
@@ -126,10 +127,10 @@ class DeepAlignedManager:
 
     def test(self, args, data):
         
-        feats = self.get_outputs(args, mode = 'test', model = self.model, get_feats = True)
+        feats, y_true = self.get_outputs(args, mode = 'test', model = self.model, get_feats = True)
         km = KMeans(n_clusters = self.num_labels).fit(feats)
         y_pred = km.labels_
-        y_true, _ = self.get_outputs(args, mode = 'test', model = self.model)
+    
         
         test_results = clustering_score(y_true, y_pred)
         cm = confusion_matrix(y_true, y_pred)
@@ -173,11 +174,13 @@ class DeepAlignedManager:
                 
                 total_labels = torch.cat((total_labels,label_ids))
                 total_features = torch.cat((total_features, pooled_output))
-                total_logits = torch.cat((total_logits, logits))
+                if not get_feats:  
+                    total_logits = torch.cat((total_logits, logits))
 
         if get_feats:  
             feats = total_features.cpu().numpy()
-            return feats 
+            y_true = total_labels.cpu().numpy()
+            return feats, y_true
 
         else:
             total_probs = F.softmax(total_logits.detach(), dim=1)
@@ -192,8 +195,7 @@ class DeepAlignedManager:
 
         self.logger.info('Predict number of clusters start...')
 
-        feats = self.get_outputs(args, mode = 'train', model = self.pretrained_model, get_feats = True)
-        feats = feats.cpu().numpy()
+        feats, _ = self.get_outputs(args, mode = 'train', model = self.pretrained_model, get_feats = True) 
 
         km = KMeans(n_clusters = data.num_labels).fit(feats)
         y_pred = km.labels_
