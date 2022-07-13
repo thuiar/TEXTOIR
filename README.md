@@ -85,6 +85,10 @@ The experimental results are close to the reported ones in our AAAI 2021 papers 
 ## Citations
 
 If this work is helpful, or you want to use the codes and results in this repo, please cite the following papers:
+
+* [TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition](https://aclanthology.org/2021.acl-demo.20/)
+* [Learning Discriminative Representations and Decision Boundaries for Open Intent Detection](https://arxiv.org/abs/2203.05823)
+
 ```
 @inproceedings{zhang-etal-2021-textoir,
     title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
@@ -98,7 +102,7 @@ If this work is helpful, or you want to use the codes and results in this repo, 
 ```
 ```
 @article{zhang2022towards,
-  title={Towards Open Intent Detection},
+  title={Learning Discriminative Representations and Decision Boundaries for Open Intent Detection},
   author={Zhang, Hanlei and Xu, Hua and Zhao, Shaojie and Zhou, Qianrui},
   journal={arXiv preprint arXiv:2203.05823},
   year={2022}
