@@ -18,7 +18,7 @@ Open Intent Recognition:
 ## Integrated Models
 ### Open Intent Detection
 
-* [Towards Open Intent Detection](https://arxiv.org/pdf/2203.05823.pdf) (DA-ADB, arXiv 2022)
+* [Learning Discriminative Representations and Decision Boundaries for Open Intent Detection](https://arxiv.org/pdf/2203.05823.pdf) (DA-ADB, arXiv 2022)
 * [Out-of-Scope Intent Detection with Self-Supervision and Discriminative Training](https://aclanthology.org/2021.acl-long.273) ((K+1)-way, ACL 2021)
 * [Deep Open Intent Classification with Adaptive Decision Boundary](https://ojs.aaai.org/index.php/AAAI/article/view/17690) (ADB, AAAI 2021)
 * [Unknown Intent Detection Using Gaussian Mixture Model with an Application to Zero-shot Intent Classification](https://aclanthology.org/2020.acl-main.99) (SEG, ACL 2020)
@@ -87,7 +87,7 @@ The experimental results are close to the reported ones in our AAAI 2021 papers 
 If this work is helpful, or you want to use the codes and results in this repo, please cite the following papers:
 
 * [TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition](https://aclanthology.org/2021.acl-demo.20/)
-* [Learning Discriminative Representations and Decision Boundaries for Open Intent Detection](https://arxiv.org/abs/2203.05823)
+* [Learning Discriminative Representations and Decision Boundaries for Open Intent Detection](https://arxiv.org/pdf/2203.05823.pdf)
 
 ```
 @inproceedings{zhang-etal-2021-textoir,
