@@ -29,7 +29,7 @@ class BERT_Loader_NEG:
 
     def init_loader(self, args):
         self.train_labeled_loader = get_loader(self.train_labeled_examples, args, self.base_attrs['label_list'], 'train_labeled')
-        # self.train_unlabeled_loader = get_loader(self.train_unlabeled_examples, args, self.base_attrs['label_list'], 'train_unlabeled')
+        self.train_unlabeled_loader = get_loader(self.train_unlabeled_examples, args, self.base_attrs['label_list'], 'train_unlabeled')
         self.eval_loader = get_loader(self.eval_examples, args, self.base_attrs['label_list'], 'eval')
         self.test_loader = get_loader(self.test_examples, args, self.base_attrs['label_list'], 'test')
         self.neg_loader = get_loader(self.neg_examples, args, self.base_attrs['label_list'], 'neg')
@@ -100,9 +100,6 @@ def get_loader(examples, args, label_list, mode):
     datatensor = TensorDataset(input_ids, input_mask, segment_ids, label_ids)
 
     if mode == 'train_labeled':   
-        # sampler = RandomSampler(datatensor)
-
-        # dataloader = DataLoader(datatensor, shuffle = True, batch_size = args.train_batch_size)    
         dataloader = DataLoader(datatensor, shuffle = True, batch_size = args.train_batch_size)    
 
     else:

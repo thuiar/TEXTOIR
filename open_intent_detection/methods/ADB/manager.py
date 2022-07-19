@@ -1,13 +1,8 @@
-from torch.functional import Tensor
-from torch.utils.data.dataloader import DataLoader
-from torch.utils.data.dataset import TensorDataset
 import torch
 import torch.nn.functional as F
 import numpy as np
 import os
-import copy
 import logging
-from torch import nn
 from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
 from tqdm import trange, tqdm
 from .boundary import BoundaryLoss
@@ -115,8 +110,6 @@ class ADBManager:
                     if wait >= args.wait_patient:
                         break
 
-            self.test(args, data)
-
         if best_eval_score > 0:
             self.delta = best_delta
             self.best_eval_score = best_eval_score
@@ -191,9 +184,5 @@ class ADBManager:
 
         test_results['y_true'] = y_true
         test_results['y_pred'] = y_pred
-        test_results['scale'] = args.scale
-        test_results['best_eval_score'] = self.best_eval_score
-        test_results['pretrain_best_eval_score'] = self.pretrain_best_eval_score
-        test_results['loss'] = args.loss_fct
 
         return test_results

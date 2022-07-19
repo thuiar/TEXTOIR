@@ -191,7 +191,6 @@ class BERT_SEG(BertPreTrainedModel):
             # with p_y
             ########################################
             p_y = p_y.expand_as(neg_sqr_dist).to(device)  # [bsz, n_c_seen]
-            # torch.exp(x) e^x
             dist_exp = torch.exp(neg_sqr_dist)
             dist_exp_py = p_y.mul(dist_exp)
             dist_exp_sum = torch.sum(dist_exp_py, dim=1, keepdim=True)  # [bsz, n_c_seen] -> [bsz, 1]
@@ -299,11 +298,8 @@ class BERT_Disaware(BertPreTrainedModel):
             logits = self.cosnorm_classifier(x)
 
             if mode == 'train':
-
                 loss = loss_fct(logits, labels)
-
                 return loss
 
             elif mode == 'eval':
-
                 return pooled_output, logits

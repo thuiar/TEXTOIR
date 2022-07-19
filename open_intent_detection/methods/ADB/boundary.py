@@ -15,15 +15,13 @@ class BoundaryLoss(nn.Module):
         self.delta = nn.Parameter(torch.randn(num_labels).to(device))
         nn.init.normal_(self.delta)
         
-    def forward(self, pooled_output, centroids, labels, w = 1):
+    def forward(self, pooled_output, centroids, labels):
         
         delta = F.softplus(self.delta)
         c = centroids[labels]
         d = delta[labels]
         x = pooled_output
         
-        eps = 1e-10
-
         euc_dis = torch.norm(x - c,2, 1).view(-1)
         pos_mask = (euc_dis > d).type(torch.cuda.FloatTensor)
         neg_mask = (euc_dis < d).type(torch.cuda.FloatTensor)
@@ -31,7 +29,6 @@ class BoundaryLoss(nn.Module):
         pos_loss = (euc_dis - d) * pos_mask
         neg_loss = (d - euc_dis) * neg_mask
         
-        # loss = pos_loss.sum() / (pos_mask.sum() + eps) + neg_loss.sum() / (neg_mask.sum() + eps)
         loss = pos_loss.mean() + neg_loss.mean()
 
         return loss, delta 

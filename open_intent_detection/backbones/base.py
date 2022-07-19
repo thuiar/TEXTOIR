@@ -31,12 +31,6 @@ class ModelManager:
                                                     num_warmup_steps=num_warmup_steps,
                                                     num_training_steps=num_train_optimization_steps)
         
-        '''
-        optimizer = BertAdam(optimizer_grouped_parameters,
-                        lr = lr,
-                        warmup = warmup_proportion,
-                        t_total = num_train_optimization_steps)
-        '''
         return optimizer, scheduler
     
     def set_model(self, args, pattern):
