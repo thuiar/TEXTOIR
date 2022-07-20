@@ -123,19 +123,22 @@ Add a script in the [examples](./examples) directory, and configure the parsing 
 
 ## Citation
 If you are interested in this work, and want to use the codes in this repo, please star/fork this repo, and cite the following works:
+
+* [TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition](https://aclanthology.org/2021.acl-demo.20/)
+* [Discovering New Intents with Deep Aligned Clustering](https://arxiv.org/pdf/2012.08987.pdf)
+
 ```
 @inproceedings{zhang-etal-2021-textoir,
     title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
-    author = "Zhang, Hanlei  and
-      Li, Xiaoteng  and
-      Xu, Hua  and
-      Zhang, Panpan  and
-      Zhao, Kang  and
-      Gao, Kai",
+    author = "Zhang, Hanlei  and Li, Xiaoteng  and Xu, Hua  and Zhang, Panpan and Zhao, Kang  and Gao, Kai",
     booktitle = "Proceedings of the 59th Annual Meeting of the Association for Computational Linguistics and the 11th International Joint Conference on Natural Language Processing: System Demonstrations",
-    year = "2021",
     pages = "167--174",
+    year = "2021",
+    url = "https://aclanthology.org/2021.acl-demo.20",
+    doi = "10.18653/v1/2021.acl-demo.20",
 }
+```
+```
 @article{Zhang_Xu_Lin_Lyu_2021, 
     title={Discovering New Intents with Deep Aligned Clustering}, 
     volume={35}, 
@@ -146,7 +149,6 @@ If you are interested in this work, and want to use the codes in this repo, plea
     month={May}, 
     pages={14365-14373}
 }
-
 ```
 
 
