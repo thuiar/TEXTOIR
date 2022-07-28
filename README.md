@@ -88,6 +88,8 @@ If this work is helpful, or you want to use the codes and results in this repo, 
 
 * [TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition](https://aclanthology.org/2021.acl-demo.20/)
 * [Learning Discriminative Representations and Decision Boundaries for Open Intent Detection](https://arxiv.org/pdf/2203.05823.pdf)
+* [Deep Open Intent Classification with Adaptive Decision Boundary](https://arxiv.org/pdf/2012.10209.pdf)
+* [Discovering New Intents with Deep Aligned Clustering](https://arxiv.org/pdf/2012.08987.pdf)
 
 ```
 @inproceedings{zhang-etal-2021-textoir,
@@ -108,6 +110,31 @@ If this work is helpful, or you want to use the codes and results in this repo, 
   year={2022}
 }
 ```
+```
+@article{Zhang_Xu_Lin_2021, 
+      title={Deep Open Intent Classification with Adaptive Decision Boundary}, 
+      volume={35}, 
+      number={16}, 
+      journal={Proceedings of the AAAI Conference on Artificial Intelligence}, 
+      author={Zhang, Hanlei and Xu, Hua and Lin, Ting-En}, 
+      year={2021}, 
+      month={May}, 
+      pages={14374-14382} 
+}
+```
+```
+@article{Zhang_Xu_Lin_Lyu_2021, 
+    title={Discovering New Intents with Deep Aligned Clustering}, 
+    volume={35}, 
+    number={16}, 
+    journal={Proceedings of the AAAI Conference on Artificial Intelligence}, 
+    author={Zhang, Hanlei and Xu, Hua and Lin, Ting-En and Lyu, Rui}, 
+    year={2021}, 
+    month={May}, 
+    pages={14365-14373}
+}
+```
+
 # Contributors
 
 [Hanlei Zhang](https://github.com/HanleiZhang), [Shaojie Zhao](https://github.com/MurraryZhao), [Xin Wang](https://github.com/mrFocusXin), [Ting-En Lin](https://github.com/tnlin), [Qianrui Zhou](https://github.com/zhougr18), [Huisheng Mao](https://github.com/FlameSky-S). 
