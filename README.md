@@ -57,7 +57,7 @@ conda install pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch -c cond
 ```
 2. Clone the TEXTOIR repository, and choose the task (Take open intent detection as an example).
 ```
-git clone git@github.com:HanleiZhang/TEXTOIR.git
+git clone git@github.com:thuiar/TEXTOIR.git
 cd TEXTOIR
 cd open_intent_detection
 ```
