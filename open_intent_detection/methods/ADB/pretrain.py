@@ -8,7 +8,7 @@ from torch import nn
 from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
 from tqdm import trange, tqdm
 from losses import loss_map
-from utils.functions import save_model, restore_model, centroids_cal, sigmoid_rampup, linear_rampup
+from utils.functions import save_model, restore_model, centroids_cal
 
 
 class PretrainManager:
