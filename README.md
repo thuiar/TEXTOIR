@@ -11,22 +11,29 @@ Open Intent Recognition:
  **We strongly recommend you to use our TEXTOIR toolkit, which has standard and unified interfaces (especially data setting) to obtain fair and persuable results on benchmark intent datasets!**
 
 ## Benchmark Datasets
-* [BANKING](https://arxiv.org/pdf/2003.04807.pdf)
-* [OOS / CLINC150 (without OOD samples)](https://arxiv.org/pdf/1909.02027.pdf) 
-* [StackOverflow](https://aclanthology.org/W15-1509.pdf)
+
+| Dataset Name | Source |
+| :---: | :---: |
+| [BANKING](./data/banking) | [Paper](https://aclanthology.org/2020.nlp4convai-1.5/) [Dataset](https://github.com/PolyAI-LDN/task-specific-datasets) |
+| [OOS](./data/oos) | [Paper](https://aclanthology.org/D19-1131/) [Dataset](https://github.com/clinc/oos-eval) |
+| [StackOverflow](./data/stackoverflow) | [Paper](https://aclanthology.org/W15-1509.pdf) [Dataset](https://github.com/jacoxu/StackOverflow) |
+
 
 ## Integrated Models
 ### Open Intent Detection
 
-* [Learning Discriminative Representations and Decision Boundaries for Open Intent Detection](https://arxiv.org/pdf/2203.05823.pdf) (DA-ADB, arXiv 2022)
-* [Out-of-Scope Intent Detection with Self-Supervision and Discriminative Training](https://aclanthology.org/2021.acl-long.273) ((K+1)-way, ACL 2021)
-* [Deep Open Intent Classification with Adaptive Decision Boundary](https://ojs.aaai.org/index.php/AAAI/article/view/17690) (ADB, AAAI 2021)
-* [Unknown Intent Detection Using Gaussian Mixture Model with an Application to Zero-shot Intent Classification](https://aclanthology.org/2020.acl-main.99) (SEG, ACL 2020)
-* [Deep Unknown Intent Detection with Margin Loss](https://aclanthology.org/P19-1548.pdf) (DeepUnk, ACL 2019)
-* [DOC: Deep Open Classification of Text Documents](https://aclanthology.org/D17-1314.pdf) (DOC, EMNLP 2017)
-* [A Baseline For Detecting Misclassified and Out-of-distribution Examples in Neural Networks](https://arxiv.org/pdf/1610.02136.pdf) (MSP, ICLR 2017) 
-* [Towards Open Set Deep Networks](https://openaccess.thecvf.com/content_cvpr_2016/papers/Bendale_Towards_Open_Set_CVPR_2016_paper.pdf) (OpenMax, CVPR 2016)
-
+| Model Name | Source | Published |
+| :---: | :---: | :---: |
+| [DA-ADB](./open_intent_detection/examples/run_DA-ADB.sh) | [Paper](https://arxiv.org/pdf/2203.05823.pdf) | arXiv 2022 |
+| [ARPL](./open_intent_detection/examples/run_ARPL.sh) | [Paper](https://ieeexplore.ieee.org/document/9521769) [Code](https://github.com/iCGY96/ARPL) | IEEE TPAMI 2022 |
+| [MDF](./open_intent_detection/examples/run_MDF.sh) | [Paper](https://aclanthology.org/2021.acl-long.85.pdf) [Code](https://github.com/rivercold/BERT-unsupervised-OOD) | ACL 2021 |
+| [(K+1)-way](./open_intent_detection/examples/run_K+1-way.sh) | [Paper](https://aclanthology.org/2021.acl-long.273) [Code](https://github.com/fanolabs/out-of-scope-intent-detection) | ACL 2021 |
+| [ADB](./open_intent_detection/examples/run_ADB.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/17690) [Code](https://github.com/thuiar/Adaptive-Decision-Boundary) | AAAI 2021 |
+| [SEG](./open_intent_detection/examples/run_SEG.sh) | [Paper](https://aclanthology.org/2020.acl-main.99) [Code](https://github.com/fanolabs/0shot-classification) | ACL 2020 |
+| [DeepUnk](./open_intent_detection/examples/run_DeepUnk.sh) | [Paper](https://aclanthology.org/P19-1548.pdf) [Code](https://github.com/thuiar/DeepUnkID) | ACL 2019 |
+| [DOC](./open_intent_detection/examples/run_DOC.sh) | [Paper](https://aclanthology.org/D17-1314.pdf) [Code](https://github.com/leishu02/EMNLP2017_DOC) | EMNLP 2017 |
+| [MSP](./open_intent_detection/examples/run_MSP.sh) | [Paper](https://arxiv.org/pdf/1610.02136.pdf) [Code](https://github.com/hendrycks/error-detection) | ICLR 2017 |
+| [OpenMax](./open_intent_detection/examples/run_OpenMax.sh) | [Paper](https://openaccess.thecvf.com/content_cvpr_2016/papers/Bendale_Towards_Open_Set_CVPR_2016_paper.pdf) [Code](https://github.com/abhijitbendale/OSDN) | CVPR 2016 |
 
 ### Open Intent Discovery
 
