@@ -14,7 +14,7 @@ We collect benchmark intent datasets, and reproduce related methods to our best.
 
 ### Benchmark Datasets
 | Dataset Name | Source |
-| :---: | :--- | :---: |
+| :---: | :---: |
 | [BANKING](../data/banking) | [Paper](https://aclanthology.org/2020.nlp4convai-1.5/) [Dataset](https://github.com/PolyAI-LDN/task-specific-datasets) |
 | [OOS](../data/oos) | [Paper](https://aclanthology.org/D19-1131/) [Dataset](https://github.com/clinc/oos-eval) |
 | [StackOverflow](../data/stackoverflow) | [Paper](https://aclanthology.org/W15-1509.pdf) [Dataset](https://github.com/jacoxu/StackOverflow) |
@@ -22,6 +22,7 @@ We collect benchmark intent datasets, and reproduce related methods to our best.
 ### Integrated Models
 
 | Model Name | Source | Published |
+| :---: | :---: | :---: |
 | [DA-ADB](./examples/run_DA-ADB.sh) | [Paper](https://arxiv.org/pdf/2203.05823.pdf) | arXiv 2022 |
 | [ARPL](./examples/run_ARPL.sh) | [Paper](https://ieeexplore.ieee.org/document/9521769) [Code](https://github.com/iCGY96/ARPL) | IEEE TPAMI 2022 |
 | [MDF](./examples/run_MDF.sh) | [Paper](https://aclanthology.org/2021.acl-long.85.pdf) [Code](https://github.com/rivercold/BERT-unsupervised-OOD) | ACL 2021 |
