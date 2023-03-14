@@ -1,5 +1,4 @@
 from .bert_loader import BERT_Loader
-from .bert_loader_neg import BERT_Loader_NEG
 
 max_seq_lengths = {
                         'stackoverflow':45,
@@ -13,9 +12,10 @@ backbone_loader_map = {
                             'bert': BERT_Loader,
                             'bert_doc': BERT_Loader,
                             'bert_norm': BERT_Loader,
-                            'bert_mixup': BERT_Loader_NEG,
+                            'bert_K+1-way': BERT_Loader,
                             'bert_seg': BERT_Loader,
-                            'bert_disaware': BERT_Loader
+                            'bert_disaware': BERT_Loader,
+                            'bert_mdf': BERT_Loader
                         }
 
 benchmark_labels = {

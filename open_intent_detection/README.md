@@ -13,21 +13,26 @@ We collect benchmark intent datasets, and reproduce related methods to our best.
 ## Basic Information
 
 ### Benchmark Datasets
-
-* [BANKING](https://arxiv.org/pdf/2003.04807.pdf)
-* [OOS](https://arxiv.org/pdf/1909.02027.pdf) 
-* [StackOverflow](https://aclanthology.org/W15-1509.pdf)
+| Dataset Name | Source |
+| :---: | :--- | :---: |
+| [BANKING](../data/banking) | [Paper](https://aclanthology.org/2020.nlp4convai-1.5/) [Dataset](https://github.com/PolyAI-LDN/task-specific-datasets) |
+| [OOS](../data/oos) | [Paper](https://aclanthology.org/D19-1131/) [Dataset](https://github.com/clinc/oos-eval) |
+| [StackOverflow](../data/stackoverflow) | [Paper](https://aclanthology.org/W15-1509.pdf) [Dataset](https://github.com/jacoxu/StackOverflow) |
 
 ### Integrated Models
 
-* [Towards Open Intent Detection](https://arxiv.org/pdf/2203.05823.pdf) (DA-ADB, arXiv 2022)
-* [Out-of-Scope Intent Detection with Self-Supervision and Discriminative Training](https://aclanthology.org/2021.acl-long.273) ((K+1)-way, ACL 2021)
-* [Deep Open Intent Classification with Adaptive Decision Boundary](https://ojs.aaai.org/index.php/AAAI/article/view/17690) (ADB, AAAI 2021)
-* [Unknown Intent Detection Using Gaussian Mixture Model with an Application to Zero-shot Intent Classification](https://aclanthology.org/2020.acl-main.99) (SEG, ACL 2020)
-* [Deep Unknown Intent Detection with Margin Loss](https://aclanthology.org/P19-1548.pdf) (DeepUnk, ACL 2019)
-* [DOC: Deep Open Classification of Text Documents](https://aclanthology.org/D17-1314.pdf) (DOC, EMNLP 2017)
-* [A Baseline For Detecting Misclassified and Out-of-distribution Examples in Neural Networks](https://arxiv.org/pdf/1610.02136.pdf) (MSP, ICLR 2017) 
-* [Towards Open Set Deep Networks](https://openaccess.thecvf.com/content_cvpr_2016/papers/Bendale_Towards_Open_Set_CVPR_2016_paper.pdf) (OpenMax, CVPR 2016)
+| Model Name | Source | Published |
+| [DA-ADB](./examples/run_DA-ADB.sh) | [Paper](https://arxiv.org/pdf/2203.05823.pdf) | arXiv 2022 |
+| [ARPL](./examples/run_ARPL.sh) | [Paper](https://ieeexplore.ieee.org/document/9521769) [Code](https://github.com/iCGY96/ARPL) | IEEE TPAMI 2022 |
+| [MDF](./examples/run_MDF.sh) | [Paper](https://aclanthology.org/2021.acl-long.85.pdf) [Code](https://github.com/rivercold/BERT-unsupervised-OOD) | ACL 2021 |
+| [(K+1)-way](./examples/run_K+1-way.sh) | [Paper](https://aclanthology.org/2021.acl-long.273) [Code](https://github.com/fanolabs/out-of-scope-intent-detection) | ACL 2021 |
+| [ADB](./examples/run_ADB.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/17690) [Code](https://github.com/thuiar/Adaptive-Decision-Boundary) | AAAI 2021 |
+| [SEG](./examples/run_SEG.sh) | [Paper](https://aclanthology.org/2020.acl-main.99) [Code](https://github.com/fanolabs/0shot-classification) | ACL 2020 |
+| [DeepUnk](./examples/run_DeepUnk.sh) | [Paper](https://aclanthology.org/P19-1548.pdf) [Code](https://github.com/thuiar/DeepUnkID) | ACL 2019 |
+| [DOC](./examples/run_DOC.sh) | [Paper](https://aclanthology.org/D17-1314.pdf) [Code](https://github.com/leishu02/EMNLP2017_DOC) | EMNLP 2017 |
+| [MSP](./examples/run_MSP.sh) | [Paper](https://arxiv.org/pdf/1610.02136.pdf) [Code](https://github.com/hendrycks/error-detection) | ICLR 2017 |
+| [OpenMax](./examples/run_OpenMax.sh) | [Paper](https://openaccess.thecvf.com/content_cvpr_2016/papers/Bendale_Towards_Open_Set_CVPR_2016_paper.pdf) [Code](https://github.com/abhijitbendale/OSDN) | CVPR 2016 |
+
 
 We welcome any issues and requests for model implementation and bug fix. 
 
@@ -55,35 +60,41 @@ The detailed results can be seen in [results.md](results/results.md).
 | | | BANKING     |  | OOS      |  |  StackOverflow     |  |  
 |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 | KIR* | Methods | Accuracy | F1-score | Accuracy  |F1-score  | Accuracy | F1-score | 
-|0.25|MSP|41.84|50.03|49.78|49.42|27.91|37.49|
-|0.25|SEG|49.73|52.03|53.34|47.57|23.35|34.59|
+|0.25|MSP|42.19|49.92|53.38|51.23|27.91|37.49|
+|0.25|SEG|48.73|51.49|52.18|47.0|23.33|34.4|
 |0.25|OpenMax|47.76|53.18|70.27|63.03|38.97|45.35|
 |0.25|LOF|66.73|63.38|87.77|78.13|25.02|35.29|
 |0.25|DOC|70.31|65.74|86.08|75.86|57.75|57.34|
 |0.25|DeepUnk|70.68|65.57|87.18|77.32|40.03|45.64|
-|0.25|(K+1)-way|75.43|68.31|86.98|76.58|53.05|53.12|
-|0.25|ADB|79.94|72.08|88.21|78.14|86.7|79.79|
-|0.25|DA-ADB|**81.09**|**73.65**|**89.49**|**79.95**|**89.03**|**82.81**|
+|0.25|(K+1)-way|76.66|68.44|85.36|74.43|49.75|50.82|
+|0.25|MDF|77.17|46.85|76.56|50.34|74.1|53.95|
+|0.25|ARPL|76.8|64.01|84.51|73.44|66.76|62.62|
+|0.25|ADB|79.33|71.63|88.3|78.23|86.75|79.85|
+|0.25|DA-ADB|81.19|73.73|89.48|79.92|89.07|82.83|
 |||||||||
-|0.5|MSP|59.8|71.4|62.71|70.33|53.23|62.7|
-|0.5|SEG|54.66|62.86|60.54|62.51|43.04|55.1|
+|0.5|MSP|61.67|72.51|66.68|72.7|53.23|62.7|
+|0.5|SEG|55.11|63.32|60.67|62.55|43.04|55.1|
 |0.5|OpenMax|65.53|74.64|80.22|79.86|60.27|67.72|
 |0.5|LOF|71.13|76.26|85.22|83.86|44.56|56.57|
 |0.5|DOC|74.6|78.24|85.19|83.89|73.88|76.8|
 |0.5|DeepUnk|71.01|75.41|84.95|83.35|55.46|64.78|
-|0.5|(K+1)-way|74.66|78.13|83.71|82.85|63.54|69.26|
-|0.5|ADB|79.52|81.33|86.47|85.11|86.51|85.55|
-|0.5|DA-ADB|**81.64**|**82.6**|**87.96**|**85.64**|**87.79**|**86.92**|
+|0.5|(K+1)-way|74.65|77.83|82.19|81.56|62.57|68.81|
+|0.5|MDF|60.18|64.1|60.72|61.61|56.46|61.47|
+|0.5|ARPL|74.11|77.77|80.36|80.88|75.65|77.87|
+|0.5|ADB|79.61|81.34|86.54|85.16|86.49|85.54|
+|0.5|DA-ADB|81.51|82.53|87.93|85.64|87.78|86.91|
 |||||||||
-|0.75|MSP|75.9|83.49|72.86|81.61|73.2|78.7|
-|0.75|SEG|64.54|69.37|42.97|42.49|62.63|69.86|
+|0.75|MSP|77.08|84.33|76.19|83.48|73.2|78.7|
+|0.75|SEG|64.65|69.54|42.78|42.7|62.72|69.97|
 |0.75|OpenMax|78.32|84.95|75.36|71.17|75.78|80.9|
 |0.75|LOF|77.21|83.64|85.07|87.2|65.05|71.87|
 |0.75|DOC|78.94|83.79|85.93|87.87|80.55|84.37|
 |0.75|DeepUnk|74.73|81.12|84.61|86.53|71.56|77.63|
-|0.75|(K+1)-way|79.9|85.22|85.31|87.9|74.72|79.47|
-|0.75|ADB|**81.35**|**86.08**|86.98|**88.95**|82.84|86.07|
-|0.75|DA-ADB|81.18|85.68|**87.46**|88.47|**83.63**|**86.89**|
+|0.75|(K+1)-way|79.18|84.71|83.51|86.66|74.0|78.95|
+|0.75|MDF|64.59|74.76|63.98|72.02|62.98|71.12|
+|0.75|ARPL|79.6|85.16|81.29|86.0|79.64|83.85|
+|0.75|ADB|81.39|86.11|86.99|88.94|82.89|86.11|
+|0.75|DA-ADB|81.12|85.65|87.39|88.41|83.56|86.84|
 
 *KIR means "Known Intent Ratio".
 
@@ -93,35 +104,41 @@ The detailed results can be seen in [results.md](results/results.md).
 |  | | BANKING     |  | OOS      |  |  StackOverflow     |  |  
 |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
 | KIR | Methods | Open | Known | Open | Known | Open | Known | 
-|0.25|MSP|38.84|50.62|54.74|49.28|11.66|42.66|
-|0.25|SEG|52.97|51.98|60.59|47.23|4.36|40.63|
+|0.25|MSP|39.42|50.47|59.26|51.02|11.66|42.66|
+|0.25|SEG|51.58|51.48|59.22|46.67|4.19|40.44|
 |0.25|OpenMax|48.52|53.42|77.51|62.65|34.52|47.51|
 |0.25|LOF|72.64|62.89|91.96|77.77|7.14|40.92|
 |0.25|DOC|76.64|65.16|90.78|75.46|62.5|56.3|
 |0.25|DeepUnk|76.98|64.97|91.61|76.95|36.87|47.39|
-|0.25|(K+1)-way|81.52|67.61|91.44|76.19|56.31|52.48|
-|0.25|ADB|85.57|71.37|92.3|77.77|90.91|77.56|
-|0.25|DA-ADB|**86.49**|**72.97**|**93.2**|**79.6**|**92.61**|**80.84**|
+|0.25|(K+1)-way|82.66|67.7|90.27|74.02|52.23|50.54|
+|0.25|MDF|85.7|44.8|84.89|49.43|83.03|48.13|
+|0.25|ARPL|83.39|62.99|89.63|73.01|72.95|60.55|
+|0.25|ADB|85.05|70.92|92.36|77.85|90.96|77.62|
+|0.25|DA-ADB|86.57|73.05|93.2|79.57|92.65|80.87|
 |||||||||
-|0.5|MSP|42.13|72.17|57.49|70.5|26.94|66.28|
-|0.5|SEG|42.35|63.4|61.13|62.52|4.72|60.14|
+|0.5|MSP|46.29|73.2|63.71|72.82|26.94|66.28|
+|0.5|SEG|43.03|63.85|61.34|62.57|4.72|60.14|
 |0.5|OpenMax|55.03|75.16|82.15|79.83|46.11|69.88|
 |0.5|LOF|66.81|76.51|87.57|83.81|5.18|61.71|
 |0.5|DOC|72.66|78.38|87.45|83.84|71.18|77.37|
 |0.5|DeepUnk|67.8|75.61|87.48|83.3|35.8|67.67|
-|0.5|(K+1)-way|72.38|78.29|85.84|82.82|53.68|70.81|
-|0.5|ADB|79.32|81.38|88.54|85.06|87.72|85.33|
-|0.5|DA-ADB|**82.1**|**82.61**|**90.14**|**85.58**|**88.86**|**86.72**|
+|0.5|(K+1)-way|72.58|77.97|84.25|81.52|51.69|70.53|
+|0.5|MDF|57.72|64.27|62.31|61.6|50.19|62.6|
+|0.5|ARPL|71.79|77.93|81.81|80.87|73.97|78.26|
+|0.5|ADB|79.43|81.39|88.6|85.12|87.7|85.32|
+|0.5|DA-ADB|81.93|82.54|90.1|85.58|88.86|86.71|
 |||||||||
-|0.75|MSP|41.64|84.21|56.26|81.83|37.86|81.42|
-|0.75|SEG|37.58|69.92|41.6|42.5|6.38|74.09|
+|0.75|MSP|46.05|84.99|63.86|83.65|37.86|81.42|
+|0.75|SEG|37.22|70.1|40.74|42.72|6.0|74.24|
 |0.75|OpenMax|53.02|85.5|75.18|71.14|49.69|82.98|
 |0.75|LOF|54.19|84.15|82.81|87.24|5.22|76.31|
 |0.75|DOC|63.51|84.14|83.87|87.91|65.32|85.64|
 |0.75|DeepUnk|50.57|81.65|82.67|86.57|34.38|80.51|
-|0.75|(K+1)-way|62.13|85.62|82.39|87.95|47.57|81.6|
-|0.75|ADB|67.32|**86.4**|84.81|**88.99**|74.02|86.87|
-|0.75|DA-ADB|**69.51**|85.96|**86.09**|88.49|**74.66**|**87.71**|
+|0.75|(K+1)-way|59.89|85.14|79.59|86.72|45.22|81.2|
+|0.75|MDF|33.43|75.47|51.33|72.21|28.52|73.96|
+|0.75|ARPL|61.26|85.58|74.67|86.1|62.99|85.24|
+|0.75|ADB|67.34|86.44|84.85|88.97|74.1|86.91|
+|0.75|DA-ADB|69.37|85.93|86.0|88.43|74.55|87.66|
 
 “Open” and “Known” denote the macro f1-score over open class and known classes respectively.
 

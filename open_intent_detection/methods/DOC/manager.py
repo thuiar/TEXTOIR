@@ -19,10 +19,7 @@ class DOCManager:
 
         self.logger = logging.getLogger(logger_name)
         
-        self.model = model.model 
-        self.optimizer = model.optimizer
-        self.scheduler = model.scheduler
-        self.device = model.device
+        self.set_model_optimizer(args, data, model)
 
         self.data = data 
         self.train_dataloader = data.dataloader.train_labeled_loader
@@ -37,6 +34,14 @@ class DOCManager:
         else:
             restore_model(self.model, args.model_output_dir)
         
+    def set_model_optimizer(self, args, data, model):
+    
+        self.model = model.set_model(args, 'bert')  
+        self.optimizer, self.scheduler = model.set_optimizer(self.model, data.dataloader.num_train_examples, args.train_batch_size, \
+                args.num_train_epochs, args.lr, args.warmup_proportion)
+        self.device = model.device
+    
+    
     def train(self, args, data):     
         best_model = None
         wait = 0

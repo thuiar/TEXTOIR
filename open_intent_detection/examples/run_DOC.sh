@@ -20,8 +20,7 @@ do
                 --train \
                 --gpu_id '0' \
                 --save_results \
-                --results_file_name 'results_DOC.csv' \
-                --save_model
+                --results_file_name 'results_DOC.csv'
             done
         done
     done

@@ -10,11 +10,11 @@ do
             do 
                 python run.py \
                 --dataset $dataset \
-                --method 'MixUp' \
+                --method 'K+1-way' \
                 --known_cls_ratio $known_cls_ratio \
                 --labeled_ratio $labeled_ratio \
                 --seed $seed \
-                --backbone 'bert_mixup' \
+                --backbone 'bert_K+1-way' \
                 --config_file_name 'K+1-way' \
                 --loss_fct 'CrossEntropyLoss' \
                 --gpu_id '0' \
@@ -25,3 +25,4 @@ do
         done
     done
 done
+

@@ -18,12 +18,12 @@ do
                 --config_file_name 'DA-ADB' \
                 --loss_fct 'CrossEntropyLoss' \
                 --gpu_id '0' \
-                --pretrain \
                 --train \
+                --pretrain \
                 --results_file_name 'results_DA-ADB.csv' \
-                --save_results \
-                --save_model
+                --save_results
             done
         done
     done
 done
+

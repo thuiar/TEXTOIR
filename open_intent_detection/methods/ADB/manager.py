@@ -23,14 +23,6 @@ class ADBManager:
         self.centroids = pretrain_model.centroids
         self.pretrain_best_eval_score = pretrain_model.best_eval_score
 
-        if args.pretrain:
-        
-            from dataloaders.base import DataManager
-            data = DataManager(args, logger_name = None)
-
-            from backbones.base import ModelManager
-            model = ModelManager(args, data, logger_name = '') 
-        
         self.device = model.device
         
         self.train_dataloader = data.dataloader.train_labeled_loader
@@ -51,6 +43,14 @@ class ADBManager:
             self.centroids = np.load(os.path.join(args.method_output_dir, 'centroids.npy'))
             self.centroids = torch.from_numpy(self.centroids).to(self.device)
 
+    def set_model_optimizer(self, args, data, model):
+        
+        self.model = model.set_model(args, 'bert')  
+        self.optimizer, self.scheduler = model.set_optimizer(self.model, data.dataloader.num_train_examples, args.train_batch_size, \
+                args.num_train_epochs, args.lr, args.warmup_proportion)
+        self.device = model.device
+
+
     def train(self, args, data):  
         criterion_boundary = BoundaryLoss(num_labels = data.num_labels, feat_dim = args.feat_dim, device = self.device)
         
@@ -66,6 +66,7 @@ class ADBManager:
         
         for epoch in trange(int(args.num_train_epochs), desc="Epoch"):
             self.model.train()
+            # self.model.eval()
             tr_loss = 0
             nb_tr_examples, nb_tr_steps = 0, 0
             
@@ -83,7 +84,7 @@ class ADBManager:
                     
                     nb_tr_examples += features.shape[0]
                     nb_tr_steps += 1
-
+            print(self.delta)
             self.delta_points.append(self.delta)
 
             loss = tr_loss / nb_tr_steps
@@ -185,4 +186,11 @@ class ADBManager:
         test_results['y_true'] = y_true
         test_results['y_pred'] = y_pred
 
+        test_results['scale'] = args.scale
+
         return test_results
+
+    def load_pretrained_model(self, pretrained_model):
+
+        pretrained_dict = pretrained_model.state_dict()
+        self.model.load_state_dict(pretrained_dict, strict=False)

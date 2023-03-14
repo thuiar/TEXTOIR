@@ -10,23 +10,18 @@ from utils.functions import restore_model, save_model
 from utils.metrics import F_measure
 
 
-class MixUpManager:
+class K_1_wayManager:
     
     def __init__(self, args, data, model, logger_name = 'Detection'):
         
         self.logger = logging.getLogger(logger_name)
 
-        self.model = model.model 
-        self.optimizer = model.optimizer
-        self.scheduler = model.scheduler
-
-        self.device = model.device
+        self.set_model_optimizer(args, data, model)
 
         self.data = data 
         self.train_dataloader = data.dataloader.train_labeled_loader
         self.eval_dataloader = data.dataloader.eval_loader 
         self.test_dataloader = data.dataloader.test_loader
-        self.neg_dataloader = data.dataloader.neg_loader
 
         self.loss_fct = loss_map[args.loss_fct]
         
@@ -35,6 +30,12 @@ class MixUpManager:
         if not args.train:
             restore_model(self.model, args.model_output_dir)
 
+    def set_model_optimizer(self, args, data, model):
+    
+        self.model = model.set_model(args, 'bert')  
+        self.optimizer, self.scheduler = model.set_optimizer(self.model, data.dataloader.num_train_examples, args.train_batch_size, \
+                args.num_train_epochs, args.lr, args.warmup_proportion)
+        self.device = model.device
 
     def get_outputs(self, args, data, mode = 'eval', get_feats = False):
 
@@ -109,12 +110,9 @@ class MixUpManager:
             tr_loss = 0
             nb_tr_examples, nb_tr_steps = 0, 0
             
-            for step, (pst, ngt) in enumerate(zip(self.train_dataloader, self.neg_dataloader)):
-                input_ids = torch.cat([pst[0], ngt[0]], dim=0).to(self.device)
-                input_mask = torch.cat([pst[1], ngt[1]], dim=0).to(self.device)
-                segment_ids = torch.cat([pst[2], ngt[2]], dim=0).to(self.device)
-                label_ids = torch.cat([pst[3], ngt[3]], dim=0).to(self.device)
-
+            for step, batch in enumerate(tqdm(self.train_dataloader, desc="Iteration")):
+                batch = tuple(t.to(self.device) for t in batch)
+                input_ids, input_mask, segment_ids, label_ids = batch
                 with torch.set_grad_enabled(True):
                     loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode='train', loss_fct=self.loss_fct)
                     self.optimizer.zero_grad()

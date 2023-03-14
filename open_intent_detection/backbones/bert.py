@@ -2,9 +2,11 @@ import torch
 import math
 import torch.nn.functional as F
 from torch import nn
-from transformers import BertPreTrainedModel, BertModel
+from transformers import BertPreTrainedModel, BertModel, BertForMaskedLM, BertForSequenceClassification
 from torch.nn.parameter import Parameter
 from .utils import ConvexSampler
+from transformers import BertForMaskedLM
+
 
 activation_map = {'relu': nn.ReLU(), 'tanh': nn.Tanh()}
 
@@ -24,8 +26,6 @@ class BERT_DOC(BertPreTrainedModel):
         outputs = self.bert(
             input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask, output_hidden_states=True)
         encoded_layer_12 = outputs.hidden_states
-        pooled_output = outputs.pooler_output
-        pooled_output = encoded_layer_12[-1].mean(dim=1)
         
         pooled_output = self.dense(encoded_layer_12[-1].mean(dim=1))
         pooled_output = self.dropout(pooled_output)
@@ -62,8 +62,6 @@ class BERT(BertPreTrainedModel):
         outputs = self.bert(
             input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask, output_hidden_states=True)
         encoded_layer_12 = outputs.hidden_states
-        pooled_output = outputs.pooler_output
-        pooled_output = encoded_layer_12[-1].mean(dim=1)
         
         pooled_output = self.dense(encoded_layer_12[-1].mean(dim=1))
         pooled_output = self.activation(pooled_output)
@@ -113,9 +111,9 @@ class BERT_Norm(BertPreTrainedModel):
             else:
                 return pooled_output, logits
 
-class BERT_MixUp(BertPreTrainedModel):
+class BERT_K_1_way(BertPreTrainedModel):
     def __init__(self, config, args):
-        super(BERT_MixUp, self).__init__(config)
+        super(BERT_K_1_way, self).__init__(config)
         self.num_labels = args.num_labels
         self.bert = BertModel(config)
         self.dense = nn.Linear(config.hidden_size, config.hidden_size)
@@ -172,7 +170,6 @@ class BERT_SEG(BertPreTrainedModel):
         outputs = self.bert(
             input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask, output_hidden_states=True)
         encoded_layer_12 = outputs.hidden_states
-        pooled_output = outputs.pooler_output
         pooled_output = self.dense(encoded_layer_12[-1].mean(dim=1))
         pooled_output = self.activation(pooled_output)
         pooled_output = self.dropout(pooled_output)
@@ -264,7 +261,6 @@ class BERT_Disaware(BertPreTrainedModel):
         outputs = self.bert(
             input_ids, token_type_ids, attention_mask,  output_hidden_states=True)
         encoded_layer_12 = outputs.hidden_states
-        pooled_output = outputs.pooler_output
         pooled_output = self.dense(encoded_layer_12[-1].mean(dim=1))
         pooled_output = self.activation(pooled_output)
         pooled_output = self.dropout(pooled_output)
@@ -303,3 +299,78 @@ class BERT_Disaware(BertPreTrainedModel):
 
             elif mode == 'eval':
                 return pooled_output, logits
+
+class BERT_MDF_Pretrain(nn.Module):
+    
+    def __init__(self, args):
+
+        super(BERT_MDF_Pretrain, self).__init__()
+        self.num_labels = args.num_labels
+        self.bert = BertForMaskedLM.from_pretrained(args.pretrained_bert_model)
+        self.dropout = nn.Dropout(0.1) #0.1
+        self.classifier = nn.Linear(args.feat_dim, args.num_labels)  
+        
+    
+    def forward(self, X):
+
+        outputs = self.bert(**X,  output_hidden_states=True)
+        
+        CLSEmbedding = outputs.hidden_states[-1][:,0]
+        CLSEmbedding = self.dropout(CLSEmbedding)
+        logits = self.classifier(CLSEmbedding)
+        output_dir = {"logits": logits}
+        output_dir["hidden_states"] = outputs.hidden_states[-1][:, 0]
+        
+        return output_dir
+    
+    def mlmForward(self, X, Y = None):
+        outputs = self.bert(**X,  labels = Y)
+        return outputs.loss
+        
+    def loss_ce(self, logits, Y):
+        loss = nn.CrossEntropyLoss()
+        output = loss(logits, Y)
+        return output
+
+
+
+class BERT_MDF(BertPreTrainedModel):
+    def __init__(self, config, args):
+        super(BERT_MDF, self).__init__(config)
+        self.num_labels = args.num_labels
+        self.bert = BertModel(config)
+        self.dropout = nn.Dropout(0.1) #0.1
+        self.classifier = nn.Linear(args.feat_dim, 2)  
+        self.init_weights() 
+
+    def forward(
+        self,
+        input_ids=None,
+        attention_mask=None,
+        token_type_ids=None,
+        position_ids=None,
+        head_mask=None,
+        inputs_embeds=None,
+        labels=None,
+    ):
+
+        outputs = self.bert(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            token_type_ids=token_type_ids,
+            position_ids=position_ids,
+            head_mask=head_mask,
+            output_hidden_states=True
+        )
+        # Complains if input_embeds is kept
+
+        pooled_output = outputs[1]
+        
+        pooled_output = self.dropout(pooled_output)
+        logits = self.classifier(pooled_output)
+
+        outputs = (logits,) + outputs[
+            2:
+        ]  # add hidden states and attention if they are here
+
+        return outputs  # (loss), logits, (hidden_states), (attentions)

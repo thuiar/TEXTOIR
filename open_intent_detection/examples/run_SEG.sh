@@ -19,8 +19,8 @@ do
                 --save_results \
                 --config_file_name 'SEG' \
                 --loss_fct 'SEGLoss' \
-                --results_file_name 'results_SEG.csv' \
-                --backbone 'bert_seg'
+                --backbone 'bert_seg' \
+                --results_file_name 'results_SEG.csv'
             done
         done
     done

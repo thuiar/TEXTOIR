@@ -29,8 +29,6 @@ class DataManager:
         self.known_label_list = np.random.choice(np.array(self.all_label_list), self.n_known_cls, replace=False)
         self.known_label_list = list(self.known_label_list)
 
-        self.data_dir_neg = os.path.join(args.data_dir, args.dataset_neg)
-
         self.logger.info('The number of known intents is %s', self.n_known_cls)
         self.logger.info('Lists of known labels are: %s', str(self.known_label_list))
 

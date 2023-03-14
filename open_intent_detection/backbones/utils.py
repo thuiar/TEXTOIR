@@ -36,8 +36,8 @@ class ConvexSampler(nn.Module):
         if mode =='train':
             if label_ids.size(0)>2:
                 while len(convex_list) < num_convex:
-                    # cdt = np.random.choice(label_ids.size(0), 2, replace=False)
-                    cdt = np.random.choice(label_ids.size(0) - self.oos_num, 2, replace=False)
+                    cdt = np.random.choice(label_ids.size(0), 2, replace=False)
+                    # cdt = np.random.choice(label_ids.size(0) - self.oos_num, 2, replace=False)
                     if label_ids[cdt[0]] != label_ids[cdt[1]]:
                         s = np.random.uniform(0, 1, 1)
                         convex_list.append(s[0] * z[cdt[0]] + (1 - s[0]) * z[cdt[1]])

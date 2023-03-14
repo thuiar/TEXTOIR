@@ -3,8 +3,10 @@ from .MSP.manager import MSPManager
 from .DeepUnk.manager import DeepUnkManager
 from .DOC.manager import DOCManager
 from .OpenMax.manager import OpenMaxManager
-from .MixUp.manager import MixUpManager
+from .K_1_way.manager import K_1_wayManager
 from .SEG.manager import SEGManager
+from .MDF.manager import MDFManager
+from .ARPL.manager import ARPLManager
 
 method_map = {
                 'ADB': ADBManager, 
@@ -14,6 +16,8 @@ method_map = {
                 'LOF': DeepUnkManager, 
                 'DOC': DOCManager, 
                 'OpenMax': OpenMaxManager, 
-                'MixUp': MixUpManager,
-                'SEG': SEGManager
+                'K+1-way': K_1_wayManager,
+                'SEG': SEGManager,
+                'MDF': MDFManager,
+                'ARPL': ARPLManager
             }

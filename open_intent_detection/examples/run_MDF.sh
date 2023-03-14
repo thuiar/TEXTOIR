@@ -10,19 +10,18 @@ do
             do 
                 python run.py \
                 --dataset $dataset \
-                --method 'ADB' \
+                --method 'MDF' \
                 --known_cls_ratio $known_cls_ratio \
                 --labeled_ratio $labeled_ratio \
                 --seed $seed \
-                --backbone 'bert' \
-                --config_file_name 'ADB' \
+                --backbone 'bert_mdf' \
+                --config_file_name 'MDF' \
                 --loss_fct 'CrossEntropyLoss' \
                 --gpu_id '0' \
-                --train \
                 --pretrain \
-                --results_file_name 'results_ADB.csv' \
-                --save_results \
-                --save_model
+                --train \
+                --results_file_name 'results_MDF.csv' \
+                --save_results 
             done
         done
     done

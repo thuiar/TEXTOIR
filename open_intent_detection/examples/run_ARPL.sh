@@ -10,19 +10,18 @@ do
             do 
                 python run.py \
                 --dataset $dataset \
-                --method 'ADB' \
+                --method 'ARPL' \
                 --known_cls_ratio $known_cls_ratio \
                 --labeled_ratio $labeled_ratio \
                 --seed $seed \
                 --backbone 'bert' \
-                --config_file_name 'ADB' \
-                --loss_fct 'CrossEntropyLoss' \
-                --gpu_id '0' \
-                --train \
+                --config_file_name 'ARPL' \
                 --pretrain \
-                --results_file_name 'results_ADB.csv' \
-                --save_results \
-                --save_model
+                --train \
+                --loss_fct 'ARPLoss' \
+                --gpu_id '0' \
+                --results_file_name 'results_ARPL.csv' \
+                --save_results
             done
         done
     done
