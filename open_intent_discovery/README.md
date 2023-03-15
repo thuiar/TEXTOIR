@@ -13,9 +13,10 @@ We collect benchmark intent datasets, and reproduce related methods to our best.
 ## Basic Information
 
 ### Benchmark Datasets
-
-* [BANKING](https://arxiv.org/pdf/2003.04807.pdf)
-* [CLINC](https://arxiv.org/pdf/1909.02027.pdf) (without 1200 out-of-score samples)
+| Dataset Name | Source |
+| :---: | :---: |
+| [BANKING](../data/banking) | [Paper](https://aclanthology.org/2020.nlp4convai-1.5/) [Dataset](https://github.com/PolyAI-LDN/task-specific-datasets) |
+| [CLINC (without 1200 out-of-score samples)](../data/clinc) | [Paper](https://arxiv.org/pdf/1909.02027.pdf) [Dataset](https://github.com/clinc/oos-eval) |
 
 ### Integrated Models
 
