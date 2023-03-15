@@ -53,8 +53,8 @@ Open Intent Recognition:
 | :---: | :---: | :---: |
 | [DCN](./open_intent_discovery/examples/run_DCN.sh) | [Paper](http://proceedings.mlr.press/v70/yang17b/yang17b.pdf) [Code](https://github.com/xuyxu/Deep-Clustering-Network) | ICML 2017 |
 | [DEC](./open_intent_discovery/examples/run_DEC.sh) | [Paper](http://proceedings.mlr.press/v48/xieb16.pdf) [Code](https://github.com/piiswrong/dec) | ICML 2016 |
-| [SAE-KM](./open_intent_discovery/examples/run_SAE.sh) | [Paper](https://www.jmlr.org/papers/volume11/vincent10a/vincent10a.pdf)  | Machine Learning Research 2010|
-| [AG](./open_intent_discovery/examples/run_AG.sh) | [Paper](https://www.sciencedirect.com/science/article/abs/pii/0031320378900183) | Pattern Recognition 1978 |
+| [SAE-KM](./open_intent_discovery/examples/run_SAE.sh) | [Paper](https://www.jmlr.org/papers/volume11/vincent10a/vincent10a.pdf)  | JMLR 2010|
+| [AG](./open_intent_discovery/examples/run_AG.sh) | [Paper](https://www.sciencedirect.com/science/article/abs/pii/0031320378900183) | PR 1978 |
 | [KM](./open_intent_discovery/examples/run_KM.sh) | [Paper](https://www.cs.cmu.edu/~bhiksha/courses/mlsp.fall2010/class14/macqueen.pdf) | 1967 |
 
 (* denotes the CV model replaced with the BERT backbone)
