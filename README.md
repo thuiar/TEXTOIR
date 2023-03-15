@@ -24,7 +24,7 @@ Open Intent Recognition:
 
 | Model Name | Source | Published |
 | :---: | :---: | :---: |
-| [DA-ADB](./open_intent_detection/examples/run_DA-ADB.sh) | [Paper](https://arxiv.org/pdf/2203.05823.pdf) | arXiv 2022 |
+| [DA-ADB](./open_intent_detection/examples/run_DA-ADB.sh) | [Paper](https://arxiv.org/pdf/2203.05823.pdf) [Code](https://github.com/thuiar/TEXTOIR) | arXiv 2022 |
 | [ARPL](./open_intent_detection/examples/run_ARPL.sh) | [Paper](https://ieeexplore.ieee.org/document/9521769) [Code](https://github.com/iCGY96/ARPL) | IEEE TPAMI 2022 |
 | [MDF](./open_intent_detection/examples/run_MDF.sh) | [Paper](https://aclanthology.org/2021.acl-long.85.pdf) [Code](https://github.com/rivercold/BERT-unsupervised-OOD) | ACL 2021 |
 | [(K+1)-way](./open_intent_detection/examples/run_K+1-way.sh) | [Paper](https://aclanthology.org/2021.acl-long.273) [Code](https://github.com/fanolabs/out-of-scope-intent-detection) | ACL 2021 |
@@ -38,17 +38,25 @@ Open Intent Recognition:
 ### Open Intent Discovery
 
 * Semi-supervised Clustering Methods
-    - [Discovering New Intents with Deep Aligned Clustering](https://ojs.aaai.org/index.php/AAAI/article/view/17689) (DeepAligned, AAAI 2021)
-    - [Discovering New Intents via Constrained Deep Adaptive Clustering with Cluster Refinement](https://ojs.aaai.org/index.php/AAAI/article/view/6353) (CDAC+, AAAI 2020)
-    - [Learning to Discover Novel Visual Categories via Deep Transfer Clustering](https://www.robots.ox.ac.uk/~vgg/research/DTC/files/iccv2019_DTC.pdf) (DTC*, ICCV 2019)
-    - [Multi-class Classification Without Multi-class Labels](https://openreview.net/pdf?id=SJzR2iRcK7) (MCL*, ICLR 2019)
-    - [Learning to cluster in order to transfer across domains and tasks](https://openreview.net/pdf?id=ByRWCqvT-) (KCL*, ICLR 2018)
+
+| Model Name | Source | Published |
+| :---: | :---: | :---: |
+| [DeepAligned](./open_intent_discovery/examples/run_DeepAligned.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/17689) [Code](https://github.com/thuiar/DeepAligned-Clustering) | AAAI 2021 |
+| [CDAC+](./open_intent_discovery/examples/run_CDACPlus.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/6353) [Code](https://github.com/thuiar/CDAC-plus) | AAAI 2020 |
+| [DTC*](./open_intent_discovery/examples/run_DTC.sh) | [Paper](https://www.robots.ox.ac.uk/~vgg/research/DTC/files/iccv2019_DTC.pdf) [Code](https://github.com/k-han/DTC) | ICCV 2019 |
+| [MCL*](./open_intent_discovery/examples/run_MCL.sh) | [Paper](https://openreview.net/pdf?id=SJzR2iRcK7) [Code](https://github.com/GT-RIPL/L2C) | ICLR 2019 |
+| [KCL*](./open_intent_discovery/examples/run_KCL.sh) | [Paper](https://openreview.net/pdf?id=ByRWCqvT-) [Code](https://github.com/GT-RIPL/L2C) | ICLR 2018 |
+
 * Unsupervised Clustering Methods
-    - [Towards K-means-friendly Spaces: Simultaneous Deep Learning and Clustering](http://proceedings.mlr.press/v70/yang17b/yang17b.pdf) (DCN, ICML 2017)
-    - [Unsupervised Deep Embedding for Clustering Analysis](http://proceedings.mlr.press/v48/xieb16.pdf) (DEC, ICML 2016)
-    - Stacked auto-encoder K-Means (SAE-KM)
-    - Agglomerative clustering (AG)
-    - K-Means (KM)
+
+| Model Name | Source | Published |
+| :---: | :---: | :---: |
+| [DCN](./open_intent_discovery/examples/run_DCN.sh) | [Paper](http://proceedings.mlr.press/v70/yang17b/yang17b.pdf) [Code](https://github.com/xuyxu/Deep-Clustering-Network) | ICML 2017 |
+| [DEC](./open_intent_discovery/examples/run_DEC.sh) | [Paper](http://proceedings.mlr.press/v48/xieb16.pdf) [Code](https://github.com/piiswrong/dec) | ICML 2016 |
+| [SAE-KM](./open_intent_discovery/examples/run_SAE.sh) | -  | - |
+| [AG](./open_intent_discovery/examples/run_AG.sh) | - | - |
+| [KM](./open_intent_discovery/examples/run_KM.sh) | - | - |
+
 
 (* denotes the CV model replaced with the BERT backbone)
 
