@@ -17,7 +17,7 @@ Open Intent Recognition:
 | [BANKING](./data/banking) | [Paper](https://aclanthology.org/2020.nlp4convai-1.5/) |
 | [OOS](./data/oos) | [Paper](https://aclanthology.org/D19-1131/) |
 | [StackOverflow](./data/stackoverflow) | [Paper](https://aclanthology.org/W15-1509.pdf) |
-| [CLINC (without 1200 out-of-score samples)](./data/clinc) | [Paper](https://arxiv.org/pdf/1909.02027.pdf) |
+| [CLINC150](./data/clinc) | [Paper](https://arxiv.org/pdf/1909.02027.pdf) |
 
 
 ## Integrated Models
@@ -110,12 +110,12 @@ If this work is helpful, or you want to use the codes and results in this repo, 
 ```
 ```
 @article{DA-ADB, 
- author = {Zhang, Hanlei and Xu, Hua and Zhao, Shaojie and Zhou, Qianrui}, 
- journal = {IEEE/ACM Transactions on Audio, Speech, and Language Processing},  
- title = {Learning Discriminative Representations and Decision Boundaries for Open Intent Detection},  
- year = {2023}, 
- doi = {10.1109/TASLP.2023.3265203} 
- } 
+    title = {Learning Discriminative Representations and Decision Boundaries for Open Intent Detection},  
+    author = {Zhang, Hanlei and Xu, Hua and Zhao, Shaojie and Zhou, Qianrui}, 
+    journal = {IEEE/ACM Transactions on Audio, Speech, and Language Processing},  
+    year = {2023}, 
+    doi = {10.1109/TASLP.2023.3265203} 
+} 
 ```
 
 ## Contributors

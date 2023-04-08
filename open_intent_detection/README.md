@@ -224,10 +224,10 @@ If this work is helpful, or you want to use the codes and results in this repo, 
 ```
 ```
 @article{DA-ADB, 
- author = {Zhang, Hanlei and Xu, Hua and Zhao, Shaojie and Zhou, Qianrui}, 
- journal = {IEEE/ACM Transactions on Audio, Speech, and Language Processing},  
- title = {Learning Discriminative Representations and Decision Boundaries for Open Intent Detection},  
- year = {2023}, 
- doi = {10.1109/TASLP.2023.3265203} 
+    title = {Learning Discriminative Representations and Decision Boundaries for Open Intent Detection},  
+    author = {Zhang, Hanlei and Xu, Hua and Zhao, Shaojie and Zhou, Qianrui}, 
+    journal = {IEEE/ACM Transactions on Audio, Speech, and Language Processing},  
+    year = {2023}, 
+    doi = {10.1109/TASLP.2023.3265203} 
  } 
 ```
