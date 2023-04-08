@@ -23,7 +23,7 @@ We collect benchmark intent datasets, and reproduce related methods to our best.
 
 | Model Name | Source | Published |
 | :---: | :---: | :---: |
-| [DA-ADB](./examples/run_DA-ADB.sh) | [Paper](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10097558) [Code](https://github.com/thuiar/TEXTOIR) | IEEE/ACM TASLP 2023 |
+| [DA-ADB](./examples/run_DA-ADB.sh) | [Paper](https://ieeexplore.ieee.org/document/10097558) [Code](https://github.com/thuiar/TEXTOIR) | IEEE/ACM TASLP 2023 |
 | [ARPL*](./examples/run_ARPL.sh) | [Paper](https://ieeexplore.ieee.org/document/9521769) [Code](https://github.com/iCGY96/ARPL) | IEEE TPAMI 2022 |
 | [MDF](./examples/run_MDF.sh) | [Paper](https://aclanthology.org/2021.acl-long.85.pdf) [Code](https://github.com/rivercold/BERT-unsupervised-OOD) | ACL 2021 |
 | [(K+1)-way](./examples/run_K+1-way.sh) | [Paper](https://aclanthology.org/2021.acl-long.273) [Code](https://github.com/fanolabs/out-of-scope-intent-detection) | ACL 2021 |
@@ -209,7 +209,7 @@ Add a script in the [examples](./examples) directory, and configure the parsing 
 If this work is helpful, or you want to use the codes and results in this repo, please cite the following papers:
 
 * [TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition](https://aclanthology.org/2021.acl-demo.20/)
-* [Learning Discriminative Representations and Decision Boundaries for Open Intent Detection](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10097558)
+* [Learning Discriminative Representations and Decision Boundaries for Open Intent Detection](https://ieeexplore.ieee.org/document/10097558)
 
 ```
 @inproceedings{zhang-etal-2021-textoir,
