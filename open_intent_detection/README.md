@@ -13,18 +13,18 @@ We collect benchmark intent datasets, and reproduce related methods to our best.
 ## Basic Information
 
 ### Benchmark Datasets
-| Dataset Name | Source |
+| Datasets | Source |
 | :---: | :---: |
-| [BANKING](../data/banking) | [Paper](https://aclanthology.org/2020.nlp4convai-1.5/) [Dataset](https://github.com/PolyAI-LDN/task-specific-datasets) |
-| [OOS](../data/oos) | [Paper](https://aclanthology.org/D19-1131/) [Dataset](https://github.com/clinc/oos-eval) |
-| [StackOverflow](../data/stackoverflow) | [Paper](https://aclanthology.org/W15-1509.pdf) [Dataset](https://github.com/jacoxu/StackOverflow) |
+| [BANKING](../data/banking) | [Paper](https://aclanthology.org/2020.nlp4convai-1.5/) |
+| [OOS](../data/oos) | [Paper](https://aclanthology.org/D19-1131/) |
+| [StackOverflow](../data/stackoverflow) | [Paper](https://aclanthology.org/W15-1509.pdf) |
 
 ### Integrated Models
 
 | Model Name | Source | Published |
 | :---: | :---: | :---: |
-| [DA-ADB](./examples/run_DA-ADB.sh) | [Paper](https://arxiv.org/pdf/2203.05823.pdf) [Code](https://github.com/thuiar/TEXTOIR) | arXiv 2022 |
-| [ARPL](./examples/run_ARPL.sh) | [Paper](https://ieeexplore.ieee.org/document/9521769) [Code](https://github.com/iCGY96/ARPL) | IEEE TPAMI 2022 |
+| [DA-ADB](./examples/run_DA-ADB.sh) | [Paper](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10097558) [Code](https://github.com/thuiar/TEXTOIR) | IEEE/ACM TASLP 2023 |
+| [ARPL*](./examples/run_ARPL.sh) | [Paper](https://ieeexplore.ieee.org/document/9521769) [Code](https://github.com/iCGY96/ARPL) | IEEE TPAMI 2022 |
 | [MDF](./examples/run_MDF.sh) | [Paper](https://aclanthology.org/2021.acl-long.85.pdf) [Code](https://github.com/rivercold/BERT-unsupervised-OOD) | ACL 2021 |
 | [(K+1)-way](./examples/run_K+1-way.sh) | [Paper](https://aclanthology.org/2021.acl-long.273) [Code](https://github.com/fanolabs/out-of-scope-intent-detection) | ACL 2021 |
 | [ADB](./examples/run_ADB.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/17690) [Code](https://github.com/thuiar/Adaptive-Decision-Boundary) | AAAI 2021 |
@@ -32,8 +32,7 @@ We collect benchmark intent datasets, and reproduce related methods to our best.
 | [DeepUnk](./examples/run_DeepUnk.sh) | [Paper](https://aclanthology.org/P19-1548.pdf) [Code](https://github.com/thuiar/DeepUnkID) | ACL 2019 |
 | [DOC](./examples/run_DOC.sh) | [Paper](https://aclanthology.org/D17-1314.pdf) [Code](https://github.com/leishu02/EMNLP2017_DOC) | EMNLP 2017 |
 | [MSP](./examples/run_MSP.sh) | [Paper](https://arxiv.org/pdf/1610.02136.pdf) [Code](https://github.com/hendrycks/error-detection) | ICLR 2017 |
-| [OpenMax](./examples/run_OpenMax.sh) | [Paper](https://openaccess.thecvf.com/content_cvpr_2016/papers/Bendale_Towards_Open_Set_CVPR_2016_paper.pdf) [Code](https://github.com/abhijitbendale/OSDN) | CVPR 2016 |
-
+| [OpenMax*](./examples/run_OpenMax.sh) | [Paper](https://openaccess.thecvf.com/content_cvpr_2016/papers/Bendale_Towards_Open_Set_CVPR_2016_paper.pdf) [Code](https://github.com/abhijitbendale/OSDN) | CVPR 2016 |
 
 We welcome any issues and requests for model implementation and bug fix. 
 
@@ -210,7 +209,7 @@ Add a script in the [examples](./examples) directory, and configure the parsing 
 If this work is helpful, or you want to use the codes and results in this repo, please cite the following papers:
 
 * [TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition](https://aclanthology.org/2021.acl-demo.20/)
-* [Learning Discriminative Representations and Decision Boundaries for Open Intent Detection](https://arxiv.org/pdf/2203.05823.pdf)
+* [Learning Discriminative Representations and Decision Boundaries for Open Intent Detection](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=10097558)
 
 ```
 @inproceedings{zhang-etal-2021-textoir,
@@ -224,10 +223,11 @@ If this work is helpful, or you want to use the codes and results in this repo, 
 }
 ```
 ```
-@article{zhang2022towards,
-  title={Learning Discriminative Representations and Decision Boundaries for Open Intent Detection},
-  author={Zhang, Hanlei and Xu, Hua and Zhao, Shaojie and Zhou, Qianrui},
-  journal={arXiv preprint arXiv:2203.05823},
-  year={2022}
-}
+@article{DA-ADB, 
+ author = {Zhang, Hanlei and Xu, Hua and Zhao, Shaojie and Zhou, Qianrui}, 
+ journal = {IEEE/ACM Transactions on Audio, Speech, and Language Processing},  
+ title = {Learning Discriminative Representations and Decision Boundaries for Open Intent Detection},  
+ year = {2023}, 
+ doi = {10.1109/TASLP.2023.3265203} 
+ } 
 ```
