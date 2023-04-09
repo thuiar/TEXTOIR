@@ -15,10 +15,8 @@ Open Intent Recognition:
 | Datasets | Source |
 | :---: | :---: |
 | [BANKING](./data/banking) | [Paper](https://aclanthology.org/2020.nlp4convai-1.5/) |
-| [OOS](./data/oos) | [Paper](https://aclanthology.org/D19-1131/) |
+| [OOS](./data/oos) / [CLINC150](./data/clinc) | [Paper](https://aclanthology.org/D19-1131/) |
 | [StackOverflow](./data/stackoverflow) | [Paper](https://aclanthology.org/W15-1509.pdf) |
-| [CLINC150](./data/clinc) | [Paper](https://arxiv.org/pdf/1909.02027.pdf) |
-
 
 ## Integrated Models
 ### Open Intent Detection
