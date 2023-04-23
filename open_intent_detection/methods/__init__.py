@@ -7,6 +7,7 @@ from .K_1_way.manager import K_1_wayManager
 from .SEG.manager import SEGManager
 from .MDF.manager import MDFManager
 from .ARPL.manager import ARPLManager
+from .KCL.manager import KCLManager
 
 method_map = {
                 'ADB': ADBManager, 
@@ -19,5 +20,6 @@ method_map = {
                 'K+1-way': K_1_wayManager,
                 'SEG': SEGManager,
                 'MDF': MDFManager,
-                'ARPL': ARPLManager
+                'ARPL': ARPLManager,
+                'KCL': KCLManager
             }

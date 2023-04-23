@@ -3,7 +3,7 @@ from torch import nn
 import numpy as np
 
 def l2_norm(input,axis=1):
-    norm = torch.norm(input,2,axis,True)
+    norm = torch.norm(input, 2, axis, True)
     output = torch.div(input, norm)
     return output
 
@@ -13,6 +13,17 @@ class L2_normalization(nn.Module):
 
 def freeze_bert_parameters(model):
     for name, param in model.bert.named_parameters():  
+        param.requires_grad = False
+        if "encoder.layer.11" in name or "pooler" in name:
+            param.requires_grad = True
+    return model
+
+def freeze_bert_parameters_KCL(model):
+    for name, param in model.encoder_q.named_parameters():  
+        param.requires_grad = False
+        if "encoder.layer.11" in name or "pooler" in name:
+            param.requires_grad = True
+    for name, param in model.encoder_k.named_parameters():  
         param.requires_grad = False
         if "encoder.layer.11" in name or "pooler" in name:
             param.requires_grad = True

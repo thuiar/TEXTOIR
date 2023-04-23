@@ -1,7 +1,7 @@
 import torch
 import logging
 from transformers import AdamW, get_linear_schedule_with_warmup
-from .utils import freeze_bert_parameters
+from .utils import freeze_bert_parameters, freeze_bert_parameters_KCL
 from .__init__ import backbones_map
 
 class ModelManager:
@@ -9,7 +9,7 @@ class ModelManager:
     def __init__(self, args, data, logger_name = 'Detection'):
         
         self.logger = logging.getLogger(logger_name)
-        
+
     def set_optimizer(self, model, num_train_examples, train_batch_size, num_train_epochs, lr, warmup_proportion):
         num_train_optimization_steps = int(num_train_examples / train_batch_size) * num_train_epochs
 
@@ -41,7 +41,10 @@ class ModelManager:
                 
             if args.freeze_backbone_parameters:
                 self.logger.info('Freeze all parameters but the last layer for efficiency')
-                model = freeze_bert_parameters(model)
+                if args.method == 'KCL':
+                    model = freeze_bert_parameters_KCL(model)
+                else: 
+                    model = freeze_bert_parameters(model)
         model.to(self.device)
         
         return model

@@ -15,7 +15,8 @@ backbone_loader_map = {
                             'bert_K+1-way': BERT_Loader,
                             'bert_seg': BERT_Loader,
                             'bert_disaware': BERT_Loader,
-                            'bert_mdf': BERT_Loader
+                            'bert_mdf': BERT_Loader,
+                            'bert_kcl': BERT_Loader
                         }
 
 benchmark_labels = {

@@ -23,31 +23,32 @@ Open Intent Recognition:
 
 | Model Name | Source | Published |
 | :---: | :---: | :---: |
-| [DA-ADB](./open_intent_detection/examples/run_DA-ADB.sh) | [Paper](https://ieeexplore.ieee.org/document/10097558) [Code](https://github.com/thuiar/TEXTOIR) | IEEE/ACM TASLP 2023 |
-| [ARPL*](./open_intent_detection/examples/run_ARPL.sh) | [Paper](https://ieeexplore.ieee.org/document/9521769) [Code](https://github.com/iCGY96/ARPL) | IEEE TPAMI 2022 |
-| [MDF](./open_intent_detection/examples/run_MDF.sh) | [Paper](https://aclanthology.org/2021.acl-long.85.pdf) [Code](https://github.com/rivercold/BERT-unsupervised-OOD) | ACL 2021 |
-| [(K+1)-way](./open_intent_detection/examples/run_K+1-way.sh) | [Paper](https://aclanthology.org/2021.acl-long.273) [Code](https://github.com/fanolabs/out-of-scope-intent-detection) | ACL 2021 |
-| [ADB](./open_intent_detection/examples/run_ADB.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/17690) [Code](https://github.com/thuiar/Adaptive-Decision-Boundary) | AAAI 2021 |
-| [SEG](./open_intent_detection/examples/run_SEG.sh) | [Paper](https://aclanthology.org/2020.acl-main.99) [Code](https://github.com/fanolabs/0shot-classification) | ACL 2020 |
-| [DeepUnk](./open_intent_detection/examples/run_DeepUnk.sh) | [Paper](https://aclanthology.org/P19-1548.pdf) [Code](https://github.com/thuiar/DeepUnkID) | ACL 2019 |
-| [DOC](./open_intent_detection/examples/run_DOC.sh) | [Paper](https://aclanthology.org/D17-1314.pdf) [Code](https://github.com/leishu02/EMNLP2017_DOC) | EMNLP 2017 |
-| [MSP](./open_intent_detection/examples/run_MSP.sh) | [Paper](https://arxiv.org/pdf/1610.02136.pdf) [Code](https://github.com/hendrycks/error-detection) | ICLR 2017 |
 | [OpenMax*](./open_intent_detection/examples/run_OpenMax.sh) | [Paper](https://openaccess.thecvf.com/content_cvpr_2016/papers/Bendale_Towards_Open_Set_CVPR_2016_paper.pdf) [Code](https://github.com/abhijitbendale/OSDN) | CVPR 2016 |
+| [MSP](./open_intent_detection/examples/run_MSP.sh) | [Paper](https://arxiv.org/pdf/1610.02136.pdf) [Code](https://github.com/hendrycks/error-detection) | ICLR 2017 |
+| [DOC](./open_intent_detection/examples/run_DOC.sh) | [Paper](https://aclanthology.org/D17-1314.pdf) [Code](https://github.com/leishu02/EMNLP2017_DOC) | EMNLP 2017 |
+| [DeepUnk](./open_intent_detection/examples/run_DeepUnk.sh) | [Paper](https://aclanthology.org/P19-1548.pdf) [Code](https://github.com/thuiar/DeepUnkID) | ACL 2019 |
+| [SEG](./open_intent_detection/examples/run_SEG.sh) | [Paper](https://aclanthology.org/2020.acl-main.99) [Code](https://github.com/fanolabs/0shot-classification) | ACL 2020 |
+| [ADB](./open_intent_detection/examples/run_ADB.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/17690) [Code](https://github.com/thuiar/Adaptive-Decision-Boundary) | AAAI 2021 |
+| [(K+1)-way](./open_intent_detection/examples/run_K+1-way.sh) | [Paper](https://aclanthology.org/2021.acl-long.273) [Code](https://github.com/fanolabs/out-of-scope-intent-detection) | ACL 2021 |
+| [MDF](./open_intent_detection/examples/run_MDF.sh) | [Paper](https://aclanthology.org/2021.acl-long.85.pdf) [Code](https://github.com/rivercold/BERT-unsupervised-OOD) | ACL 2021 |
+| [ARPL*](./open_intent_detection/examples/run_ARPL.sh) | [Paper](https://ieeexplore.ieee.org/document/9521769) [Code](https://github.com/iCGY96/ARPL) | IEEE TPAMI 2022 |
+| [KCL](./open_intent_detection/examples/run_KCL.sh) | [Paper](https://aclanthology.org/2022.acl-long.352/) [Code](https://github.com/zyh190507/KnnContrastiveForOOD) | ACL 2022 |
+| [DA-ADB](./open_intent_detection/examples/run_DA-ADB.sh) | [Paper](https://ieeexplore.ieee.org/document/10097558) [Code](https://github.com/thuiar/TEXTOIR) | IEEE/ACM TASLP 2023 |
 
 ### Open Intent Discovery
 
 | Setting | Model Name | Source | Published |
 | :---: | :---: | :---: | :---: |
-| Semi-supervised | [DeepAligned](./open_intent_discovery/examples/run_DeepAligned.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/17689) [Code](https://github.com/thuiar/DeepAligned-Clustering) | AAAI 2021 |
-| Semi-supervised | [CDAC+](./open_intent_discovery/examples/run_CDACPlus.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/6353) [Code](https://github.com/thuiar/CDAC-plus) | AAAI 2020 |
-| Semi-supervised | [DTC*](./open_intent_discovery/examples/run_DTC.sh) | [Paper](https://www.robots.ox.ac.uk/~vgg/research/DTC/files/iccv2019_DTC.pdf) [Code](https://github.com/k-han/DTC) | ICCV 2019 |
-| Semi-supervised | [MCL*](./open_intent_discovery/examples/run_MCL.sh) | [Paper](https://openreview.net/pdf?id=SJzR2iRcK7) [Code](https://github.com/GT-RIPL/L2C) | ICLR 2019 |
-| Semi-supervised | [KCL*](./open_intent_discovery/examples/run_KCL.sh) | [Paper](https://openreview.net/pdf?id=ByRWCqvT-) [Code](https://github.com/GT-RIPL/L2C) | ICLR 2018 |
-| Unsupervised | [DCN](./open_intent_discovery/examples/run_DCN.sh) | [Paper](http://proceedings.mlr.press/v70/yang17b/yang17b.pdf) [Code](https://github.com/xuyxu/Deep-Clustering-Network) | ICML 2017 |
-| Unsupervised | [DEC](./open_intent_discovery/examples/run_DEC.sh) | [Paper](http://proceedings.mlr.press/v48/xieb16.pdf) [Code](https://github.com/piiswrong/dec) | ICML 2016 |
-| Unsupervised | [SAE-KM](./open_intent_discovery/examples/run_SAE.sh) | [Paper](https://www.jmlr.org/papers/volume11/vincent10a/vincent10a.pdf)  | JMLR 2010|
-| Unsupervised | [AG](./open_intent_discovery/examples/run_AG.sh) | [Paper](https://www.sciencedirect.com/science/article/abs/pii/0031320378900183) | PR 1978 |
 | Unsupervised | [KM](./open_intent_discovery/examples/run_KM.sh) | [Paper](https://www.cs.cmu.edu/~bhiksha/courses/mlsp.fall2010/class14/macqueen.pdf) | BSMSP 1967 |
+| Unsupervised | [AG](./open_intent_discovery/examples/run_AG.sh) | [Paper](https://www.sciencedirect.com/science/article/abs/pii/0031320378900183) | PR 1978 |
+| Unsupervised | [SAE-KM](./open_intent_discovery/examples/run_SAE.sh) | [Paper](https://www.jmlr.org/papers/volume11/vincent10a/vincent10a.pdf)  | JMLR 2010|
+| Unsupervised | [DEC](./open_intent_discovery/examples/run_DEC.sh) | [Paper](http://proceedings.mlr.press/v48/xieb16.pdf) [Code](https://github.com/piiswrong/dec) | ICML 2016 |
+| Unsupervised | [DCN](./open_intent_discovery/examples/run_DCN.sh) | [Paper](http://proceedings.mlr.press/v70/yang17b/yang17b.pdf) [Code](https://github.com/xuyxu/Deep-Clustering-Network) | ICML 2017 |
+| Semi-supervised | [KCL*](./open_intent_discovery/examples/run_KCL.sh) | [Paper](https://openreview.net/pdf?id=ByRWCqvT-) [Code](https://github.com/GT-RIPL/L2C) | ICLR 2018 |
+| Semi-supervised | [MCL*](./open_intent_discovery/examples/run_MCL.sh) | [Paper](https://openreview.net/pdf?id=SJzR2iRcK7) [Code](https://github.com/GT-RIPL/L2C) | ICLR 2019 |
+| Semi-supervised | [DTC*](./open_intent_discovery/examples/run_DTC.sh) | [Paper](https://www.robots.ox.ac.uk/~vgg/research/DTC/files/iccv2019_DTC.pdf) [Code](https://github.com/k-han/DTC) | ICCV 2019 |
+| Semi-supervised | [CDAC+](./open_intent_discovery/examples/run_CDACPlus.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/6353) [Code](https://github.com/thuiar/CDAC-plus) | AAAI 2020 |
+| Semi-supervised | [DeepAligned](./open_intent_discovery/examples/run_DeepAligned.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/17689) [Code](https://github.com/thuiar/DeepAligned-Clustering) | AAAI 2021 |
 
 (* denotes the CV model replaced with the BERT backbone)
 

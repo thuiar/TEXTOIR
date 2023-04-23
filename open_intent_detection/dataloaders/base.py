@@ -42,6 +42,7 @@ class DataManager:
         args.unseen_label_id = self.unseen_label_id = self.num_labels
         self.label_list = self.known_label_list + [self.unseen_label]
 
+        self.anum_labels = args.anum_labels = len(self.label_list)
         self.dataloader = self.get_loader(args, self.get_attrs())
 
     def get_labels(self, dataset):

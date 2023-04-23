@@ -23,16 +23,17 @@ We collect benchmark intent datasets, and reproduce related methods to our best.
 
 | Model Name | Source | Published |
 | :---: | :---: | :---: |
-| [DA-ADB](./examples/run_DA-ADB.sh) | [Paper](https://ieeexplore.ieee.org/document/10097558) [Code](https://github.com/thuiar/TEXTOIR) | IEEE/ACM TASLP 2023 |
-| [ARPL*](./examples/run_ARPL.sh) | [Paper](https://ieeexplore.ieee.org/document/9521769) [Code](https://github.com/iCGY96/ARPL) | IEEE TPAMI 2022 |
-| [MDF](./examples/run_MDF.sh) | [Paper](https://aclanthology.org/2021.acl-long.85.pdf) [Code](https://github.com/rivercold/BERT-unsupervised-OOD) | ACL 2021 |
-| [(K+1)-way](./examples/run_K+1-way.sh) | [Paper](https://aclanthology.org/2021.acl-long.273) [Code](https://github.com/fanolabs/out-of-scope-intent-detection) | ACL 2021 |
-| [ADB](./examples/run_ADB.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/17690) [Code](https://github.com/thuiar/Adaptive-Decision-Boundary) | AAAI 2021 |
-| [SEG](./examples/run_SEG.sh) | [Paper](https://aclanthology.org/2020.acl-main.99) [Code](https://github.com/fanolabs/0shot-classification) | ACL 2020 |
-| [DeepUnk](./examples/run_DeepUnk.sh) | [Paper](https://aclanthology.org/P19-1548.pdf) [Code](https://github.com/thuiar/DeepUnkID) | ACL 2019 |
-| [DOC](./examples/run_DOC.sh) | [Paper](https://aclanthology.org/D17-1314.pdf) [Code](https://github.com/leishu02/EMNLP2017_DOC) | EMNLP 2017 |
-| [MSP](./examples/run_MSP.sh) | [Paper](https://arxiv.org/pdf/1610.02136.pdf) [Code](https://github.com/hendrycks/error-detection) | ICLR 2017 |
 | [OpenMax*](./examples/run_OpenMax.sh) | [Paper](https://openaccess.thecvf.com/content_cvpr_2016/papers/Bendale_Towards_Open_Set_CVPR_2016_paper.pdf) [Code](https://github.com/abhijitbendale/OSDN) | CVPR 2016 |
+| [MSP](./examples/run_MSP.sh) | [Paper](https://arxiv.org/pdf/1610.02136.pdf) [Code](https://github.com/hendrycks/error-detection) | ICLR 2017 |
+| [DOC](./examples/run_DOC.sh) | [Paper](https://aclanthology.org/D17-1314.pdf) [Code](https://github.com/leishu02/EMNLP2017_DOC) | EMNLP 2017 |
+| [DeepUnk](./examples/run_DeepUnk.sh) | [Paper](https://aclanthology.org/P19-1548.pdf) [Code](https://github.com/thuiar/DeepUnkID) | ACL 2019 |
+| [SEG](./examples/run_SEG.sh) | [Paper](https://aclanthology.org/2020.acl-main.99) [Code](https://github.com/fanolabs/0shot-classification) | ACL 2020 |
+| [ADB](./examples/run_ADB.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/17690) [Code](https://github.com/thuiar/Adaptive-Decision-Boundary) | AAAI 2021 |
+| [(K+1)-way](./examples/run_K+1-way.sh) | [Paper](https://aclanthology.org/2021.acl-long.273) [Code](https://github.com/fanolabs/out-of-scope-intent-detection) | ACL 2021 |
+| [MDF](./examples/run_MDF.sh) | [Paper](https://aclanthology.org/2021.acl-long.85.pdf) [Code](https://github.com/rivercold/BERT-unsupervised-OOD) | ACL 2021 |
+| [ARPL*](./examples/run_ARPL.sh) | [Paper](https://ieeexplore.ieee.org/document/9521769) [Code](https://github.com/iCGY96/ARPL) | IEEE TPAMI 2022 |
+| [KCL](./examples/run_KCL.sh) | [Paper](https://aclanthology.org/2022.acl-long.352/) [Code](https://github.com/zyh190507/KnnContrastiveForOOD) | ACL 2022 |
+| [DA-ADB](./examples/run_DA-ADB.sh) | [Paper](https://ieeexplore.ieee.org/document/10097558) [Code](https://github.com/thuiar/TEXTOIR) | IEEE/ACM TASLP 2023 |
 
 We welcome any issues and requests for model implementation and bug fix. 
 
@@ -69,8 +70,9 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.25|(K+1)-way|76.66|68.44|85.36|74.43|49.75|50.82|
 |0.25|MDF|77.17|46.85|76.56|50.34|74.1|53.95|
 |0.25|ARPL|76.8|64.01|84.51|73.44|66.76|62.62|
+|0.25|KCL|73.01|66.23|89.87|79.23|28.65|37.37|
 |0.25|ADB|79.33|71.63|88.3|78.23|86.75|79.85|
-|0.25|DA-ADB|81.19|73.73|89.48|79.92|89.07|82.83|
+|0.25|DA-ADB|**81.19**|**73.73**|**89.48**|**79.92**|**89.07**|**82.83**|
 |||||||||
 |0.5|MSP|61.67|72.51|66.68|72.7|53.23|62.7|
 |0.5|SEG|55.11|63.32|60.67|62.55|43.04|55.1|
@@ -81,8 +83,9 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.5|(K+1)-way|74.65|77.83|82.19|81.56|62.57|68.81|
 |0.5|MDF|60.18|64.1|60.72|61.61|56.46|61.47|
 |0.5|ARPL|74.11|77.77|80.36|80.88|75.65|77.87|
+|0.5|KCL|70.41|74.96|85.32|83.31|45.38|56.69|
 |0.5|ADB|79.61|81.34|86.54|85.16|86.49|85.54|
-|0.5|DA-ADB|81.51|82.53|87.93|85.64|87.78|86.91|
+|0.5|DA-ADB|**81.51**|**82.53**|**87.93**|**85.64**|**87.78**|**86.91**|
 |||||||||
 |0.75|MSP|77.08|84.33|76.19|83.48|73.2|78.7|
 |0.75|SEG|64.65|69.54|42.78|42.7|62.72|69.97|
@@ -93,8 +96,9 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.75|(K+1)-way|79.18|84.71|83.51|86.66|74.0|78.95|
 |0.75|MDF|64.59|74.76|63.98|72.02|62.98|71.12|
 |0.75|ARPL|79.6|85.16|81.29|86.0|79.64|83.85|
-|0.75|ADB|81.39|86.11|86.99|88.94|82.89|86.11|
-|0.75|DA-ADB|81.12|85.65|87.39|88.41|83.56|86.84|
+|0.75|KCL|74.78|81.25|84.12|86.1|65.01|71.85|
+|0.75|ADB|**81.39**|**86.11**|86.99|**88.94**|82.89|86.11|
+|0.75|DA-ADB|81.12|85.65|**87.39**|88.41|**83.56**|**86.84**|
 
 *KIR means "Known Intent Ratio".
 
@@ -113,8 +117,9 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.25|(K+1)-way|82.66|67.7|90.27|74.02|52.23|50.54|
 |0.25|MDF|85.7|44.8|84.89|49.43|83.03|48.13|
 |0.25|ARPL|83.39|62.99|89.63|73.01|72.95|60.55|
+|0.25|KCL|79.34|65.54|93.56|78.85|15.26|41.79|
 |0.25|ADB|85.05|70.92|92.36|77.85|90.96|77.62|
-|0.25|DA-ADB|86.57|73.05|93.2|79.57|92.65|80.87|
+|0.25|DA-ADB|**86.57**|**73.05**|**93.2**|**79.57**|**92.65**|**80.87**|
 |||||||||
 |0.5|MSP|46.29|73.2|63.71|72.82|26.94|66.28|
 |0.5|SEG|43.03|63.85|61.34|62.57|4.72|60.14|
@@ -125,8 +130,9 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.5|(K+1)-way|72.58|77.97|84.25|81.52|51.69|70.53|
 |0.5|MDF|57.72|64.27|62.31|61.6|50.19|62.6|
 |0.5|ARPL|71.79|77.93|81.81|80.87|73.97|78.26|
+|0.5|KCL|67.21|75.16|87.85|83.25|8.5|61.5|
 |0.5|ADB|79.43|81.39|88.6|85.12|87.7|85.32|
-|0.5|DA-ADB|81.93|82.54|90.1|85.58|88.86|86.71|
+|0.5|DA-ADB|**81.93**|**82.54**|**90.1**|**85.58**|**88.86**|**86.71**|
 |||||||||
 |0.75|MSP|46.05|84.99|63.86|83.65|37.86|81.42|
 |0.75|SEG|37.22|70.1|40.74|42.72|6.0|74.24|
@@ -137,8 +143,9 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.75|(K+1)-way|59.89|85.14|79.59|86.72|45.22|81.2|
 |0.75|MDF|33.43|75.47|51.33|72.21|28.52|73.96|
 |0.75|ARPL|61.26|85.58|74.67|86.1|62.99|85.24|
-|0.75|ADB|67.34|86.44|84.85|88.97|74.1|86.91|
-|0.75|DA-ADB|69.37|85.93|86.0|88.43|74.55|87.66|
+|0.75|KCL|51.42|81.76|82.05|86.14|7.19|76.16|
+|0.75|ADB|67.34|**86.44**|**84.85**|**88.97**|74.1|86.91|
+|0.75|DA-ADB|**69.37**|85.93|86.0|88.43|**74.55**|**87.66**|
 
 “Open” and “Known” denote the macro f1-score over open class and known classes respectively.
 
