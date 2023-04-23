@@ -20,7 +20,7 @@ do
                 --gpu_id '0' \
                 --save_results \
                 --train \
-                --results_file_name 'KCL_freeze_no_earlystop.csv' 
+                --results_file_name 'results_KCL.csv' 
             done
         done
     done
