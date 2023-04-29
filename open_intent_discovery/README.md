@@ -126,9 +126,18 @@ Add a script in the [examples](./examples) directory, and configure the parsing 
 ## Citation
 If you are interested in this work, and want to use the codes in this repo, please star/fork this repo, and cite the following works:
 
+* [USNID: A Framework for Unsupervised and Semi-supervised New Intent Discovery](https://arxiv.org/abs/2304.07699)
 * [TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition](https://aclanthology.org/2021.acl-demo.20/)
 * [Discovering New Intents with Deep Aligned Clustering](https://arxiv.org/pdf/2012.08987.pdf)
 
+```
+@article{USNID, 
+    title={USNID: A Framework for Unsupervised and Semi-supervised New Intent Discovery},  
+    author={Zhang, Hanlei and Xu, Hua and Wang, Xin and Long, Fei and Gao, Kai},
+    journal={arXiv preprint arXiv:2304.07699},  
+    year={2023}, 
+ } 
+```
 ```
 @inproceedings{zhang-etal-2021-textoir,
     title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",

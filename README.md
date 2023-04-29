@@ -32,7 +32,7 @@ Open Intent Recognition:
 | [(K+1)-way](./open_intent_detection/examples/run_K+1-way.sh) | [Paper](https://aclanthology.org/2021.acl-long.273) [Code](https://github.com/fanolabs/out-of-scope-intent-detection) | ACL 2021 |
 | [MDF](./open_intent_detection/examples/run_MDF.sh) | [Paper](https://aclanthology.org/2021.acl-long.85.pdf) [Code](https://github.com/rivercold/BERT-unsupervised-OOD) | ACL 2021 |
 | [ARPL*](./open_intent_detection/examples/run_ARPL.sh) | [Paper](https://ieeexplore.ieee.org/document/9521769) [Code](https://github.com/iCGY96/ARPL) | IEEE TPAMI 2022 |
-| [KCL](./open_intent_detection/examples/run_KCL.sh) | [Paper](https://aclanthology.org/2022.acl-long.352/) [Code](https://github.com/zyh190507/KnnContrastiveForOOD) | ACL 2022 |
+| [KNNCL](./open_intent_detection/examples/run_KNNCL.sh) | [Paper](https://aclanthology.org/2022.acl-long.352/) [Code](https://github.com/zyh190507/KnnContrastiveForOOD) | ACL 2022 |
 | [DA-ADB](./open_intent_detection/examples/run_DA-ADB.sh) | [Paper](https://ieeexplore.ieee.org/document/10097558) [Code](https://github.com/thuiar/TEXTOIR) | IEEE/ACM TASLP 2023 |
 
 ### Open Intent Discovery

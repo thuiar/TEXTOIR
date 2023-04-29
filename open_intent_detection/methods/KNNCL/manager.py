@@ -8,9 +8,9 @@ from sklearn.metrics import confusion_matrix, accuracy_score, f1_score
 from sklearn.neighbors import LocalOutlierFactor
 from utils.functions import restore_model, save_model
 from utils.metrics import F_measure
-from .KCL_utils import create_negative_dataset, generate_positive_sample, _prepare_inputs
+from .KNNCL_utils import create_negative_dataset, generate_positive_sample, _prepare_inputs
 
-class KCLManager:
+class KNNCLManager:
     def __init__(self, args, data, model, logger_name = 'Detection'):
 
         self.logger = logging.getLogger(logger_name)

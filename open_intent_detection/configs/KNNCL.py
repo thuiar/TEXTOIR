@@ -26,21 +26,12 @@ class Param():
             'n_neighbors': 20,
             'contamination': 0.05,
 
-            "temperature": 0.5 ,
-            "negative_num":96,
+            "temperature": 0.5,
+            "contrastive_rate_in_training": 0.1,
+            "top_k": 25,
             "positive_num":3,
-            "end_k" : 1,
-            "m" : 0.999,
-            "contrastive_rate_in_training" : 0.1,
-            "warmup_steps" : 0,
-            "clip" : 0.25,
-            "weight_decay" : 0.0001,
-            "anum_labels" : None,
-            "adam_beta1" :0.9,
-            "adam_beta2" : 0.98,
-
-            "top_k" : 25,
-            "queue_size": 7500 
+            "clip": 0.25,
+            "queue_size": 7500,
 
         }
 

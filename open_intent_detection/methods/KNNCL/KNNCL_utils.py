@@ -21,7 +21,7 @@ def create_negative_dataset(train_dataloader):
             batch_dict = {"labels": label_id, "input_ids": input_id, "token_type_ids": segment_id,
                                 "attention_mask": input_mask}
             list.append(batch_dict)
-                   
+            
     negative_dataset = {}
 
     for line in list:

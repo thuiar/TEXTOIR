@@ -10,17 +10,17 @@ do
             do 
                 python run.py \
                 --dataset $dataset \
-                --method 'KCL' \
+                --method 'KNNCL' \
                 --known_cls_ratio $known_cls_ratio \
                 --labeled_ratio $labeled_ratio \
                 --seed $seed \
-                --backbone 'bert_kcl' \
-                --config_file_name 'KCL' \
-                --loss_fct 'KCLLoss' \
+                --backbone 'bert_knncl' \
+                --config_file_name 'KNNCL' \
+                --loss_fct 'KNNCLoss' \
                 --gpu_id '0' \
                 --save_results \
                 --train \
-                --results_file_name 'results_KCL.csv' 
+                --results_file_name 'results_KNNCL.csv' 
             done
         done
     done

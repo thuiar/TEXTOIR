@@ -410,10 +410,10 @@ class BertContrastiveHead(nn.Module):
         return x
 
 
-class BERT_KCL(nn.Module):
+class BERT_KNNCL(nn.Module):
 
     def __init__(self, args):
-        super(BERT_KCL, self).__init__()
+        super(BERT_KNNCL, self).__init__()
 
         self.number_labels = args.anum_labels
 
