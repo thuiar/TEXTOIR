@@ -103,7 +103,7 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.75|DA-ADB|81.12|85.65|**87.39**|88.41|**83.56**|**86.84**|
 |0.75|KNNCL**|77.50|82.30|85.07|85.11|83.15|86.73|
 
-*$~$KIR means "Known Intent Ratio".    
+\* KIR means "Known Intent Ratio".    
 
 ** KNNCL utilizes all 12 transformer layers for fine-tuning, whereas the others only utilize the last transformer layer.
 
