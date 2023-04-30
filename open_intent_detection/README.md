@@ -73,7 +73,7 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.25|KNNCL|73.01|66.23|**89.87**|79.23|28.65|37.37|
 |0.25|ADB|79.33|71.63|88.3|78.23|86.75|79.85|
 |0.25|DA-ADB|**81.19**|**73.73**|89.48|**79.92**|**89.07**|**82.83**|
-|0.25|KNNCL_no_freeze|86.14|77.01|93.07|82.45|85.04|79.06|
+|0.25|KNNCL{**}|86.14|77.01|93.07|82.45|85.04|79.06|
 |||||||||
 |0.5|MSP|61.67|72.51|66.68|72.7|53.23|62.7|
 |0.5|SEG|55.11|63.32|60.67|62.55|43.04|55.1|
@@ -87,7 +87,7 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.5|KNNCL|70.41|74.96|85.32|83.31|45.38|56.69|
 |0.5|ADB|79.61|81.34|86.54|85.16|86.49|85.54|
 |0.5|DA-ADB|**81.51**|**82.53**|**87.93**|**85.64**|**87.78**|**86.91**|
-|0.5|KNNCL_no_freeze|82.76|81.31|88.66|83.99|86.69|86.15|
+|0.5|KNNCL{**}|82.76|81.31|88.66|83.99|86.69|86.15|
 |||||||||
 |0.75|MSP|77.08|84.33|76.19|83.48|73.2|78.7|
 |0.75|SEG|64.65|69.54|42.78|42.7|62.72|69.97|
@@ -101,9 +101,10 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.75|KNNCL|74.78|81.25|84.12|86.1|65.01|71.85|
 |0.75|ADB|**81.39**|**86.11**|86.99|**88.94**|82.89|86.11|
 |0.75|DA-ADB|81.12|85.65|**87.39**|88.41|**83.56**|**86.84**|
-|0.75|KNNCL_no_freeze|77.50|82.30|85.07|85.11|83.15|86.73|
-*KIR means "Known Intent Ratio".
+|0.75|KNNCL{**}|77.50|82.30|85.07|85.11|83.15|86.73|
 
+{*} KIR means "Known Intent Ratio".
+{**} KNNCL utilizes all 12 transformer layers for fine-tuning, whereas the others only utilize the last transformer layer.
 
 #### Fine-grained Performance
 
@@ -122,7 +123,7 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.25|KNNCL|79.34|65.54|93.56|78.85|15.26|41.79|
 |0.25|ADB|85.05|70.92|92.36|77.85|90.96|77.62|
 |0.25|DA-ADB|**86.57**|**73.05**|**93.2**|**79.57**|**92.65**|**80.87**|
-|0.25|KNNCL_no_freeze|90.55|76.30|95.73|82.10|89.59|76.96|
+|0.25|KNNCL{**}|90.55|76.30|95.73|82.10|89.59|76.96|
 |||||||||
 |0.5|MSP|46.29|73.2|63.71|72.82|26.94|66.28|
 |0.5|SEG|43.03|63.85|61.34|62.57|4.72|60.14|
@@ -136,7 +137,7 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.5|KNNCL|67.21|75.16|87.85|83.25|8.5|61.5|
 |0.5|ADB|79.43|81.39|88.6|85.12|87.7|85.32|
 |0.5|DA-ADB|**81.93**|**82.54**|**90.1**|**85.58**|**88.86**|**86.71**|
-|0.5|KNNCL_no_freeze|84.28|81.23|91.17|83.89|87.59|86.01|
+|0.5|KNNCL{**}|84.28|81.23|91.17|83.89|87.59|86.01|
 |||||||||
 |0.75|MSP|46.05|84.99|63.86|83.65|37.86|81.42|
 |0.75|SEG|37.22|70.1|40.74|42.72|6.0|74.24|
@@ -150,7 +151,8 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.75|KNNCL|51.42|81.76|82.05|86.14|7.19|76.16|
 |0.75|ADB|67.34|**86.44**|**84.85**|**88.97**|74.1|86.91|
 |0.75|DA-ADB|**69.37**|85.93|86.0|88.43|**74.55**|**87.66**|
-|0.75|KNNCL_no_freeze|67.01|82.56|84.31|85.11|72.81|87.66|
+|0.75|KNNCL{**}|67.01|82.56|84.31|85.11|72.81|87.66|
+
 “Open” and “Known” denote the macro f1-score over open class and known classes respectively.
 
 
@@ -215,7 +217,7 @@ method_map = {
 4. Run Examples
 Add a script in the [examples](./examples) directory, and configure the parsing parameters in the [run.py](./run.py). You can also run the programs serially by setting the combination of different parameters. A running example is shown in [run_MSP.sh](./examples/run_MSP.sh).
 
-## Citation
+## Citations
 
 If this work is helpful, or you want to use the codes and results in this repo, please cite the following papers:
 
@@ -238,7 +240,9 @@ If this work is helpful, or you want to use the codes and results in this repo, 
     title = {Learning Discriminative Representations and Decision Boundaries for Open Intent Detection},  
     author = {Zhang, Hanlei and Xu, Hua and Zhao, Shaojie and Zhou, Qianrui}, 
     journal = {IEEE/ACM Transactions on Audio, Speech, and Language Processing},  
+    volume = {31},
+    pages = {1611-1623},
     year = {2023}, 
     doi = {10.1109/TASLP.2023.3265203} 
- } 
+} 
 ```

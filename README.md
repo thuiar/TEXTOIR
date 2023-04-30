@@ -95,6 +95,7 @@ If this work is helpful, or you want to use the codes and results in this repo, 
 
 * [TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition](https://aclanthology.org/2021.acl-demo.20/)
 * [Learning Discriminative Representations and Decision Boundaries for Open Intent Detection](https://ieeexplore.ieee.org/document/10097558)
+* [USNID: A Framework for Unsupervised and Semi-supervised New Intent Discovery](https://arxiv.org/abs/2304.07699)
 
 ```
 @inproceedings{zhang-etal-2021-textoir,
@@ -112,10 +113,21 @@ If this work is helpful, or you want to use the codes and results in this repo, 
     title = {Learning Discriminative Representations and Decision Boundaries for Open Intent Detection},  
     author = {Zhang, Hanlei and Xu, Hua and Zhao, Shaojie and Zhou, Qianrui}, 
     journal = {IEEE/ACM Transactions on Audio, Speech, and Language Processing},  
+    volume = {31},
+    pages = {1611-1623},
     year = {2023}, 
     doi = {10.1109/TASLP.2023.3265203} 
 } 
 ```
+```
+@article{USNID, 
+    title={USNID: A Framework for Unsupervised and Semi-supervised New Intent Discovery},  
+    author={Zhang, Hanlei and Xu, Hua and Wang, Xin and Long, Fei and Gao, Kai},
+    journal={arXiv preprint arXiv:2304.07699},  
+    year={2023}, 
+ } 
+```
+
 
 ## Contributors
 

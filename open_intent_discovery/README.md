@@ -123,21 +123,12 @@ method_map = {
 4. Run Examples
 Add a script in the [examples](./examples) directory, and configure the parsing parameters in the [run.py](./run.py). You can also run the programs serially by setting the combination of different parameters. A running example is shown in [run_DeepAligned.sh](./examples/run_DeepAligned.sh).
 
-## Citation
+## Citations
 If you are interested in this work, and want to use the codes in this repo, please star/fork this repo, and cite the following works:
 
 * [USNID: A Framework for Unsupervised and Semi-supervised New Intent Discovery](https://arxiv.org/abs/2304.07699)
 * [TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition](https://aclanthology.org/2021.acl-demo.20/)
-* [Discovering New Intents with Deep Aligned Clustering](https://arxiv.org/pdf/2012.08987.pdf)
 
-```
-@article{USNID, 
-    title={USNID: A Framework for Unsupervised and Semi-supervised New Intent Discovery},  
-    author={Zhang, Hanlei and Xu, Hua and Wang, Xin and Long, Fei and Gao, Kai},
-    journal={arXiv preprint arXiv:2304.07699},  
-    year={2023}, 
- } 
-```
 ```
 @inproceedings{zhang-etal-2021-textoir,
     title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
@@ -150,17 +141,10 @@ If you are interested in this work, and want to use the codes in this repo, plea
 }
 ```
 ```
-@article{Zhang_Xu_Lin_Lyu_2021, 
-    title={Discovering New Intents with Deep Aligned Clustering}, 
-    volume={35}, 
-    number={16}, 
-    journal={Proceedings of the AAAI Conference on Artificial Intelligence}, 
-    author={Zhang, Hanlei and Xu, Hua and Lin, Ting-En and Lyu, Rui}, 
-    year={2021}, 
-    month={May}, 
-    pages={14365-14373}
-}
+@article{USNID, 
+    title={USNID: A Framework for Unsupervised and Semi-supervised New Intent Discovery},  
+    author={Zhang, Hanlei and Xu, Hua and Wang, Xin and Long, Fei and Gao, Kai},
+    journal={arXiv preprint arXiv:2304.07699},  
+    year={2023}, 
+ } 
 ```
-
-
-
