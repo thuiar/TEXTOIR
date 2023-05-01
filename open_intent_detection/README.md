@@ -58,9 +58,8 @@ Notice that if you want to train the model, save the model, or save the testing 
 The detailed results can be seen in [results.md](results/results.md).
 #### Overall Performance
 
-\* KIR means "Known Intent Ratio".   
-\* "Open" and "Known" denote the macro f1-score over open class and known classes respectively.    
-\* KNNCL (All) utilizes all 12 transformer layers for fine-tuning. KNNCL (last) utilizes only the last transformer layer for fine-tuning as the other baselines.
+* KIR means "Known Intent Ratio". "Open" and "Known" denote the macro f1-score over open class and known classes respectively.    
+* KNNCL (All) utilizes all 12 transformer layers for fine-tuning. KNNCL (last) utilizes only the last transformer layer for fine-tuning as the other baselines.
 
 | | | BANKING     |  | OOS      |  |  StackOverflow     |  |  
 |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
@@ -103,8 +102,8 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.75|MDF|64.59|74.76|63.98|72.02|62.98|71.12|
 |0.75|ARPL|79.6|85.16|81.29|86.0|79.64|83.85|
 |0.75|KNNCL (Last)|74.78|81.25|84.12|86.1|65.01|71.85|
-|0.75|KNNCL (All)|77.50|82.30|85.07|85.11|83.15|86.73|
 |0.75|ADB|**81.39**|**86.11**|86.99|**88.94**|82.89|86.11|
+|0.75|KNNCL (All)|77.50|82.30|85.07|85.11|83.15|86.73|
 |0.75|DA-ADB|81.12|85.65|**87.39**|88.41|**83.56**|**86.84**|
 
 #### Fine-grained Performance
@@ -122,8 +121,8 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.25|MDF|85.7|44.8|84.89|49.43|83.03|48.13|
 |0.25|ARPL|83.39|62.99|89.63|73.01|72.95|60.55|
 |0.25|KNNCL (Last)|79.34|65.54|93.56|78.85|15.26|41.79|
-|0.25|KNNCL (All)|**90.55**|**76.30**|**95.73**|**82.10**|89.59|76.96|
 |0.25|ADB|85.05|70.92|92.36|77.85|90.96|77.62|
+|0.25|KNNCL (All)|**90.55**|**76.30**|**95.73**|**82.10**|89.59|76.96|
 |0.25|DA-ADB|86.57|73.05|93.2|79.57|**92.65**|**80.87**|
 |||||||||
 |0.5|MSP|46.29|73.2|63.71|72.82|26.94|66.28|
@@ -136,8 +135,8 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.5|MDF|57.72|64.27|62.31|61.6|50.19|62.6|
 |0.5|ARPL|71.79|77.93|81.81|80.87|73.97|78.26|
 |0.5|KNNCL (Last)|67.21|75.16|87.85|83.25|8.5|61.5|
-|0.5|KNNCL (All)|**84.28**|81.23|**91.17**|83.89|87.59|86.01|
 |0.5|ADB|79.43|81.39|88.6|85.12|87.7|85.32|
+|0.5|KNNCL (All)|**84.28**|81.23|**91.17**|83.89|87.59|86.01|
 |0.5|DA-ADB|81.93|**82.54**|90.1|**85.58**|**88.86**|**86.71**|
 |||||||||
 |0.75|MSP|46.05|84.99|63.86|83.65|37.86|81.42|
@@ -150,8 +149,8 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.75|MDF|33.43|75.47|51.33|72.21|28.52|73.96|
 |0.75|ARPL|61.26|85.58|74.67|86.1|62.99|85.24|
 |0.75|KNNCL (Last)|51.42|81.76|82.05|86.14|7.19|76.16|
-|0.75|KNNCL (All)|67.01|82.56|84.31|85.11|72.81|**87.66**|
 |0.75|ADB|67.34|**86.44**|**84.85**|**88.97**|74.1|86.91|
+|0.75|KNNCL (All)|67.01|82.56|84.31|85.11|72.81|**87.66**|
 |0.75|DA-ADB|**69.37**|85.93|86.0|88.43|**74.55**|**87.66**|
 
 ## Tutorials
