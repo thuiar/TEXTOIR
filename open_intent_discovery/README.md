@@ -59,7 +59,7 @@ Notice that if you want to train the model, save the model, or save the testing 
 Create a new directory to store your dataset in the [data](../data) directory. You should provide the train.tsv, dev.tsv, and test.tsv, with the same formats as in the provided [datasets](../data/banking).
 
 2. Dataloader Setting  
-Calculate the maximum sentence length (token unit) and count the labels of the dataset. Add them in the [file](./configs/__init__.py) as follows:  
+Calculate the maximum sentence length (token unit) and count the labels of the dataset. Add them in the [file](./dataloaders/init.py) as follows:  
 ```
 max_seq_lengths = {
     'new_dataset': max_length
