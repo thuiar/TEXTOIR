@@ -3,13 +3,12 @@ import os
 from utils.metrics import clustering_score
 from sklearn.metrics import confusion_matrix
 
-
 class SAEManager:
     
     def __init__(self, args, data, model, logger_name = 'Discovery'):
         
         self.logger = logging.getLogger(logger_name)
-        self.sae = model.sae
+        self.sae = model.set_model(args, data, 'sae')
         self.tfidf_train, self.tfidf_test = data.dataloader.tfidf_train, data.dataloader.tfidf_test
 
         self.num_labels = data.num_labels
@@ -25,7 +24,9 @@ class SAEManager:
         self.logger.info('SAE (emb) training finished...') 
         
         if args.save_model:
+
             save_path = os.path.join(args.model_output_dir, args.model_name)
+            self.logger.info('Save models at %s', str(save_path))
             self.sae.save_weights(save_path)
 
     

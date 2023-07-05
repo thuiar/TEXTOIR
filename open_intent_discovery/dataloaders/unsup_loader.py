@@ -2,23 +2,30 @@ import pandas as pd
 import os 
 import numpy as np
 from keras.preprocessing.text import Tokenizer
-from nltk.tokenize import word_tokenize
 from keras.preprocessing.sequence import pad_sequences
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
+import nltk
+from nltk.tokenize import word_tokenize
 
 class UNSUP_Loader:
 
     def __init__(self, args, base_attrs):
         
+        if not os.path.exists(nltk.downloader.Downloader()._download_dir):
+            nltk.download('punkt') 
+
         self.all_data, self.train_data, self.test_data = self.get_examples(base_attrs)
         self.all_data['words'] = self.all_data['text'].apply(word_tokenize)
+
         le = LabelEncoder()
         self.all_data['y_true'] = le.fit_transform(self.all_data['label'])
         self.all_data['text'] = self.all_data['words'].apply(lambda l: " ".join(l))
+
         self.train_data, self.test_data = self.all_data.iloc[self.train_data.index], self.all_data.iloc[self.test_data.index]
         self.test_true_labels = self.all_data.y_true.values[self.test_data.index]
-        
+        self.train_true_labels = self.all_data.y_true.values[self.train_data.index]
+
         if args.backbone == 'glove':
             self.embedding_matrix, self.index_word, self.train_data, self.test_data = \
                 get_glove_data(args, self.all_data, self.train_data, self.test_data)

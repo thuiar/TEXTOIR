@@ -41,16 +41,16 @@ class ParamManager:
             os.makedirs(task_output_dir)
 
         if args.setting == 'semi_supervised':
-            concat_names = [args.method, args.dataset, args.known_cls_ratio, args.labeled_ratio, args.backbone, args.seed]    
+            concat_names = [args.method, args.dataset, args.known_cls_ratio, args.labeled_ratio, args.cluster_num_factor, args.backbone, args.seed]    
         elif args.setting == 'unsupervised':
-            concat_names = [args.method, args.dataset, args.backbone, args.seed]  
-
+            concat_names = [args.method, args.dataset, args.cluster_num_factor, args.backbone, args.seed] 
+             
         method_output_name = "_".join([str(x) for x in concat_names])
-
+        
         method_output_dir = os.path.join(task_output_dir, method_output_name)
         if not os.path.exists(method_output_dir):
             os.makedirs(method_output_dir)
-
+            
         model_output_dir = os.path.join(method_output_dir, args.model_dir)
         if not os.path.exists(model_output_dir):
             os.makedirs(model_output_dir)
@@ -58,7 +58,7 @@ class ParamManager:
         output_path_param = {
             'task_output_dir': task_output_dir,
             'method_output_dir': method_output_dir,
-            'model_output_dir': model_output_dir,
+            'model_output_dir': model_output_dir
         }
 
         return output_path_param

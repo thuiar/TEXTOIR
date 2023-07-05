@@ -1,39 +1,38 @@
 import torch
 import torch.nn.functional as F
 import numpy as np
-import os
 import copy
 import logging
-from torch import nn
 from sklearn.metrics import confusion_matrix
 from sklearn.cluster import KMeans
 from tqdm import trange, tqdm
-
+from utils.functions import set_seed
 from utils.metrics import clustering_score
 from utils.functions import restore_model, save_model
 
 def target_distribution(q):
-    weight = q ** 2 / q.sum(0)
-    return (weight.T / weight.sum(1)).T
-
+        weight = q ** 2 / q.sum(0)
+        return (weight.T / weight.sum(1)).T
 class CDACPlusManager:
     
     def __init__(self, args, data, model, logger_name = 'Discovery'):
 
         self.logger = logging.getLogger(logger_name)
-        self.model = model.model
-        self.optimizer1 = model.optimizer
-        self.optimizer2 = model.set_optimizer(self.model, data.dataloader.num_train_examples, args.train_batch_size, \
+        set_seed(args.seed)
+        loader = data.dataloader
+        self.train_dataloader, self.eval_dataloader, self.test_dataloader = \
+            loader.train_outputs['loader'], loader.eval_outputs['loader'], loader.test_outputs['loader']
+        self.train_labeled_dataloader = loader.train_labeled_outputs['loader']
+        self.train_unlabeled_dataloader = loader.train_unlabeled_outputs['loader'] 
+
+        self.model = model.set_model(args, data, 'bert')
+        self.optimizer1 , self.scheduler1 = model.set_optimizer(self.model, data.dataloader.num_train_examples, args.train_batch_size, \
+            args.num_train_epochs, args.lr, args.warmup_proportion)
+        self.optimizer2 , self.scheduler2 = model.set_optimizer(self.model, data.dataloader.num_train_examples, args.train_batch_size, \
             args.num_refine_epochs, args.lr, args.warmup_proportion)
 
         self.device = model.device 
         
-        self.train_labeled_dataloader = data.dataloader.train_labeled_loader
-        self.train_unlabeled_dataloader = data.dataloader.train_unlabeled_loader
-        self.train_dataloader = data.dataloader.train_loader
-        self.eval_dataloader = data.dataloader.eval_loader
-        self.test_dataloader = data.dataloader.test_loader 
-
         if not args.train:
             self.model = restore_model(self.model, args.model_output_dir)
 
@@ -61,7 +60,6 @@ class CDACPlusManager:
         
         for epoch in trange(int(args.num_train_epochs), desc="Epoch"):  
             
-            # Fine-tuning with auxiliary distribution
             tr_loss, nb_tr_examples, nb_tr_steps = 0, 0, 0
             self.model.train()
 
@@ -77,6 +75,7 @@ class CDACPlusManager:
                 nb_tr_steps += 1
 
                 self.optimizer1.step()
+                self.scheduler1.step()
                 self.optimizer1.zero_grad() 
 
             train_labeled_loss = tr_loss / nb_tr_steps
@@ -93,6 +92,7 @@ class CDACPlusManager:
                 nb_tr_steps += 1
 
                 self.optimizer1.step()
+                self.scheduler1.step()
                 self.optimizer1.zero_grad()
             
             train_loss = tr_loss / nb_tr_steps
@@ -138,11 +138,9 @@ class CDACPlusManager:
 
         for epoch in range(args.num_refine_epochs):
             
-            #evaluation
             eval_true, eval_pred = self.get_outputs(args, mode = 'eval')
             eval_score = clustering_score(eval_true, eval_pred)['NMI']
 
-            #early stop
             if eval_score > best_eval_score:
                 best_model = copy.deepcopy(self.model)
                 wait = 0
@@ -154,7 +152,6 @@ class CDACPlusManager:
                 if wait > args.wait_patient:
                     break
 
-            #converge
             train_pred_logits = self.get_outputs(args, mode = 'train', get_logits = True)
             p_target = target_distribution(train_pred_logits)
             train_preds = train_pred_logits.argmax(1)
@@ -175,7 +172,7 @@ class CDACPlusManager:
                 batch = tuple(t.to(self.device) for t in batch)
                 input_ids, input_mask, segment_ids, label_ids = batch
                 feats, logits = self.model(input_ids, segment_ids, input_mask, mode='finetune')
-                kl_loss = F.kl_div(logits.log(), torch.Tensor(p_target[step * args.train_batch_size: (step + 1) * args.train_batch_size]).cuda())
+                kl_loss = F.kl_div(logits.log(), torch.Tensor(p_target[step * args.train_batch_size: (step + 1) * args.train_batch_size]).to(self.device))
                 kl_loss.backward()
 
                 tr_loss += kl_loss.item()
@@ -183,6 +180,7 @@ class CDACPlusManager:
                 nb_tr_steps += 1
 
                 self.optimizer2.step()
+                self.scheduler2.step()
                 self.optimizer2.zero_grad() 
             
             train_loss = tr_loss / nb_tr_steps
@@ -265,3 +263,5 @@ class CDACPlusManager:
         test_results['y_pred'] = y_pred
 
         return test_results
+
+    

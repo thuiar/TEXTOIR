@@ -1,64 +1,70 @@
 import logging
 import copy
+import os
+import random
 import torch
 import torch.nn.functional as F
+import numpy as np
+import math
+import pandas as pd
+
 from .pretrain import PretrainDTCManager
 from sklearn.cluster import KMeans
 from sklearn.metrics import confusion_matrix
 from tqdm import trange, tqdm
-from utils.metrics import clustering_score
-from utils.functions import save_model, restore_model
-
-def target_distribution(q):
-    weight = q ** 2 / q.sum(0)
-    return (weight.T / weight.sum(1)).T
+from utils.metrics import clustering_score, clustering_accuracy_score
+from utils.functions import save_model, restore_model, set_seed
+from utils.faster_mix_k_means_pytorch import K_Means
+from sklearn.metrics import silhouette_score
+from scipy.optimize import linear_sum_assignment
+from collections import Counter
 
 class DTCManager:
     
     def __init__(self, args, data, model, logger_name = 'Discovery'):
-        
-        self.logger = logging.getLogger(logger_name)
+
         pretrain_manager = PretrainDTCManager(args, data, model)  
-
-        self.device = model.device
-
-        self.train_dataloader = data.dataloader.train_unlabeled_loader
-
-        from dataloaders.bert_loader import get_loader
-        self.eval_dataloader = get_loader(data.dataloader.eval_examples, args, data.all_label_list, 'eval')
-        self.test_dataloader = data.dataloader.test_loader 
-
-        if args.train:
-            
-            num_train_examples = len(data.dataloader.train_unlabeled_examples)
-
-            self.logger.info('Pre-raining start...')
-            pretrain_manager.train(args, data)
-            self.logger.info('Pre-training finished...')
-
-            args.num_labels = data.num_labels
-            self.model = model.set_model(args, data, 'bert')
-            self.load_pretrained_model(pretrain_manager.model)
-
-            self.initialize_centroids(args)
-            
-            self.warmup_optimizer = model.set_optimizer(self.model, num_train_examples, args.train_batch_size, \
-                args.num_warmup_train_epochs, args.lr, args.warmup_proportion)
-
-            self.logger.info('WarmUp Training start...')
-            self.p_target = self.warmup_train(args)
-            self.logger.info('WarmUp Training finished...')
-
-            self.optimizer = model.set_optimizer(self.model, num_train_examples, args.train_batch_size, \
-                args.num_train_epochs, args.lr, args.warmup_proportion)
-
+        
+        set_seed(args.seed)
+        self.logger = logging.getLogger(logger_name)
+        
+        loader = data.dataloader
+        self.train_dataloader, self.eval_dataloader, self.test_dataloader = \
+            loader.train_unlabeled_outputs['loader'], loader.eval_outputs['loader'], loader.test_outputs['loader'] 
+ 
+        if args.pretrain:
+                     
+            self.pretrained_model = pretrain_manager.model
+            self.set_model_optimizer(args, data, model, pretrain_manager)
+            self.load_pretrained_model(self.pretrained_model)
         else:
             self.pretrained_model = restore_model(pretrain_manager.model, os.path.join(args.method_output_dir, 'pretrain'))
-            args.num_labels = data.num_labels
-            self.model = model.set_model(args, data, 'bert')
-            self.load_pretrained_model(pretrain_manager.model)
-            self.model = restore_model(self.model, args.model_output_dir)
+            self.set_model_optimizer(args, data, model, pretrain_manager)
+            
+            if args.train:
+                self.load_pretrained_model(self.pretrained_model)
+            else:
+                self.model = restore_model(self.model, args.model_output_dir)
 
+    def set_model_optimizer(self, args, data, model, pretrain_manager):
+
+        if args.cluster_num_factor > 1:
+            args.num_labels = self.num_labels = pretrain_manager.num_labels
+        else:
+            args.num_labels = self.num_labels = data.num_labels
+            
+        num_train_examples = len(data.dataloader.train_unlabeled_examples)
+
+        self.model = model.set_model(args, data, 'bert', args.freeze_bert_parameters)
+
+        self.warmup_optimizer, self.warmup_scheduler = model.set_optimizer(self.model, num_train_examples, args.train_batch_size, \
+                args.num_warmup_train_epochs, args.lr, args.warmup_proportion)
+
+        self.optimizer, self.scheduler = model.set_optimizer(self.model, num_train_examples, args.train_batch_size, \
+                args.num_train_epochs, args.lr, args.warmup_proportion)
+        
+        self.device = model.device
+        self.model.to(self.device)
 
     def initialize_centroids(self, args):
 
@@ -93,6 +99,7 @@ class DTCManager:
                 nb_tr_steps += 1
 
                 self.warmup_optimizer.step()
+                self.warmup_scheduler.step()
                 self.warmup_optimizer.zero_grad()       
 
             eval_true, eval_pred = self.get_outputs(args, mode = 'eval')
@@ -107,7 +114,6 @@ class DTCManager:
         
         return p_target
     
-
     def get_outputs(self, args, mode = 'eval', get_feats = False, get_probs = False):
         
         if mode == 'eval':
@@ -135,7 +141,6 @@ class DTCManager:
                 total_features = torch.cat((total_features, logits))
                 total_probs = torch.cat((total_probs, probs))
 
-
         if get_feats:
             feats = total_features.cpu().numpy()
             return feats
@@ -153,10 +158,16 @@ class DTCManager:
 
     def train(self, args, data): 
 
+        self.initialize_centroids(args)
+
+        self.logger.info('WarmUp Training start...')
+        self.p_target = self.warmup_train(args)
+        self.logger.info('WarmUp Training finished...')
+          
         ntrain = len(data.dataloader.train_unlabeled_examples)
-        Z = torch.zeros(ntrain, args.num_labels).float().to(self.device)        # intermediate values
-        z_ema = torch.zeros(ntrain, args.num_labels).float().to(self.device)        # temporal outputs
-        z_epoch = torch.zeros(ntrain, args.num_labels).float().to(self.device)  # current outputs
+        Z = torch.zeros(ntrain, args.num_labels).float().to(self.device)       
+        z_ema = torch.zeros(ntrain, args.num_labels).float().to(self.device)        
+        z_epoch = torch.zeros(ntrain, args.num_labels).float().to(self.device) 
 
         best_model = None
         best_eval_score = 0
@@ -180,6 +191,7 @@ class DTCManager:
                 nb_tr_steps += 1
 
                 self.optimizer.step()
+                self.scheduler.step()
                 self.optimizer.zero_grad() 
             
             z_epoch = torch.tensor(self.get_outputs(args, mode = 'train', get_probs = True)).to(self.device)
@@ -236,6 +248,9 @@ class DTCManager:
         test_results['y_true'] = y_true
         test_results['y_pred'] = y_pred
 
+        if args.cluster_num_factor > 1:
+            test_results['estimate_k'] = args.num_labels
+
         return test_results
 
     def load_pretrained_model(self, pretrained_model):
@@ -244,3 +259,8 @@ class DTCManager:
         classifier_params = ['cluster_layer', 'classifier.weight','classifier.bias']
         pretrained_dict =  {k: v for k, v in pretrained_dict.items() if k not in classifier_params}
         self.model.load_state_dict(pretrained_dict, strict=False)
+
+
+def target_distribution(q):
+    weight = q ** 2 / q.sum(0)
+    return (weight.T / weight.sum(1)).T

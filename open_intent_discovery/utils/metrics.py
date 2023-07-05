@@ -17,6 +17,8 @@ def clustering_accuracy_score(y_true, y_pred):
     return acc
 
 def clustering_score(y_true, y_pred):
-    return {'ACC': round(clustering_accuracy_score(y_true, y_pred)*100, 2),
+    return {
+            'NMI': round(normalized_mutual_info_score(y_true, y_pred)*100, 2),
             'ARI': round(adjusted_rand_score(y_true, y_pred)*100, 2),
-            'NMI': round(normalized_mutual_info_score(y_true, y_pred)*100, 2)}
+            'ACC': round(clustering_accuracy_score(y_true, y_pred)*100, 2)
+            }

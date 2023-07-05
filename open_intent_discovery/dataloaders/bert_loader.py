@@ -5,8 +5,9 @@ import os
 import csv
 import sys
 import logging
-from pytorch_pretrained_bert.tokenization import BertTokenizer
+from transformers import BertTokenizer, AutoTokenizer
 from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler, TensorDataset)
+from sentence_transformers import SentenceTransformer
 
 class BERT_Loader:
     
@@ -14,66 +15,121 @@ class BERT_Loader:
 
         self.logger = logging.getLogger(logger_name)
 
-        self.train_examples, self.train_labeled_examples, self.train_unlabeled_examples  = get_examples(args, base_attrs, 'train')
-        self.logger.info("Number of labeled training samples = %s", str(len(self.train_labeled_examples)))
-        self.logger.info("Number of unlabeled training samples = %s", str(len(self.train_unlabeled_examples)))
+        if args.method == 'SCCL' :
+            self.tokenizer = SentenceTransformer('distilbert-base-nli-stsb-mean-tokens')[0].tokenizer
+        else:
+            self.tokenizer = BertTokenizer.from_pretrained(args.pretrained_bert_model, do_lower_case=True)    
 
-        self.eval_examples = get_examples(args, base_attrs, 'eval')
-        self.logger.info("Number of evaluation samples = %s", str(len(self.eval_examples)))
-        
-        self.test_examples = get_examples(args, base_attrs, 'test')
-        self.logger.info("Number of testing samples = %s", str(len(self.test_examples)))
-        
-        self.train_labeled_loader = get_loader(self.train_labeled_examples, args, base_attrs['known_label_list'], 'train_labeled')
+        if args.setting == 'unsupervised':
 
-        self.train_unlabeled_loader = get_loader(self.train_unlabeled_examples, args, base_attrs['all_label_list'], 'train_unlabeled')
-        
-        self.train_loader, self.train_input_ids, self.train_input_mask, self.train_segment_ids = \
-            get_semi_loader(self.train_labeled_examples, self.train_unlabeled_examples, base_attrs, args)
+            self.train_examples = get_examples(args, base_attrs, 'train')
+            self.eval_examples = get_examples(args, base_attrs, 'eval')
 
-        self.eval_loader = get_loader(self.eval_examples, args, base_attrs['known_label_list'], 'eval')
-        self.test_loader = get_loader(self.test_examples, args, base_attrs['all_label_list'], 'test')
+            self.train_examples = self.train_examples + self.eval_examples
+            self.train_outputs = get_loader(self.train_examples, args, base_attrs['all_label_list'], 'train_unlabeled', self.tokenizer)
+            self.logger.info("Number of train samples = %s", str(len(self.train_examples)))
+
+            self.test_examples = get_examples(args, base_attrs, 'test')
+            self.logger.info("Number of testing samples = %s", str(len(self.test_examples)))
+            self.test_outputs = get_loader(self.test_examples, args, base_attrs['all_label_list'], 'test', self.tokenizer)
+            
+ 
+        elif args.setting == 'semi_supervised':
+
+            self.train_examples, self.train_labeled_examples, self.train_unlabeled_examples  = get_examples(args, base_attrs, 'train')
+            self.logger.info("Number of labeled training samples = %s", str(len(self.train_labeled_examples)))
+            self.logger.info("Number of unlabeled training samples = %s", str(len(self.train_unlabeled_examples)))
+            self.eval_examples = get_examples(args, base_attrs, 'eval')
+            self.logger.info("Number of evaluation samples = %s", str(len(self.eval_examples)))
+            self.test_examples = get_examples(args, base_attrs, 'test')
+            self.logger.info("Number of testing samples = %s", str(len(self.test_examples)))
+            
+            self.train_labeled_outputs = get_loader(self.train_labeled_examples, args, base_attrs['known_label_list'], 'train_labeled', self.tokenizer)
+            self.train_unlabeled_outputs = get_loader(self.train_unlabeled_examples, args, base_attrs['all_label_list'], 'train_unlabeled', self.tokenizer)
+            self.train_outputs = get_semi_loader(self.train_labeled_examples, self.train_unlabeled_examples, base_attrs, args, self.tokenizer)
+            self.eval_outputs = get_loader(self.eval_examples, args, base_attrs['known_label_list'], 'eval', self.tokenizer)
+            self.test_outputs = get_loader(self.test_examples, args, base_attrs['all_label_list'], 'test', self.tokenizer)
+            if args.method == 'DTC_BERT':
+                self.get_examples_dtc_predict(args ,base_attrs)
 
         self.num_train_examples = len(self.train_examples)
+    def get_examples_dtc_predict(self, args ,base_attrs):
+
+        num_val_cls = round(base_attrs['n_known_cls'] * 0.75 )
+        self.num_val_cls = num_val_cls
+
+        label_val = list(np.random.choice(np.array(base_attrs['known_label_list']), num_val_cls, replace=False))  #44  
+        label_train = [label for label in base_attrs['known_label_list'] if label not in label_val]  
+
+        ntrain = len(self.train_examples)
+        train_labels = np.array([example.label for example in self.train_examples])
+
+        train_base_attrs = {}
+        train_base_attrs['known_label_list'] = label_train
+        train_base_attrs['data_dir'] = base_attrs['data_dir']
+        train_base_attrs['all_label_list'] = base_attrs['all_label_list']
+
+        self.train_examples_dtc, self.train_labeled_examples_dtc, self.train_unlabeled_examples_dtc  = get_examples(args, train_base_attrs, 'train')
+        self.logger.info("Number of labeled training samples = %s", str(len(self.train_labeled_examples_dtc)))
+        self.logger.info("Number of unlabeled training samples = %s", str(len(self.train_unlabeled_examples_dtc)))
+        self.eval_examples_dtc = get_examples(args, train_base_attrs, 'eval')
+        self.logger.info("Number of evaluation samples = %s", str(len(self.eval_examples_dtc)))
+
+        self.train_labeled_outputs_dtc = get_loader(self.train_labeled_examples_dtc, args, train_base_attrs['known_label_list'], 'train_labeled', self.tokenizer)
+        self.train_unlabeled_outputs_dtc = get_loader(self.train_unlabeled_examples_dtc, args, train_base_attrs['all_label_list'], 'train_unlabeled', self.tokenizer)
+        self.eval_outputs_dtc = get_loader(self.eval_examples_dtc, args, train_base_attrs['known_label_list'], 'eval', self.tokenizer)
+        
+        val_base_attrs = {}
+        val_base_attrs['known_label_list'] = label_val
+        val_base_attrs['data_dir'] = base_attrs['data_dir']
+        val_base_attrs['all_label_list'] = base_attrs['all_label_list']
+
+        self.val_examples_dtc, self.val_labeled_examples_dtc, self.val_unlabeled_examples_dtc  = get_examples(args, val_base_attrs, 'train')
+        self.val_labeled_outputs_dtc = get_loader(self.val_labeled_examples_dtc, args, val_base_attrs['known_label_list'], 'train_labeled', self.tokenizer)
 
 def get_examples(args, base_attrs, mode):
 
     processor = DatasetProcessor()
     ori_examples = processor.get_examples(base_attrs['data_dir'], mode)
     
-    if mode == 'train':
+    if args.setting == 'unsupervised':
         
-        train_labels = np.array([example.label for example in ori_examples])
-        train_labeled_ids = []
-        for label in base_attrs['known_label_list']:
-            num = round(len(train_labels[train_labels == label]) * args.labeled_ratio)
-            pos = list(np.where(train_labels == label)[0])
-            train_labeled_ids.extend(random.sample(pos, num))
-
-        labeled_examples, unlabeled_examples = [], []
-        for idx, example in enumerate(ori_examples):
-            if idx in train_labeled_ids:
-                labeled_examples.append(example)
-            else:
-                unlabeled_examples.append(example)
-
-        return ori_examples, labeled_examples, unlabeled_examples
-
-    elif mode == 'eval':
-
-        examples = []
-        for example in ori_examples:
-            if (example.label in base_attrs['known_label_list']):
-                examples.append(example)
-        
-        return examples
-    
-    elif mode == 'test':
         return ori_examples
 
-def get_loader(examples, args, label_list, mode):
+    elif args.setting == 'semi_supervised':
 
-    tokenizer = BertTokenizer.from_pretrained(args.bert_model, do_lower_case=True)    
+        if mode == 'train':
+            
+            train_labels = np.array([example.label for example in ori_examples])
+            train_labeled_ids = []
+            for label in base_attrs['known_label_list']:
+                num = round(len(train_labels[train_labels == label]) * args.labeled_ratio)
+                pos = list(np.where(train_labels == label)[0])
+                train_labeled_ids.extend(random.sample(pos, num))
+
+            labeled_examples, unlabeled_examples = [], []
+            for idx, example in enumerate(ori_examples):
+                if idx in train_labeled_ids:
+                    labeled_examples.append(example)
+                else:
+                    unlabeled_examples.append(example)
+
+            return ori_examples, labeled_examples, unlabeled_examples
+
+        elif mode == 'eval':
+
+            examples = []
+            for example in ori_examples:
+                if (example.label in base_attrs['known_label_list']):
+                    examples.append(example)
+            
+            return examples
+        
+        elif mode == 'test':
+            return ori_examples
+
+def get_loader(examples, args, label_list, mode, tokenizer):
+    
     features = convert_examples_to_features(examples, label_list, args.max_seq_length, tokenizer)
     input_ids = torch.tensor([f.input_ids for f in features], dtype=torch.long)
     input_mask = torch.tensor([f.input_mask for f in features], dtype=torch.long)
@@ -84,32 +140,41 @@ def get_loader(examples, args, label_list, mode):
     else:
         label_ids = torch.tensor([f.label_id for f in features], dtype=torch.long)
 
+
     datatensor = TensorDataset(input_ids, input_mask, segment_ids, label_ids)
 
     if mode == 'train_labeled':  
         sampler = RandomSampler(datatensor)
-        dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.train_batch_size)    
+        dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.train_batch_size, num_workers = args.num_workers, pin_memory = True)  #, num_workers = args.num_workers, pin_memory = True
 
     else:
         sampler = SequentialSampler(datatensor)
 
         if mode == 'train_unlabeled':
-            dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.train_batch_size)    
+            dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.train_batch_size, num_workers = args.num_workers, pin_memory = True)    
 
         elif mode == 'eval':
-            dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.eval_batch_size)    
+            dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.eval_batch_size, num_workers = args.num_workers, pin_memory = True)
         
         elif mode == 'test':
-            dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.test_batch_size)    
+            dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.test_batch_size, num_workers = args.num_workers, pin_memory = True)
 
-    return dataloader
+    outputs = {
+        'loader': dataloader,
+        'input_ids': input_ids,
+        'input_mask': input_mask,
+        'segment_ids': segment_ids,
+        'label_ids': label_ids,
+        'data': datatensor
+    }
+    
+    return outputs
 
-def get_semi_loader(labeled_examples, unlabeled_examples, base_attrs, args):
+def get_semi_loader(labeled_examples, unlabeled_examples, base_attrs, args, tokenizer):
 
-    tokenizer = BertTokenizer.from_pretrained(args.bert_model, do_lower_case=True)    
     labeled_features = convert_examples_to_features(labeled_examples, base_attrs['known_label_list'], args.max_seq_length, tokenizer)
     unlabeled_features = convert_examples_to_features(unlabeled_examples, base_attrs['all_label_list'], args.max_seq_length, tokenizer)
-
+    
     labeled_input_ids = torch.tensor([f.input_ids for f in labeled_features], dtype=torch.long)
     labeled_input_mask = torch.tensor([f.input_mask for f in labeled_features], dtype=torch.long)
     labeled_segment_ids = torch.tensor([f.segment_ids for f in labeled_features], dtype=torch.long)
@@ -118,7 +183,7 @@ def get_semi_loader(labeled_examples, unlabeled_examples, base_attrs, args):
     unlabeled_input_ids = torch.tensor([f.input_ids for f in unlabeled_features], dtype=torch.long)
     unlabeled_input_mask = torch.tensor([f.input_mask for f in unlabeled_features], dtype=torch.long)
     unlabeled_segment_ids = torch.tensor([f.segment_ids for f in unlabeled_features], dtype=torch.long)
-    unlabeled_label_ids = torch.tensor([-1 for f in unlabeled_features], dtype=torch.long)     
+    unlabeled_label_ids = torch.tensor([-1 for f in unlabeled_features], dtype=torch.long)       
 
     semi_input_ids = torch.cat([labeled_input_ids, unlabeled_input_ids])
     semi_input_mask = torch.cat([labeled_input_mask, unlabeled_input_mask])
@@ -127,9 +192,17 @@ def get_semi_loader(labeled_examples, unlabeled_examples, base_attrs, args):
 
     semi_data = TensorDataset(semi_input_ids, semi_input_mask, semi_segment_ids, semi_label_ids)
     semi_sampler = SequentialSampler(semi_data)
-    semi_dataloader = DataLoader(semi_data, sampler=semi_sampler, batch_size = args.train_batch_size) 
+    semi_dataloader = DataLoader(semi_data, sampler=semi_sampler, batch_size = args.train_batch_size, num_workers = args.num_workers, pin_memory = True)#args.train_batch_size)
 
-    return semi_dataloader, semi_input_ids, semi_input_mask, semi_segment_ids
+    outputs = {
+        'loader': semi_dataloader,
+        'input_ids': semi_input_ids,
+        'input_mask': semi_input_mask,
+        'segment_ids': semi_segment_ids,
+        'label_ids': semi_label_ids,
+        'semi_data' : semi_data
+    }
+    return outputs
 
 class InputExample(object):
     """A single training/test example for simple sequence classification."""
@@ -151,7 +224,6 @@ class InputExample(object):
         self.text_b = text_b
         self.label = label
 
-
 class InputFeatures(object):
     """A single set of features of data."""
 
@@ -160,7 +232,6 @@ class InputFeatures(object):
         self.input_mask = input_mask
         self.segment_ids = segment_ids
         self.label_id = label_id
-
 
 class DataProcessor(object):
     """Base class for data converters for sequence classification data sets."""
@@ -281,16 +352,6 @@ def convert_examples_to_features(examples, label_list, max_seq_length, tokenizer
         assert len(segment_ids) == max_seq_length
 
         label_id = label_map[example.label]
-        # if ex_index < 5:
-        #     logger.info("*** Example ***")
-        #     logger.info("guid: %s" % (example.guid))
-        #     logger.info("tokens: %s" % " ".join(
-        #         [str(x) for x in tokens]))
-        #     logger.info("input_ids: %s" % " ".join([str(x) for x in input_ids]))
-        #     logger.info("input_mask: %s" % " ".join([str(x) for x in input_mask]))
-        #     logger.info(
-        #         "segment_ids: %s" % " ".join([str(x) for x in segment_ids]))
-        #     logger.info("label: %s (id = %d)" % (example.label, label_id))
 
         features.append(
             InputFeatures(input_ids=input_ids,
@@ -298,7 +359,6 @@ def convert_examples_to_features(examples, label_list, max_seq_length, tokenizer
                           segment_ids=segment_ids,
                           label_id=label_id))
     return features
-
 
 def _truncate_seq_pair(tokens_a, tokens_b, max_length):
     """Truncates a sequence pair in place to the maximum length."""

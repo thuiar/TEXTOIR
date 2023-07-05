@@ -26,9 +26,9 @@ class Param():
         """
         hyper_parameters = {
 
-            'bert_model': "/home/sharing/disk1/pretrained_embedding/bert/uncased_L-12_H-768_A-12/",
+            'pretrained_bert_model': "/home/sharing/disk1/pretrained_embedding/bert/uncased_L-12_H-768_A-12/",
             'num_labels': None,
-            'num_train_epochs': 46,
+            'num_train_epochs': 49,
             'num_refine_epochs': 100,
             'max_seq_length': None, 
             'freeze_bert_parameters': True,
@@ -39,7 +39,7 @@ class Param():
             'u': 0.95,
             'l': 0.455,
             'train_batch_size': 256,
-            'eval_batch_size': 64,
+            'eval_batch_size': 256,
             'test_batch_size': 64,
             'wait_patient': 5
         }

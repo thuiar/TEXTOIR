@@ -7,47 +7,39 @@ import torch.nn.functional as F
 from losses import loss_map
 from tqdm import tqdm, trange
 from sklearn.metrics import accuracy_score
-from utils.functions import save_model
+from utils.functions import save_model, set_seed
 
-def Class2Simi(x,mode='cls',mask=None):
-    # Convert class label to pairwise similarity
-    n=x.nelement()
-    assert (n-x.ndimension()+1)==n,'Dimension of Label is not right'
-    expand1 = x.view(-1,1).expand(n,n)
-    expand2 = x.view(1,-1).expand(n,n)
-    out = expand1 - expand2    
-    out[out!=0] = -1 #dissimilar pair: label=-1
-    out[out==0] = 1 #Similar pair: label=1
-    if mode=='cls':
-        out[out==-1] = 0 #dissimilar pair: label=0
-    if mode=='hinge':
-        out = out.float() #hingeloss require float type
-    if mask is None:
-        out = out.view(-1)
-    else:
-        mask = mask.detach()
-        out = out[mask]
-    return out
-
+ 
 class PretrainKCLManager:
     
     def __init__(self, args, data, model, logger_name = 'Discovery'):
-        
+
         self.logger = logging.getLogger(logger_name)
 
-        args.backbone = 'bert_KCL_simi'
+        loader = data.dataloader
+        self.train_dataloader, self.eval_dataloader, self.test_dataloader = \
+            loader.train_labeled_outputs['loader'], loader.eval_outputs['loader'], loader.test_outputs['loader']
+        
         args.num_labels = 2
-        self.model = model.set_model(args, data, 'bert')
-        self.optimizer = model.set_optimizer(self.model, len(data.dataloader.train_labeled_examples), args.train_batch_size, \
-            args.num_pretrain_epochs, args.lr_pre, args.warmup_proportion)
-                    
-        self.device = model.device
-        
-        self.train_dataloader = data.dataloader.train_labeled_loader
-        self.eval_dataloader = data.dataloader.eval_loader
-        self.test_dataloader = data.dataloader.test_loader
-        
+        self.set_model_optimizer(args, data, model)
         self.loss_fct = loss_map[args.pretrain_loss_fct]
+
+        if args.pretrain:
+            self.logger.info('Pre-raining start...')
+            self.train(args, data)
+            self.logger.info('Pre-training finished...')
+
+        else:
+            self.model = restore_model(self.model, os.path.join(args.method_output_dir, 'pretrain'))
+            
+    def set_model_optimizer(self, args, data, model):
+
+        args.backbone = 'bert_KCL_simi'
+        self.model = model.set_model(args, data, 'bert', args.freeze_bert_parameters)   
+        self.optimizer, self.scheduler = model.set_optimizer(self.model, len(data.dataloader.train_labeled_examples), args.train_batch_size, \
+            args.num_pretrain_epochs, args.lr_pre, args.warmup_proportion)
+        
+        self.device = model.device
 
     def train(self, args, data):  
 
@@ -74,6 +66,7 @@ class PretrainKCLManager:
                 nb_tr_steps += 1 
                 
                 self.optimizer.step()
+                self.scheduler.step()
                 self.optimizer.zero_grad()
                 
             loss = tr_loss / nb_tr_steps
@@ -138,3 +131,23 @@ class PretrainKCLManager:
         y_true = total_labels.cpu().numpy()
 
         return y_true, y_pred
+        
+def Class2Simi(x,mode='cls',mask=None):
+    # Convert class label to pairwise similarity
+    n=x.nelement()
+    assert (n-x.ndimension()+1)==n,'Dimension of Label is not right'
+    expand1 = x.view(-1,1).expand(n,n)
+    expand2 = x.view(1,-1).expand(n,n)
+    out = expand1 - expand2    
+    out[out!=0] = -1 #dissimilar pair: label=-1
+    out[out==0] = 1 #Similar pair: label=1
+    if mode=='cls':
+        out[out==-1] = 0 #dissimilar pair: label=0
+    if mode=='hinge':
+        out = out.float() #hingeloss require float type
+    if mask is None:
+        out = out.view(-1)
+    else:
+        mask = mask.detach()
+        out = out[mask]
+    return out

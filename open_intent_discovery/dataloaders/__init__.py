@@ -1,7 +1,7 @@
 from .bert_loader import BERT_Loader
 from .unsup_loader import UNSUP_Loader
 
-max_seq_lengths = {
+max_seq_lengths = {     'stackoverflow':45,
                         'clinc':30, 
                         'banking':55, 
                         'snips': 35,
@@ -14,8 +14,16 @@ backbone_loader_map = {
                             'bert_KCL_simi': BERT_Loader,
                             'bert_KCL': BERT_Loader,
                             'bert_MCL': BERT_Loader,
+                            'bert_MTP':BERT_Loader,
+                            'bert_MTP_Pretrain':BERT_Loader,
+                            'bert_USNID': BERT_Loader,
+                            'bert_USNID_Unsup': BERT_Loader,
                             'glove': UNSUP_Loader,
-                            'sae': UNSUP_Loader
+                            'sae': UNSUP_Loader,
+                            'bert_SCCL' : BERT_Loader,
+                            'bert_GCD': BERT_Loader,
+                            'bert_CC': BERT_Loader,
+                            'bert_DeepAligned': BERT_Loader
                       }
 
 benchmark_labels = {
@@ -70,6 +78,13 @@ benchmark_labels = {
                     "verify_source_of_funds", "verify_top_up", "virtual_card_not_working", "visa_or_mastercard", "why_verify_identity", 
                     "wrong_amount_of_cash_received", "wrong_exchange_rate_for_cash_withdrawal"
                 ], 
+    'stackoverflow':
+                        [
+                            "ajax", "apache", "bash", "cocoa", "drupal", 
+                            "excel", "haskell", "hibernate", "linq", "magento", 
+                            "matlab", "oracle", "osx", "qt", "scala", 
+                            "sharepoint", "spring", "svn", "visual-studio", "wordpress"
+                        ],
     'snips':
                 [
                     "AddToPlaylist", "BookRestaurant", "GetWeather", "PlayMusic", "RateBook", 

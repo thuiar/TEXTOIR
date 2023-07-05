@@ -9,27 +9,51 @@ from sklearn.metrics import accuracy_score
 from tqdm import trange, tqdm
 
 from losses import loss_map
-from utils.functions import save_model
+from utils.functions import save_model, restore_model
+from sklearn.cluster import KMeans
 
 class PretrainDeepAlignedManager:
     
     def __init__(self, args, data, model, logger_name = 'Discovery'):
-        
+
         self.logger = logging.getLogger(logger_name)
 
         args.num_labels = data.n_known_cls
-        self.model = model.set_model(args, data, 'bert')
-        self.optimizer = model.set_optimizer(self.model, len(data.dataloader.train_labeled_examples), args.train_batch_size, \
-            args.num_pretrain_epochs, args.lr_pre, args.warmup_proportion)
 
-        self.device = model.device
-
-        self.train_dataloader = data.dataloader.train_labeled_loader
-        self.eval_dataloader = data.dataloader.eval_loader 
-        self.test_dataloader = data.dataloader.test_loader
+        self.set_model_optimizer(args, data, model)
+        
+        loader = data.dataloader
+        self.train_labeled_dataloader = loader.train_labeled_outputs['loader']
+        self.train_dataloader = loader.train_outputs['loader']
+        self.eval_dataloader = loader.eval_outputs['loader']
+        self.test_dataloader = loader.test_outputs['loader']
 
         self.loss_fct = loss_map[args.loss_fct]
 
+        if args.pretrain:
+            
+            self.logger.info('Pre-raining start...')
+            self.train(args, data)
+            self.logger.info('Pre-training finished...')
+            
+        else:
+            self.model = restore_model(self.model, os.path.join(args.method_output_dir, 'pretrain'))
+            
+        if args.cluster_num_factor > 1:
+            self.num_labels = data.num_labels
+            self.num_labels = self.predict_k(args, data) 
+
+        self.model.to(torch.device('cpu'))
+        torch.cuda.empty_cache()
+            
+    def set_model_optimizer(self, args, data, model):
+        
+        self.model = model.set_model(args, data, 'bert')  
+        self.optimizer , self.scheduler = model.set_optimizer(self.model, len(data.dataloader.train_labeled_examples), args.train_batch_size, \
+            args.num_pretrain_epochs, args.lr_pre, args.warmup_proportion)
+        
+        self.device = model.device
+        
     def train(self, args, data):
 
         wait = 0
@@ -42,20 +66,21 @@ class PretrainDeepAlignedManager:
             tr_loss = 0
             nb_tr_examples, nb_tr_steps = 0, 0
             
-            for step, batch in enumerate(tqdm(self.train_dataloader, desc="Iteration")):
+            for step, batch in enumerate(tqdm(self.train_labeled_dataloader, desc="Iteration")):
                 batch = tuple(t.to(self.device) for t in batch)
                 input_ids, input_mask, segment_ids, label_ids = batch
                 with torch.set_grad_enabled(True):
 
                     loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = "train", loss_fct = self.loss_fct)
                     
+                    self.optimizer.zero_grad()
                     loss.backward()
                     tr_loss += loss.item()
                     nb_tr_examples += input_ids.size(0)
                     nb_tr_steps += 1
 
                     self.optimizer.step()
-                    self.optimizer.zero_grad()
+                    self.scheduler.step()
             
             loss = tr_loss / nb_tr_steps
             
@@ -95,6 +120,8 @@ class PretrainDeepAlignedManager:
         
         if mode == 'eval':
             dataloader = self.eval_dataloader
+        elif mode == 'train':
+            dataloader = self.train_dataloader
 
         self.model.eval()
 
@@ -127,3 +154,30 @@ class PretrainDeepAlignedManager:
             y_true = total_labels.cpu().numpy()
 
             return y_true, y_pred
+
+    def predict_k(self, args, data):
+
+        self.logger.info('Predict number of clusters start...')
+        self.num_labels = data.num_labels
+        feats = self.get_outputs(args, mode = 'train', get_feats = True)
+
+        km = KMeans(n_clusters = self.num_labels, random_state =args.seed).fit(feats)
+        y_pred = km.labels_
+
+        pred_label_list = np.unique(y_pred)
+        drop_out = len(feats) / data.num_labels
+
+        cnt = 0
+        for label in pred_label_list:
+            num = len(y_pred[y_pred == label]) 
+            if num < drop_out:
+                cnt += 1
+
+        K = len(pred_label_list) - cnt
+        
+        self.logger.info('Predict number of clusters finish...')
+        outputs = {'K': K, 'mean_cluster_size': drop_out}
+        for key in outputs.keys():
+            self.logger.info("  %s = %s", key, str(outputs[key]))
+
+        return K

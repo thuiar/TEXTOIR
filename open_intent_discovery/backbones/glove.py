@@ -1,5 +1,4 @@
 import numpy as np
-import os
 from collections import defaultdict
 
 class GloVeEmbeddingVectorizer(object):

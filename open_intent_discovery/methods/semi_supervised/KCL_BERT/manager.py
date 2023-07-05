@@ -6,45 +6,45 @@ import torch.nn.functional as F
 
 from tqdm import trange, tqdm
 from sklearn.metrics import confusion_matrix
-
 from losses import loss_map
 from .pretrain import PretrainKCLManager
-from utils.functions import restore_model, save_model
+from utils.functions import restore_model, save_model, set_seed
 from utils.metrics import clustering_score
 
 class KCLManager:
     
     def __init__(self, args, data, model, logger_name = 'Discovery'):
-        
+
         self.logger = logging.getLogger(logger_name)
-
-        backbone = args.backbone
-        self.device = model.device
-        
-        self.train_dataloader = data.dataloader.train_loader
-        self.eval_dataloader = data.dataloader.eval_loader
-        self.test_dataloader = data.dataloader.test_loader
-
         pretrain_manager = PretrainKCLManager(args, data, model)  
+        set_seed(args.seed)
+        
+        loader = data.dataloader
+        self.train_dataloader, self.eval_dataloader, self.test_dataloader = \
+            loader.train_outputs['loader'], loader.eval_outputs['loader'], loader.test_outputs['loader']
         self.loss_fct = loss_map[args.loss_fct]
 
-        if args.train:
-            
-            self.logger.info('Pre-raining start...')
-            pretrain_manager.train(args, data)
-            self.logger.info('Pre-training finished...')
-
+        if args.pretrain:
             self.pretrained_model = pretrain_manager.model
-
-            args.num_labels = data.num_labels
-            args.backbone = backbone
-            self.model = model.set_model(args, data, 'bert')
-            self.optimizer = model.set_optimizer(self.model, data.dataloader.num_train_examples, args.train_batch_size, \
-                args.num_train_epochs, args.lr, args.warmup_proportion)
+            self.set_model_optimizer(args, data, model, pretrain_manager)
 
         else:
             self.pretrained_model = restore_model(pretrain_manager.model, os.path.join(args.method_output_dir, 'pretrain'))
-            self.model = restore_model(self.model, args.model_output_dir)
+            self.set_model_optimizer(args, data, model, pretrain_manager)
+
+            if not args.train:
+                self.model = restore_model(self.model, args.model_output_dir)
+        
+    def set_model_optimizer(self, args, data, model, pretrain_manager):
+
+        args.backbone = 'bert_KCL'
+        args.num_labels = data.num_labels
+        self.model = model.set_model(args, data, 'bert', args.freeze_bert_parameters)
+        
+        self.optimizer, self.scheduler = model.set_optimizer(self.model, data.dataloader.num_train_examples, args.train_batch_size, \
+                args.num_train_epochs, args.lr, args.warmup_proportion)
+        
+        self.device = model.device
 
     def train(self, args, data): 
 
@@ -73,6 +73,7 @@ class KCLManager:
                 nb_tr_steps += 1
 
                 self.optimizer.step()
+                self.scheduler.step()
                 self.optimizer.zero_grad()
             
             tr_loss = tr_loss / nb_tr_steps

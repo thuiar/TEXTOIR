@@ -29,7 +29,7 @@ class Param():
         """
         hyper_parameters = {
 
-            'bert_model': "/home/sharing/disk1/pretrained_embedding/bert/uncased_L-12_H-768_A-12/",
+            'pretrained_bert_model': "/home/sharing/disk1/pretrained_embedding/bert/uncased_L-12_H-768_A-12/",
             'max_seq_length': None, 
             'num_train_epochs': 100,
             'num_pretrain_epochs': 100,
@@ -38,6 +38,7 @@ class Param():
             'alpha': 0.6,
             'num_labels': None,
             'freeze_bert_parameters': True,
+            'pretrain': True,
             'feat_dim': 768,
             'warmup_proportion': 0.1,
             'lr_pre': 2e-5,
@@ -45,6 +46,7 @@ class Param():
             'loss_fct': 'CrossEntropyLoss',
             'activation': 'relu',
             'train_batch_size': 128,
+            'pretrain_batch_size':128,
             'eval_batch_size': 64,
             'test_batch_size': 64,
             'wait_patient': 10

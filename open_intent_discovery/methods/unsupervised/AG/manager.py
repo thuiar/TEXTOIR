@@ -5,9 +5,9 @@ from sklearn.metrics import confusion_matrix
 class AGManager:
     
     def __init__(self, args, data, model, logger_name = 'Discovery'):
-        
+
         self.logger = logging.getLogger(logger_name)
-        self.emb_train, self.emb_test = model.emb_train, model.emb_test
+        self.emb_train, self.emb_test = model.set_model(args, data, 'glove')
         self.num_labels = data.num_labels
         self.test_y = data.dataloader.test_true_labels
 

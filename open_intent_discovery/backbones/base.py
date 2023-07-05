@@ -2,7 +2,7 @@ import os
 import torch
 import math
 import logging
-from pytorch_pretrained_bert.optimization import BertAdam
+from transformers import AdamW, get_linear_schedule_with_warmup
 from .utils import freeze_bert_parameters, set_allow_growth
 from .__init__ import backbones_map
 
@@ -13,19 +13,15 @@ class ModelManager:
         
         self.logger = logging.getLogger(logger_name)
         
-        if args.backbone.startswith('bert'):
-            self.model = self.set_model(args, data, 'bert')
-            self.optimizer = self.set_optimizer(self.model, data.dataloader.num_train_examples, args.train_batch_size, \
-                args.num_train_epochs, args.lr, args.warmup_proportion) 
-        elif args.backbone.startswith('glove'):
-            self.emb_train, self.emb_test = self.set_model(args, data, 'glove')
-        elif args.backbone.startswith('sae'):
-            self.sae = self.set_model(args, data, 'sae')
-
+        if args.method in ['KM', 'AG', 'SAE', 'DEC', 'DCN']:
+            set_allow_growth('0')
+        else:
+            self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')   
+    
     def set_optimizer(self, model, num_train_examples, train_batch_size, num_train_epochs, lr, warmup_proportion):
 
         num_train_optimization_steps = int(num_train_examples / train_batch_size) * num_train_epochs
-
+        
         param_optimizer = list(model.named_parameters())
         no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
         optimizer_grouped_parameters = [
@@ -33,21 +29,25 @@ class ModelManager:
             {'params': [p for n, p in param_optimizer if any(nd in n for nd in no_decay)], 'weight_decay': 0.0}
         ]
 
-        optimizer = BertAdam(optimizer_grouped_parameters,
-                        lr = lr,
-                        warmup = warmup_proportion,
-                        t_total = num_train_optimization_steps)  
-        return optimizer
-
-    def set_model(self, args, data, pattern):
+        optimizer = AdamW(optimizer_grouped_parameters, lr = lr, correct_bias=False)
+        num_warmup_steps= int(num_train_examples * num_train_epochs * warmup_proportion / train_batch_size)
+        scheduler = get_linear_schedule_with_warmup(optimizer,
+                                                    num_warmup_steps=num_warmup_steps,
+                                                    num_training_steps=num_train_optimization_steps)
+        return optimizer ,scheduler
+    
+    def set_model(self, args, data, pattern, freeze_parameters = True):
         
         backbone = backbones_map[args.backbone]
 
         if pattern == 'bert':
-            self.device = torch.device('cuda:%d' % int(args.gpu_id) if torch.cuda.is_available() else 'cpu')   
-            model = backbone.from_pretrained(args.bert_model, cache_dir = "", args = args)    
-
-            if args.freeze_bert_parameters:
+            
+            if hasattr(backbone, 'from_pretrained'):
+                model = backbone.from_pretrained(args.pretrained_bert_model, args = args)  
+            else:
+                model = backbone(args)
+                
+            if freeze_parameters:
                 self.logger.info('Freeze all parameters but the last layer for efficiency')
                 model = freeze_bert_parameters(model)
             
@@ -57,8 +57,6 @@ class ModelManager:
 
         elif args.setting == 'unsupervised':
 
-            set_allow_growth(args.gpu_id)
-
             if pattern == 'glove':
 
                 self.logger.info("Building GloVe (D=300)...")
@@ -66,7 +64,7 @@ class ModelManager:
                 gev = backbone(data.dataloader.embedding_matrix, data.dataloader.index_word, data.dataloader.train_data)
                 emb_train = gev.transform(data.dataloader.train_data, method='mean')
                 emb_test = gev.transform(data.dataloader.test_data, method='mean')
-
+                
                 self.logger.info('Building finished!')
 
                 return emb_train, emb_test
@@ -77,8 +75,7 @@ class ModelManager:
                 sae = backbone(data.dataloader.tfidf_train.shape[1])
 
                 return sae
-
-
+    
 
 
         

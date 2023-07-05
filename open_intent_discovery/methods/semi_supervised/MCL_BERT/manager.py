@@ -13,22 +13,24 @@ from utils.functions import restore_model, save_model
 class MCLManager:
     
     def __init__(self, args, data, model, logger_name = 'Discovery'):
-        
+
         self.logger = logging.getLogger(logger_name)
         self.num_labels = data.num_labels   
-        self.model = model.model
-        self.optimizer = model.optimizer
-        self.device = model.device
+        loader = data.dataloader
+        self.train_dataloader, self.eval_dataloader, self.test_dataloader = \
+            loader.train_outputs['loader'], loader.eval_outputs['loader'], loader.test_outputs['loader']
 
-        self.train_dataloader = data.dataloader.train_loader      
-        self.eval_dataloader = data.dataloader.eval_loader 
-        self.test_dataloader = data.dataloader.test_loader 
+        backbone = args.backbone
+        args.backbone = backbone
+        self.model = model.set_model(args, data, 'bert')
+        self.optimizer , self.scheduler = model.set_optimizer(self.model, data.dataloader.num_train_examples, args.train_batch_size, \
+        args.num_train_epochs, args.lr, args.warmup_proportion)
+        self.device = model.device
 
         self.loss_fct = loss_map[args.loss_fct]
 
         if not args.train:
             self.model = restore_model(self.model, args.model_output_dir)
-
 
     def train(self, args, data): 
 
@@ -49,12 +51,12 @@ class MCLManager:
                 loss = self.model(input_ids, segment_ids, input_mask, label_ids, mode = 'train', loss_fct = self.loss_fct)
 
                 loss.backward()
-
                 tr_loss += loss.item() 
                 nb_tr_examples += input_ids.size(0)
                 nb_tr_steps += 1
 
                 self.optimizer.step()
+                self.scheduler.step()
                 self.optimizer.zero_grad()
             
             tr_loss = tr_loss / nb_tr_steps
