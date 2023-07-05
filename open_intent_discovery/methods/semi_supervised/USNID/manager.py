@@ -122,32 +122,30 @@ class USNIDManager:
         for epoch in trange(int(args.num_train_epochs), desc="Epoch"): 
             
             self.model.train()
-            
-            if not args.wo_sup:
-               
-                for batch in tqdm(self.train_labeled_dataloader, desc="Training(All)"):
+             
+            for batch in tqdm(self.train_labeled_dataloader, desc="Training(All)"):
+                
+                batch = tuple(t.to(self.device) for t in batch)
+                input_ids, input_mask, segment_ids, label_ids = batch
+                                            
+                with torch.set_grad_enabled(True):
                     
-                    batch = tuple(t.to(self.device) for t in batch)
-                    input_ids, input_mask, segment_ids, label_ids = batch
-                                                
-                    with torch.set_grad_enabled(True):
-                        
-                        aug_mlp_outputs_a, aug_logits_a = self.model(input_ids, segment_ids, input_mask)
-                        aug_mlp_outputs_b, aug_logits_b = self.model(input_ids, segment_ids, input_mask)
+                    aug_mlp_outputs_a, aug_logits_a = self.model(input_ids, segment_ids, input_mask)
+                    aug_mlp_outputs_b, aug_logits_b = self.model(input_ids, segment_ids, input_mask)
+                
+                    norm_logits = F.normalize(aug_mlp_outputs_a)
+                    norm_aug_logits = F.normalize(aug_mlp_outputs_b)
+                
+                    contrastive_feats = torch.cat((norm_logits.unsqueeze(1), norm_aug_logits.unsqueeze(1)), dim = 1)
+                    loss_contrast = self.contrast_criterion(contrastive_feats, labels = label_ids, temperature = args.train_temperature, device = self.device)
                     
-                        norm_logits = F.normalize(aug_mlp_outputs_a)
-                        norm_aug_logits = F.normalize(aug_mlp_outputs_b)
+                    loss = loss_contrast
                     
-                        contrastive_feats = torch.cat((norm_logits.unsqueeze(1), norm_aug_logits.unsqueeze(1)), dim = 1)
-                        loss_contrast = self.contrast_criterion(contrastive_feats, labels = label_ids, temperature = args.train_temperature, device = self.device)
-                        
-                        loss = loss_contrast
-                        
-                        self.l_optimizer.zero_grad()
-                        loss.backward()
+                    self.l_optimizer.zero_grad()
+                    loss.backward()
 
-                        self.l_optimizer.step()
-                        self.l_scheduler.step()
+                    self.l_optimizer.step()
+                    self.l_scheduler.step()
             
             init_mechanism = 'k-means++' if epoch == 0 else 'centers'
             outputs, km_centroids, y_true, assign_labels, pseudo_labels = self.clustering(args, init = init_mechanism)
@@ -159,63 +157,58 @@ class USNIDManager:
             if epoch > 0:
 
                 self.logger.info("***** Epoch: %s *****", str(epoch))
-                if not args.wo_self:
-                    self.logger.info('Training Loss: %f', np.round(tr_loss, 5))
-                    
+                self.logger.info('Training Loss: %f', np.round(tr_loss, 5))
                 self.logger.info('Delta Label: %f', delta_label)
                 if delta_label < args.tol:
                     self.logger.info('delta_label %s < %f', delta_label, args.tol)  
                     self.logger.info('Reached tolerance threshold. Stop training.')
                     break                   
             
-            if not args.wo_self:
-                pseudo_train_dataloader = self.get_augment_dataloader(args, self.train_outputs, pseudo_labels)
+            pseudo_train_dataloader = self.get_augment_dataloader(args, self.train_outputs, pseudo_labels)
 
-                tr_loss = 0
-                nb_tr_examples, nb_tr_steps = 0, 0
-                self.model.train()
+            tr_loss = 0
+            nb_tr_examples, nb_tr_steps = 0, 0
+            self.model.train()
+            
+            for batch in tqdm(pseudo_train_dataloader, desc="Training(All)"):
                 
-                for batch in tqdm(pseudo_train_dataloader, desc="Training(All)"):
+                batch = tuple(t.to(self.device) for t in batch)
+                input_ids, input_mask, segment_ids, label_ids = batch
                     
-                    batch = tuple(t.to(self.device) for t in batch)
-                    input_ids, input_mask, segment_ids, label_ids = batch
-                       
-                    with torch.set_grad_enabled(True):
+                with torch.set_grad_enabled(True):
+                    
+                    input_ids_a,  input_ids_b = self.batch_chunk(input_ids)
+                    input_mask_a,  input_mask_b = self.batch_chunk(input_mask)
+                    segment_ids_a,  segment_ids_b = self.batch_chunk(segment_ids)
+                    label_ids = torch.chunk(input=label_ids, chunks=2, dim=1)[0][:, 0]
                         
-                        input_ids_a,  input_ids_b = self.batch_chunk(input_ids)
-                        input_mask_a,  input_mask_b = self.batch_chunk(input_mask)
-                        segment_ids_a,  segment_ids_b = self.batch_chunk(segment_ids)
-                        label_ids = torch.chunk(input=label_ids, chunks=2, dim=1)[0][:, 0]
-                            
-                        aug_mlp_outputs_a, aug_logits_a = self.model(input_ids_a, segment_ids_a, input_mask_a)               
-                        aug_mlp_outputs_b, aug_logits_b = self.model(input_ids_b, segment_ids_b, input_mask_b)
-                        
-                        norm_logits = F.normalize(aug_mlp_outputs_a)
-                        norm_aug_logits = F.normalize(aug_mlp_outputs_b)
+                    aug_mlp_outputs_a, aug_logits_a = self.model(input_ids_a, segment_ids_a, input_mask_a)               
+                    aug_mlp_outputs_b, aug_logits_b = self.model(input_ids_b, segment_ids_b, input_mask_b)
+                    
+                    norm_logits = F.normalize(aug_mlp_outputs_a)
+                    norm_aug_logits = F.normalize(aug_mlp_outputs_b)
 
-                        if not args.wo_ce:
-                            loss_ce = 0.5 * (self.criterion(aug_logits_a, label_ids) + self.criterion(aug_logits_b, label_ids)) 
-                        
-                        if not args.wo_con:
-                            contrastive_feats = torch.cat((norm_logits.unsqueeze(1), norm_aug_logits.unsqueeze(1)), dim = 1)
-                            loss_contrast = self.contrast_criterion(contrastive_feats, labels = label_ids, temperature = args.train_temperature, device = self.device)
-                            
-                        loss = loss_contrast + loss_ce
-                        
-                        self.optimizer.zero_grad()
-                        loss.backward()
+                    loss_ce = 0.5 * (self.criterion(aug_logits_a, label_ids) + self.criterion(aug_logits_b, label_ids)) 
+                    
+                    contrastive_feats = torch.cat((norm_logits.unsqueeze(1), norm_aug_logits.unsqueeze(1)), dim = 1)
+                    loss_contrast = self.contrast_criterion(contrastive_feats, labels = label_ids, temperature = args.train_temperature, device = self.device)
+                    
+                    loss = loss_contrast + loss_ce
+                    
+                    self.optimizer.zero_grad()
+                    loss.backward()
 
-                        if args.grad_clip != -1.0:
-                            nn.utils.clip_grad_value_([param for param in self.model.parameters() if param.requires_grad], args.grad_clip)
+                    if args.grad_clip != -1.0:
+                        nn.utils.clip_grad_value_([param for param in self.model.parameters() if param.requires_grad], args.grad_clip)
 
-                        tr_loss += loss.item()
-                        nb_tr_examples += input_ids.size(0)
-                        nb_tr_steps += 1
+                    tr_loss += loss.item()
+                    nb_tr_examples += input_ids.size(0)
+                    nb_tr_steps += 1
 
-                        self.optimizer.step()
-                        self.scheduler.step()
-                
-                tr_loss = tr_loss / nb_tr_steps
+                    self.optimizer.step()
+                    self.scheduler.step()
+            
+            tr_loss = tr_loss / nb_tr_steps
     
         if args.save_model:
             save_model(self.model, args.model_output_dir)

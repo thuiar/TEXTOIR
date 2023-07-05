@@ -4,7 +4,6 @@ import numpy as np
 import os
 import logging
 import time
-import faiss
 
 from torch.utils.data import DataLoader, TensorDataset, RandomSampler
 from tqdm import trange, tqdm

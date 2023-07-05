@@ -52,7 +52,6 @@ class Param():
                 'eval_batch_size': 64,
                 'test_batch_size': 64,
                 'wait_patient': 10,
-                'wo_ce': False,
             }
         elif args.dataset == 'clinc':
             print("==============clinc config")
@@ -81,7 +80,6 @@ class Param():
                 'eval_batch_size': 64,
                 'test_batch_size': 64,
                 'wait_patient': 10,
-                'wo_ce': False,
             }
              
         elif args.dataset == 'stackoverflow':
@@ -111,7 +109,6 @@ class Param():
                 'eval_batch_size': 64,
                 'test_batch_size': 64,
                 'wait_patient': 10,
-                'wo_ce': False,
             }
 
         return hyper_parameters

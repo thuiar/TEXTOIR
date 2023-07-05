@@ -3,7 +3,6 @@ import torch.nn.functional as F
 import numpy as np
 import logging
 import os
-import faiss
 import time 
 
 from torch.utils.data import DataLoader, TensorDataset, RandomSampler
@@ -62,22 +61,6 @@ class UnsupUSNIDManager:
             args.num_train_epochs, args.lr, args.warmup_proportion)
         
         self.device = model.device
-        
-    def faiss_kmeans(self, args, x, init_centroids = None):
-        
-        d = x.shape[1]
-        
-        km = faiss.Kmeans(x.shape[1], self.num_labels, niter = 300, verbose = False, nredo = 10, gpu = 1, seed = args.seed)
-        km.train(x, init_centroids = init_centroids)
-        
-        res = faiss.StandardGpuResources()
-        index_flat = faiss.IndexFlatL2(d)
-        gpu_index_flat = faiss.index_cpu_to_gpu(res, 0, index_flat)
-        centroids = km.centroids
-        gpu_index_flat.add(centroids)
-        distances, labels = gpu_index_flat.search(x, 1)
-        
-        return centroids, labels.ravel()
     
     def clustering(self, args, init = 'k-means++'):
         
@@ -157,21 +140,15 @@ class UnsupUSNIDManager:
                     aug_mlp_output_a, aug_logits_a = self.model(input_ids_a, segment_ids_a, input_mask_a, mode = 'train')               
                     aug_mlp_output_b, aug_logits_b = self.model(input_ids_b, segment_ids_b, input_mask_b, mode = 'train')
 
-                    if not args.wo_ce:
-                        loss_ce = 0.5 * (self.criterion(aug_logits_a, label_ids) + self.criterion(aug_logits_b, label_ids))
+                    loss_ce = 0.5 * (self.criterion(aug_logits_a, label_ids) + self.criterion(aug_logits_b, label_ids))
 
                     norm_logits = F.normalize(aug_mlp_output_a)
                     norm_aug_logits = F.normalize(aug_mlp_output_b)
                     
                     contrastive_feats = torch.cat((norm_logits.unsqueeze(1), norm_aug_logits.unsqueeze(1)), dim = 1)
                     loss_contrast = self.contrast_criterion(contrastive_feats, labels = label_ids, temperature = args.train_temperature, device = self.device)
-                    
-                    
-                    if not args.wo_ce:
-                        loss = loss_contrast + loss_ce
-                    else:
-                        loss = loss_contrast
-                    
+            
+                    loss = loss_contrast + loss_ce
                     self.optimizer.zero_grad()
                     loss.backward()
 
