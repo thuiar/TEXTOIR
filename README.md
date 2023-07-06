@@ -6,7 +6,8 @@ TEXTOIR is the first high-quality Text Open Intent Recognition platform. This re
 ## Introduction
 TEXTOIR aims to provide a convenience toolkit for researchers to reproduce the related text open classification and clustering methods. It contains two tasks, which are defined as open intent detection and open intent discovery. Open intent detection aims to identify n-class known intents, and detect one-class open intent. Open intent discovery aims to leverage limited prior knowledge of known intents to find fine-grained known and open intent-wise clusters. Related papers and codes are collected in our previous released [reading list](https://github.com/thuiar/OKD-Reading-List).
 
-
+Open Intent Recognition:  
+![Example](figs/Intro.png "Example")
 
 ## Updates 🔥 🔥 🔥 
 
@@ -20,13 +21,8 @@ TEXTOIR aims to provide a convenience toolkit for researchers to reproduce the r
 | 05/2020 	| New paper and baselines CDAC+ in Open Intent Discovery have been released. Read our paper [Discovering New Intents via Constrained Deep Adaptive Clustering with Cluster Refinement (Published in AAAI 2020)](https://ojs.aaai.org/index.php/AAAI/article/view/6353). 	|
 ---------------------------------------------------------------------------
 
-
-
-Open Intent Recognition:  
-![Example](figs/Intro.png "Example")
-
  **We strongly recommend you to use our TEXTOIR toolkit, which has standard and unified interfaces (especially data setting) to obtain fair and persuable results on benchmark intent datasets!**
-
+ 
 ## Benchmark Datasets
 
 | Datasets | Source |
