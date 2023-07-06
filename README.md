@@ -39,16 +39,23 @@ Open Intent Recognition:
 
 | Setting | Model Name | Source | Published |
 | :---: | :---: | :---: | :---: |
-| Unsupervised | [KM](./open_intent_discovery/examples/run_KM.sh) | [Paper](https://www.cs.cmu.edu/~bhiksha/courses/mlsp.fall2010/class14/macqueen.pdf) | BSMSP 1967 |
-| Unsupervised | [AG](./open_intent_discovery/examples/run_AG.sh) | [Paper](https://www.sciencedirect.com/science/article/abs/pii/0031320378900183) | PR 1978 |
-| Unsupervised | [SAE-KM](./open_intent_discovery/examples/run_SAE.sh) | [Paper](https://www.jmlr.org/papers/volume11/vincent10a/vincent10a.pdf)  | JMLR 2010|
-| Unsupervised | [DEC](./open_intent_discovery/examples/run_DEC.sh) | [Paper](http://proceedings.mlr.press/v48/xieb16.pdf) [Code](https://github.com/piiswrong/dec) | ICML 2016 |
-| Unsupervised | [DCN](./open_intent_discovery/examples/run_DCN.sh) | [Paper](http://proceedings.mlr.press/v70/yang17b/yang17b.pdf) [Code](https://github.com/xuyxu/Deep-Clustering-Network) | ICML 2017 |
-| Semi-supervised | [KCL*](./open_intent_discovery/examples/run_KCL.sh) | [Paper](https://openreview.net/pdf?id=ByRWCqvT-) [Code](https://github.com/GT-RIPL/L2C) | ICLR 2018 |
-| Semi-supervised | [MCL*](./open_intent_discovery/examples/run_MCL.sh) | [Paper](https://openreview.net/pdf?id=SJzR2iRcK7) [Code](https://github.com/GT-RIPL/L2C) | ICLR 2019 |
-| Semi-supervised | [DTC*](./open_intent_discovery/examples/run_DTC.sh) | [Paper](https://www.robots.ox.ac.uk/~vgg/research/DTC/files/iccv2019_DTC.pdf) [Code](https://github.com/k-han/DTC) | ICCV 2019 |
-| Semi-supervised | [CDAC+](./open_intent_discovery/examples/run_CDACPlus.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/6353) [Code](https://github.com/thuiar/CDAC-plus) | AAAI 2020 |
-| Semi-supervised | [DeepAligned](./open_intent_discovery/examples/run_DeepAligned.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/17689) [Code](https://github.com/thuiar/DeepAligned-Clustering) | AAAI 2021 |
+| Unsupervised | [KM](./examples/run_KM.sh) | [Paper](https://www.cs.cmu.edu/~bhiksha/courses/mlsp.fall2010/class14/macqueen.pdf) | BSMSP 1967 |
+| Unsupervised | [AG](./examples/run_AG.sh) | [Paper](https://www.sciencedirect.com/science/article/abs/pii/0031320378900183) | PR 1978 |
+| Unsupervised | [SAE-KM](./examples/run_SAE.sh) | [Paper](https://www.jmlr.org/papers/volume11/vincent10a/vincent10a.pdf)  | JMLR 2010|
+| Unsupervised | [DEC](./examples/run_DEC.sh) | [Paper](http://proceedings.mlr.press/v48/xieb16.pdf) [Code](https://github.com/piiswrong/dec) | ICML 2016 |
+| Unsupervised | [DCN](./examples/run_DCN.sh) | [Paper](http://proceedings.mlr.press/v70/yang17b/yang17b.pdf) [Code](https://github.com/xuyxu/Deep-Clustering-Network) | ICML 2017 |
+| Unsupervised | [CC](./examples/run_DCN.sh) | [Paper](https://yunfan-li.github.io/assets/pdf/Contrastive%20Clustering.pdf) [Code](https://github.com/Yunfan-Li/Contrastive-Clustering) | AAAI 2021 |
+| Unsupervised | [SCCL](./examples/run_DCN.sh) | [Paper](http://proceedings.mlr.press/v70/yang17b/yang17b.pdf) [Code](https://github.com/xuyxu/Deep-Clustering-Network) | NAACL 2021 |
+| Unsupervised | [USNID](./examples/run_DCN.sh) | [Paper](https://arxiv.org/pdf/2304.07699.pdf) [Code](https://github.com/thuiar/TEXTOIR/tree/main/open_intent_discovery) |   arXiv 2023 |
+| Semi-supervised | [KCL*](./examples/run_KCL.sh) | [Paper](https://openreview.net/pdf?id=ByRWCqvT-) [Code](https://github.com/GT-RIPL/L2C) | ICLR 2018 |
+| Semi-supervised | [MCL*](./examples/run_MCL.sh) | [Paper](https://openreview.net/pdf?id=SJzR2iRcK7) [Code](https://github.com/GT-RIPL/L2C) | ICLR 2019 |
+| Semi-supervised | [DTC*](./examples/run_DTC.sh) | [Paper](https://www.robots.ox.ac.uk/~vgg/research/DTC/files/iccv2019_DTC.pdf) [Code](https://github.com/k-han/DTC) | ICCV 2019 |
+| Semi-supervised | [CDAC+](./examples/run_CDACPlus.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/6353) [Code](https://github.com/thuiar/CDAC-plus) | AAAI 2020 |
+| Semi-supervised | [DeepAligned](./examples/run_DeepAligned.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/17689) [Code](https://github.com/thuiar/DeepAligned-Clustering) | AAAI 2021 |
+| Semi-supervised | [GCD](./examples/run_DeepAligned.sh) | [Paper](https://www.robots.ox.ac.uk/~vgg/research/gcd/) [Code](https://github.com/sgvaze/generalized-category-discovery) | CVPR 2022 |
+| Semi-supervised | [MTP-CLNN](./examples/run_DeepAligned.sh) | [Paper](https://aclanthology.org/2022.acl-long.21.pdf) [Code](https://github.com/LonelVino/MTP-CLNN) | ACL 2022 |
+| Semi-supervised | [USNID](./examples/run_DeepAligned.sh) | [Paper](https://arxiv.org/pdf/2304.07699.pdf) [Code](https://github.com/thuiar/TEXTOIR/tree/main/open_intent_discovery) |  arXiv 2023 |
+
 
 (* denotes the CV model replaced with the BERT backbone)
 
