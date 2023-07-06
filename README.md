@@ -12,18 +12,13 @@ TEXTOIR aims to provide a convenience toolkit for researchers to reproduce the r
 
 | Date 	| Announcements 	|
 |-	|-	|
-| 07/2023  | 🎆 🎆 New paper and SOTA in Open Intent Discovery. Refer to the directory [USNID](./open_intent_discovery/examples/run_semi_usnid.sh) for the code. Read the paper -- [USNID: A Framework for Unsupervised and Semi-supervised New Intent Discovery](https://arxiv.org/pdf/2304.07699.pdf).  |
-| 04/2023  | 🎆 🎆 New paper and SOTA in Open Intent Detection. Refer to the directory [DA-ADB](./COSMIC) for the code. Read the paper -- [DA-ADB: COmmonSense knowledge for eMotion Identification in Conversations(Accepted by IEEE/ACM TASLP 2023)](https://arxiv.org/pdf/2010.02795.pdf).  |
-| 09/2021 	| 🎆 🎆 New paper TEXTOIR demo in Open Intent Recognition have been released, which is the first integrated and visualized platform for text Open Intent Recognition. Read our paper [TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition(Accepted by ACL 2021)](https://aclanthology.org/2021.acl-demo.20.pdf). Fork the [codes](https://github.com/thuiar/TEXTOIR-DEMO). 	|
-| 09/2021 	| New paper and baselines DeepAligned in Open Intent Discovery have been released. Read our paper [Discovering New Intents with Deep Aligned Clustering(Accepted by AAAI 2021)](https://ojs.aaai.org/index.php/AAAI/article/view/17689). Fork the [codes](https://github.com/thuiar/DeepAligned-Clustering). 	|
-| 09/2021 	| New paper and baselines ADB in Open Intent Detection have been released. Read our paper [Deep Open Intent Classification with Adaptive Decision Boundary(Accepted by AAAI 2021)](https://ojs.aaai.org/index.php/AAAI/article/view/17690). Fork the [codes](https://github.com/thuiar/Adaptive-Decision-Boundary). 	|
-| 09/2020 	| New paper and baselines CDAC+ in Open Intent Discovery have been released. Read our paper [Discovering New Intents via Constrained Deep Adaptive Clustering with Cluster Refinement(Accepted by AAAI 2020)](https://arxiv.org/pdf/1911.08891.pdf). Fork the [codes](https://github.com/thuiar/CDAC-plus). 	|
+| 07/2023  | 🎆 🎆 New paper and SOTA in Open Intent Discovery. Refer to the directory [USNID](./open_intent_discovery/examples/run_semi_usnid.sh) for the codes. Read the paper -- [USNID: A Framework for Unsupervised and Semi-supervised New Intent Discovery](https://arxiv.org/pdf/2304.07699.pdf).  |
+| 04/2023  | 🎆 🎆 New paper and SOTA in Open Intent Detection. Refer to the directory [DA-ADB](./open_intent_detection/examples/run_DA-ADB.sh) for the codes. Read the paper -- [Learning Discriminative Representations and Decision Boundaries for Open Intent Detection (Published in IEEE/ACM TASLP 2023)](https://ieeexplore.ieee.org/document/10097558).  |
+| 09/2021 	| 🎆 🎆 The first integrated and visualized platform for text Open Intent Recognition TEXTOIR has been released. Refer to the directory [TEXTOIR-DEMO](https://github.com/thuiar/TEXTOIR-DEMO) for the demo codes. Read our paper [TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition (Published in ACL 2021)](https://aclanthology.org/2021.acl-demo.20.pdf).	|
+| 05/2021 	| New paper and baselines DeepAligned in Open Intent Discovery have been released. Read our paper [Discovering New Intents with Deep Aligned Clustering (Published in AAAI 2021)](https://ojs.aaai.org/index.php/AAAI/article/view/17689). 	|
+| 05/2021 	| New paper and baselines ADB in Open Intent Detection have been released. Read our paper [Deep Open Intent Classification with Adaptive Decision Boundary (Published in AAAI 2021)](https://ojs.aaai.org/index.php/AAAI/article/view/17690). 	|
+| 05/2020 	| New paper and baselines CDAC+ in Open Intent Discovery have been released. Read our paper [Discovering New Intents via Constrained Deep Adaptive Clustering with Cluster Refinement (Published in AAAI 2020)](https://ojs.aaai.org/index.php/AAAI/article/view/6353). 	|
 ---------------------------------------------------------------------------
-
-
-
-
-
 
 
 
