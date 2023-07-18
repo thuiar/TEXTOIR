@@ -36,7 +36,7 @@ We collect benchmark intent datasets, and reproduce related methods to our best.
 | Semi-supervised | [CDAC+](./examples/run_CDACPlus.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/6353) [Code](https://github.com/thuiar/CDAC-plus) | AAAI 2020 |
 | Semi-supervised | [DeepAligned](./examples/run_DeepAligned.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/17689) [Code](https://github.com/thuiar/DeepAligned-Clustering) | AAAI 2021 |
 | Semi-supervised | [GCD](./examples/run_DeepAligned.sh) | [Paper](https://www.robots.ox.ac.uk/~vgg/research/gcd/) [Code](https://github.com/sgvaze/generalized-category-discovery) | CVPR 2022 |
-| Semi-supervised | [MTP-CLNN](./examples/run_DeepAligned.sh) | [Paper](https://aclanthology.org/2022.acl-long.21.pdf) [Code](https://github.com/LonelVino/MTP-CLNN) | ACL 2022 |
+| Semi-supervised | [MTP-CLNN](./examples/run_DeepAligned.sh) | [Paper](https://aclanthology.org/2022.acl-long.21.pdf) [Code](https://github.com/fanolabs/NID_ACLARR2022) | ACL 2022 |
 | Semi-supervised | [USNID](./examples/run_DeepAligned.sh) | [Paper](https://arxiv.org/pdf/2304.07699.pdf) [Code](https://github.com/thuiar/TEXTOIR/tree/main/open_intent_discovery) |  arXiv 2023 |
 
 
