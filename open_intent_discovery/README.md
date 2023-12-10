@@ -177,7 +177,7 @@ Add a script in the [examples](./examples) directory, and configure the parsing 
 If you are interested in this work, and want to use the codes in this repo, please star/fork this repo, and cite the following works:
 
 * [TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition](https://aclanthology.org/2021.acl-demo.20/)
-* [USNID: A Framework for Unsupervised and Semi-supervised New Intent Discovery](https://arxiv.org/abs/2304.07699)
+* [A Clustering Framework for Unsupervised and Semi-supervised New Intent Discovery](https://ieeexplore.ieee.org/document/10349963)
 
 ```
 @inproceedings{zhang-etal-2021-textoir,
