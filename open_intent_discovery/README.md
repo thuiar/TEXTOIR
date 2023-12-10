@@ -191,10 +191,11 @@ If you are interested in this work, and want to use the codes in this repo, plea
 }
 ```
 ```
-@article{USNID, 
-    title={USNID: A Framework for Unsupervised and Semi-supervised New Intent Discovery},  
-    author={Zhang, Hanlei and Xu, Hua and Wang, Xin and Long, Fei and Gao, Kai},
-    journal={arXiv preprint arXiv:2304.07699},  
-    year={2023}, 
- } 
+@ARTICLE{10349963,
+  author={Zhang, Hanlei and Xu, Hua and Wang, Xin and Long, Fei and Gao, Kai},
+  journal={IEEE Transactions on Knowledge and Data Engineering}, 
+  title={A Clustering Framework for Unsupervised and Semi-supervised New Intent Discovery}, 
+  year={2023},
+  doi={10.1109/TKDE.2023.3340732}
+}
 ```
