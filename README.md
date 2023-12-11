@@ -13,7 +13,7 @@ Open Intent Recognition:
 
 | Date 	| Announcements 	|
 |-	|-	|
-| 07/2023  | 🎆 🎆 New paper and SOTA in Open Intent Discovery. Refer to the directory [USNID](./open_intent_discovery/examples/run_semi_usnid.sh) for the codes. Read the paper -- [USNID: A Framework for Unsupervised and Semi-supervised New Intent Discovery (Accepted by IEEE TKDE 2023)](https://arxiv.org/pdf/2304.07699.pdf).  |
+| 07/2023  | 🎆 🎆 New paper and SOTA in Open Intent Discovery. Refer to the directory [USNID](./open_intent_discovery/examples/run_semi_usnid.sh) for the codes. Read the paper -- [A Clustering Framework for Unsupervised and Semi-supervised New Intent Discovery (Accepted by IEEE TKDE 2023)](https://ieeexplore.ieee.org/document/10349963).  |
 | 04/2023  | 🎆 🎆 New paper and SOTA in Open Intent Detection. Refer to the directory [DA-ADB](./open_intent_detection/examples/run_DA-ADB.sh) for the codes. Read the paper -- [Learning Discriminative Representations and Decision Boundaries for Open Intent Detection (Published in IEEE/ACM TASLP 2023)](https://ieeexplore.ieee.org/document/10097558).  |
 | 09/2021 	| 🎆 🎆 The first integrated and visualized platform for text Open Intent Recognition TEXTOIR has been released. Refer to the directory [TEXTOIR-DEMO](https://github.com/thuiar/TEXTOIR-DEMO) for the demo codes. Read our paper [TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition (Published in ACL 2021)](https://aclanthology.org/2021.acl-demo.20.pdf).	|
 | 05/2021 	| New paper and baselines DeepAligned in Open Intent Discovery have been released. Read our paper [Discovering New Intents with Deep Aligned Clustering (Published in AAAI 2021)](https://ojs.aaai.org/index.php/AAAI/article/view/17689). 	|
@@ -59,7 +59,7 @@ Open Intent Recognition:
 | Unsupervised | [DCN](./examples/run_DCN.sh) | [Paper](http://proceedings.mlr.press/v70/yang17b/yang17b.pdf) [Code](https://github.com/xuyxu/Deep-Clustering-Network) | ICML 2017 |
 | Unsupervised | [CC](./examples/run_CC.sh) | [Paper](https://yunfan-li.github.io/assets/pdf/Contrastive%20Clustering.pdf) [Code](https://github.com/Yunfan-Li/Contrastive-Clustering) | AAAI 2021 |
 | Unsupervised | [SCCL](./examples/run_SCCL.sh) | [Paper](http://proceedings.mlr.press/v70/yang17b/yang17b.pdf) [Code](https://github.com/xuyxu/Deep-Clustering-Network) | NAACL 2021 |
-| Unsupervised | [USNID](./examples/run_unsup_usnid) | [Paper](https://arxiv.org/pdf/2304.07699.pdf) [Code](https://github.com/thuiar/TEXTOIR/tree/main/open_intent_discovery) |   arXiv 2023 |
+| Unsupervised | [USNID](./examples/run_unsup_usnid) | [Paper](https://ieeexplore.ieee.org/document/10349963) [Code](https://github.com/thuiar/TEXTOIR/tree/main/open_intent_discovery) |   IEEE TKDE 2023 |
 | Semi-supervised | [KCL*](./examples/run_KCL.sh) | [Paper](https://openreview.net/pdf?id=ByRWCqvT-) [Code](https://github.com/GT-RIPL/L2C) | ICLR 2018 |
 | Semi-supervised | [MCL*](./examples/run_MCL.sh) | [Paper](https://openreview.net/pdf?id=SJzR2iRcK7) [Code](https://github.com/GT-RIPL/L2C) | ICLR 2019 |
 | Semi-supervised | [DTC*](./examples/run_DTC.sh) | [Paper](https://www.robots.ox.ac.uk/~vgg/research/DTC/files/iccv2019_DTC.pdf) [Code](https://github.com/k-han/DTC) | ICCV 2019 |
@@ -67,7 +67,7 @@ Open Intent Recognition:
 | Semi-supervised | [DeepAligned](./examples/run_DeepAligned.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/17689) [Code](https://github.com/thuiar/DeepAligned-Clustering) | AAAI 2021 |
 | Semi-supervised | [GCD](./examples/run_GCD.sh) | [Paper](https://www.robots.ox.ac.uk/~vgg/research/gcd/) [Code](https://github.com/sgvaze/generalized-category-discovery) | CVPR 2022 |
 | Semi-supervised | [MTP-CLNN](./examples/run_MTP_CLNN.sh) | [Paper](https://aclanthology.org/2022.acl-long.21.pdf) [Code](https://github.com/fanolabs/NID_ACLARR2022) | ACL 2022 |
-| Semi-supervised | [USNID](./examples/run_semi_usnid.sh) | [Paper](https://arxiv.org/pdf/2304.07699.pdf) [Code](https://github.com/thuiar/TEXTOIR/tree/main/open_intent_discovery) |  arXiv 2023 |
+| Semi-supervised | [USNID](./examples/run_semi_usnid.sh) | [Paper](https://ieeexplore.ieee.org/document/10349963) [Code](https://github.com/thuiar/TEXTOIR/tree/main/open_intent_discovery) |  IEEE TKDE 2023 |
 
 
 (* denotes the CV model replaced with the BERT backbone)
@@ -115,7 +115,7 @@ If this work is helpful, or you want to use the codes and results in this repo, 
 
 * [TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition](https://aclanthology.org/2021.acl-demo.20/)
 * [Learning Discriminative Representations and Decision Boundaries for Open Intent Detection](https://ieeexplore.ieee.org/document/10097558)
-* [USNID: A Framework for Unsupervised and Semi-supervised New Intent Discovery](https://arxiv.org/abs/2304.07699)
+* [A Clustering Framework for Unsupervised and Semi-supervised New Intent Discovery](https://ieeexplore.ieee.org/document/10349963)
 
 ```
 @inproceedings{zhang-etal-2021-textoir,
@@ -140,12 +140,13 @@ If this work is helpful, or you want to use the codes and results in this repo, 
 } 
 ```
 ```
-@article{USNID, 
-    title={USNID: A Framework for Unsupervised and Semi-supervised New Intent Discovery},  
-    author={Zhang, Hanlei and Xu, Hua and Wang, Xin and Long, Fei and Gao, Kai},
-    journal={arXiv preprint arXiv:2304.07699},  
-    year={2023}, 
- } 
+@ARTICLE{USNID,
+  author={Zhang, Hanlei and Xu, Hua and Wang, Xin and Long, Fei and Gao, Kai},
+  journal={IEEE Transactions on Knowledge and Data Engineering}, 
+  title={A Clustering Framework for Unsupervised and Semi-supervised New Intent Discovery}, 
+  year={2023},
+  doi={10.1109/TKDE.2023.3340732}
+} 
 ```
 
 
