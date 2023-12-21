@@ -79,28 +79,32 @@ Open Intent Recognition:
 conda create --name textoir python=3.6
 conda activate textoir
 ```
+
 2. Install PyTorch (Cuda version 11.2)
 ```
 conda install pytorch torchvision torchaudio cudatoolkit=11.0 -c pytorch -c conda-forge  
 ```
-2. Clone the TEXTOIR repository, and choose the task (Take open intent detection as an example).
+3. Clone the TEXTOIR repository, and choose the task (Take open intent detection as an example).
 ```
 git clone git@github.com:thuiar/TEXTOIR.git
 cd TEXTOIR
 cd open_intent_detection
 ```
-3. Install related environmental dependencies
+4. Install related environmental dependencies
 ```
 pip install -r requirements.txt
 ```
-4. Run examples (Take ADB as an example)
+5. Run examples (Take ADB as an example)
 ```
 sh examples/run_ADB.sh
 ```
 
+* Note that if you cannot download the pre-trained model directly from HuggingFace transformers, you need to download it yourself. We provide the pre-trained bert model in the following link:  
+[Baidu Cloud Drive](https://pan.baidu.com/s/1k1zxK4xh0UyPhOU_-oPlow) with code: v8tk
+
 ## Extensibility
 
-This toolkit is extensible and supports adding new methods, datasets, configurations, backbones, dataloaders, losses conveniently. More detailed information can be seen in the directory [open_intent_detection](./open_intent_detection/README.md) and [open_intent_discovery](./open_intent_discovery/README.md) respectively. 
+This toolkit is extensible and supports adding new methods, datasets, configurations, backbones, dataloaders, losses conveniently. More detailed information can be seen in the tutorials of the directories [open_intent_detection](./open_intent_detection/README.md) and [open_intent_discovery](./open_intent_discovery/README.md). 
 
 <!-- ### Extensibility
 This toolkit is extensible and supports adding new methods, datasets, configurations, backbones, dataloaders, losses conveniently. More detailed information can be seen in the directory [open_intent_detection](./open_intent_detection/README.md) and [open_intent_discovery](./open_intent_discovery/README.md) respectively. 
