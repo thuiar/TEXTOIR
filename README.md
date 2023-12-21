@@ -19,6 +19,7 @@ Open Intent Recognition:
 | 05/2021 	| New paper and baselines DeepAligned in Open Intent Discovery have been released. Read our paper [Discovering New Intents with Deep Aligned Clustering (Published in AAAI 2021)](https://ojs.aaai.org/index.php/AAAI/article/view/17689). 	|
 | 05/2021 	| New paper and baselines ADB in Open Intent Detection have been released. Read our paper [Deep Open Intent Classification with Adaptive Decision Boundary (Published in AAAI 2021)](https://ojs.aaai.org/index.php/AAAI/article/view/17690). 	|
 | 05/2020 	| New paper and baselines CDAC+ in Open Intent Discovery have been released. Read our paper [Discovering New Intents via Constrained Deep Adaptive Clustering with Cluster Refinement (Published in AAAI 2020)](https://ojs.aaai.org/index.php/AAAI/article/view/6353). 	|
+| 07/2019 	| New paper and baselines DeepUNK in Open Intent Detection have been released. Read our paper [Deep Unknown Intent Detection with Margin Loss (Published in ACL 2019)](https://aclanthology.org/P19-1548). 	|
 ---------------------------------------------------------------------------
 
  **We strongly recommend you to use our TEXTOIR toolkit, which has standard and unified interfaces (especially data setting) to obtain fair and persuable results on benchmark intent datasets!**
