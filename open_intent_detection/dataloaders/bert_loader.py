@@ -61,7 +61,7 @@ def get_examples(args, base_attrs, mode):
 
         examples = []
         for example in ori_examples:
-            if (example.label in base_attrs['label_list']) and (example.label is not base_attrs['unseen_label']):
+            if (example.label in base_attrs['label_list']) and (example.label != base_attrs['unseen_label']):
                 examples.append(example)
             else:
                 example.label = base_attrs['unseen_label']
