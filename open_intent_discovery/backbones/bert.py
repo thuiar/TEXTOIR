@@ -317,8 +317,7 @@ class BERT_USNID_UNSUP(BertPreTrainedModel):
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
         self.args = args
  
-        if not args.wo_ce:
-            self.classifier = nn.Linear(config.hidden_size, args.num_labels)
+        self.classifier = nn.Linear(config.hidden_size, args.num_labels)
         self.mlp_head = nn.Linear(config.hidden_size, args.num_labels)
             
         self.init_weights()
@@ -337,19 +336,15 @@ class BERT_USNID_UNSUP(BertPreTrainedModel):
         pooled_output = self.activation(features)   
         pooled_output = self.dropout(features)
         
-        if not self.args.wo_ce:
-            logits = self.classifier(pooled_output)
+        logits = self.classifier(pooled_output)
             
         mlp_outputs = self.mlp_head(pooled_output)
         
         if feature_ext:
             return features, mlp_outputs
         else:
-            if not self.args.wo_ce:
-                return mlp_outputs, logits
-            else:
-                return mlp_outputs, mlp_outputs
-        
+            return mlp_outputs, logits
+            
 class BertForConstrainClustering(BertPreTrainedModel):
     def __init__(self, config, args):
         super(BertForConstrainClustering, self).__init__(config)
