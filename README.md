@@ -49,7 +49,7 @@ Open Intent Recognition:
 | [KNNCL](./open_intent_detection/examples/run_KNNCL.sh) | [Paper](https://aclanthology.org/2022.acl-long.352/) [Code](https://github.com/zyh190507/KnnContrastiveForOOD) | ACL 2022 |
 | [DA-ADB](./open_intent_detection/examples/run_DA-ADB.sh) | [Paper](https://ieeexplore.ieee.org/document/10097558) [Code](https://github.com/thuiar/TEXTOIR) | IEEE/ACM TASLP 2023 |
 
-### Open Intent Discovery
+### New Intent Discovery
 
 | Setting | Model Name | Source | Published |
 | :---: | :---: | :---: | :---: |
