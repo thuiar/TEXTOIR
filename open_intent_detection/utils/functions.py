@@ -94,7 +94,7 @@ def save_results(args, test_results):
     else:
         df1 = pd.read_csv(results_path)
         new = pd.DataFrame(results,index=[1])
-        df1 = df1.append(new,ignore_index=True)
+        df1 = pd.concat([df1, new], ignore_index=True)
         df1.to_csv(results_path,index=False)
     data_diagram = pd.read_csv(results_path)
     

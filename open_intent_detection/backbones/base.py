@@ -33,7 +33,7 @@ class ModelManager:
         backbone = backbones_map[args.backbone]
         args.device = self.device = torch.device('cuda:%d' % int(args.gpu_id) if torch.cuda.is_available() else 'cpu')
 
-        if pattern == 'bert':
+        if pattern == 'bert' or pattern == 'llama':
             if hasattr(backbone, 'from_pretrained'):
                 model = backbone.from_pretrained('bert-base-uncased', args = args)  
             else:
