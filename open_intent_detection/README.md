@@ -60,6 +60,7 @@ The detailed results can be seen in [results.md](results/results.md).
 
 * KIR means "Known Intent Ratio". "Open" and "Known" denote the macro f1-score over open class and known classes respectively.    
 * KNNCL (All) utilizes all 12 transformer layers for fine-tuning. KNNCL (last) utilizes only the last transformer layer for fine-tuning as the other baselines.
+* We also test the performance of the DA-ADB method on the backbone of llama, corresponding to the methond DA-ADB_llama.
 
 | | | BANKING     |  | OOS      |  |  StackOverflow     |  |  
 |:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
@@ -75,8 +76,9 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.25|ARPL|76.8|64.01|84.51|73.44|66.76|62.62|
 |0.25|KNNCL (Last)|73.01|66.23|89.87|79.23|28.65|37.37|
 |0.25|ADB|79.33|71.63|88.3|78.23|86.75|79.85|
-|0.25|KNNCL (All)|**86.14**|**77.01**|**93.07**|**82.45**|85.04|79.06|
+|0.25|KNNCL (All)|**86.14**|**77.01**|**93.07**|82.45|85.04|79.06|
 |0.25|DA-ADB|81.19|73.73|89.48|79.92|**89.07**|**82.83**|
+|0.25|DA-ADB_llama|83.29|76.78|91.53|**84.54**|85.54|77.81|
 |||||||||
 |0.5|MSP|61.67|72.51|66.68|72.7|53.23|62.7|
 |0.5|SEG|55.11|63.32|60.67|62.55|43.04|55.1|
@@ -89,8 +91,9 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.5|ARPL|74.11|77.77|80.36|80.88|75.65|77.87|
 |0.5|KNNCL (Last)|70.41|74.96|85.32|83.31|45.38|56.69|
 |0.5|ADB|79.61|81.34|86.54|85.16|86.49|85.54|
-|0.5|KNNCL (All)|**82.76**|81.31|**88.66**|83.99|86.69|86.15|
-|0.5|DA-ADB|81.51|**82.53**|87.93|**85.64**|**87.78**|**86.91**|
+|0.5|KNNCL (All)|**82.76**|81.31|88.66|83.99|86.69|86.15|
+|0.5|DA-ADB|81.51|82.53|87.93|85.64|**87.78**|**86.91**|
+|0.5|DA-ADB_llama|82.66|**83.67**|**90.29**|**88.86**|86.42|86.09|
 |||||||||
 |0.75|MSP|77.08|84.33|76.19|83.48|73.2|78.7|
 |0.75|SEG|64.65|69.54|42.78|42.7|62.72|69.97|
@@ -102,9 +105,10 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.75|MDF|64.59|74.76|63.98|72.02|62.98|71.12|
 |0.75|ARPL|79.6|85.16|81.29|86.0|79.64|83.85|
 |0.75|KNNCL (Last)|74.78|81.25|84.12|86.1|65.01|71.85|
-|0.75|ADB|**81.39**|**86.11**|86.99|**88.94**|82.89|86.11|
+|0.75|ADB|81.39|86.11|86.99|88.94|82.89|86.11|
 |0.75|KNNCL (All)|77.50|82.30|85.07|85.11|83.15|86.73|
-|0.75|DA-ADB|81.12|85.65|**87.39**|88.41|**83.56**|**86.84**|
+|0.75|DA-ADB|81.12|85.65|87.39|88.41|**83.56**|**86.84**|
+|0.75|DA-ADB_llama|**82.19**|**86.52**|**89.23**|**90.48**|82.69|86.28|
 
 #### Fine-grained Performance
 
@@ -122,8 +126,9 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.25|ARPL|83.39|62.99|89.63|73.01|72.95|60.55|
 |0.25|KNNCL (Last)|79.34|65.54|93.56|78.85|15.26|41.79|
 |0.25|ADB|85.05|70.92|92.36|77.85|90.96|77.62|
-|0.25|KNNCL (All)|**90.55**|**76.30**|**95.73**|**82.10**|89.59|76.96|
+|0.25|KNNCL (All)|**90.55**|**76.30**|**95.73**|82.10|89.59|76.96|
 |0.25|DA-ADB|86.57|73.05|93.2|79.57|**92.65**|**80.87**|
+|0.25|DA-ADB_llama|88.19|76.18|94.55|**84.27**|90.04|75.36|
 |||||||||
 |0.5|MSP|46.29|73.2|63.71|72.82|26.94|66.28|
 |0.5|SEG|43.03|63.85|61.34|62.57|4.72|60.14|
@@ -136,8 +141,9 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.5|ARPL|71.79|77.93|81.81|80.87|73.97|78.26|
 |0.5|KNNCL (Last)|67.21|75.16|87.85|83.25|8.5|61.5|
 |0.5|ADB|79.43|81.39|88.6|85.12|87.7|85.32|
-|0.5|KNNCL (All)|**84.28**|81.23|**91.17**|83.89|87.59|86.01|
-|0.5|DA-ADB|81.93|**82.54**|90.1|**85.58**|**88.86**|**86.71**|
+|0.5|KNNCL (All)|**84.28**|81.23|91.17|83.89|87.59|86.01|
+|0.5|DA-ADB|81.93|82.54|90.1|85.58|**88.86**|**86.71**|
+|0.5|DA-ADB_llama|83.23|**83.68**|**92.04**|**88.82**|87.43|85.95|
 |||||||||
 |0.75|MSP|46.05|84.99|63.86|83.65|37.86|81.42|
 |0.75|SEG|37.22|70.1|40.74|42.72|6.0|74.24|
@@ -149,9 +155,10 @@ The detailed results can be seen in [results.md](results/results.md).
 |0.75|MDF|33.43|75.47|51.33|72.21|28.52|73.96|
 |0.75|ARPL|61.26|85.58|74.67|86.1|62.99|85.24|
 |0.75|KNNCL (Last)|51.42|81.76|82.05|86.14|7.19|76.16|
-|0.75|ADB|67.34|**86.44**|**84.85**|**88.97**|74.1|86.91|
+|0.75|ADB|67.34|86.44|84.85|88.97|74.1|86.91|
 |0.75|KNNCL (All)|67.01|82.56|84.31|85.11|72.81|**87.66**|
-|0.75|DA-ADB|**69.37**|85.93|86.0|88.43|**74.55**|**87.66**|
+|0.75|DA-ADB|69.37|85.93|86.0|88.43|**74.55**|**87.66**|
+|0.75|DA-ADB_llama|**70.94**|**86.78**|**87.93**|**90.51**|72.84|87.17|
 
 ## Tutorials
 ### a. How to add a new dataset? 
@@ -171,11 +178,11 @@ benchmark_labels = {
 
 ### b. How to add a new backbone?
 
-1. Add a new backbone in the [backbones](./backbones) directory. For example, we provide some bert-based backbones in the [file](./backbones/bert.py).
+1. Add a new backbone in the [backbones](./backbones) directory. For example, we provide some bert-based backbones in the [file](./backbones/bert.py). And we also provide llama-based backbones in the [file](./backbones/llama.py). You can add a new backbone in the same way.
 
 2. Add the new backbone mapping in the [file](./backbones/__init__.py) as follows:
 ```
-from .bert import new_backbone_class
+from .bert import new_backbone_class # from .llama import new_backbone_class
 backbones_map = {
     'new_backbone': new_backbone_class
 }
@@ -194,6 +201,14 @@ from .bert_loader import BERT_Loader
 backbone_loader_map = {
     'bert': BERT_Loader,
     'bert_xxx': BERT_Loader,
+}
+```
+
+The llama-based model corresponds to the llama dataloader as follows.
+```
+from .llama_loader import LLAMA_Loader
+backbone_loader_map = {
+    'llama_disaware': LLAMA_Loader,
 }
 ```
 

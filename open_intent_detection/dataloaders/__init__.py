@@ -1,4 +1,5 @@
 from .bert_loader import BERT_Loader
+from .llama_loader import LLAMA_Loader
 
 max_seq_lengths = {
                         'stackoverflow':45,
@@ -16,7 +17,8 @@ backbone_loader_map = {
                             'bert_seg': BERT_Loader,
                             'bert_disaware': BERT_Loader,
                             'bert_mdf': BERT_Loader,
-                            'bert_knncl': BERT_Loader
+                            'bert_knncl': BERT_Loader,
+                            'llama_disaware': LLAMA_Loader,
                         }
 
 benchmark_labels = {

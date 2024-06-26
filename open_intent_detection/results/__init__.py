@@ -8,7 +8,6 @@ from .SEG.manager import SEGManager
 from .MDF.manager import MDFManager
 from .ARPL.manager import ARPLManager
 from .KNNCL.manager import KNNCLManager
-from .ADB_llama.manager import ADBManager_llama
 
 method_map = {
                 'ADB': ADBManager, 
@@ -22,6 +21,5 @@ method_map = {
                 'SEG': SEGManager,
                 'MDF': MDFManager,
                 'ARPL': ARPLManager,
-                'KNNCL': KNNCLManager,
-                'DA-ADB_llama' : ADBManager_llama,
+                'KNNCL': KNNCLManager
             }
