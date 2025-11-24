@@ -8,6 +8,8 @@ from torch.nn import CrossEntropyLoss, MSELoss
 from torch.nn.parameter import Parameter
 from transformers import BertPreTrainedModel, BertModel, BertForMaskedLM, AutoConfig
 from transformers.modeling_outputs import SequenceClassifierOutput
+from .utils import ConvexSampler
+from losses.SupConLoss import SupConLoss
 
 from .utils import ConvexSampler
 
@@ -621,4 +623,52 @@ class BERT_KNNCL(nn.Module):
             return probs, seq_embed
         else:
             raise ValueError("undefined mode")
+            
+class BERT_Con(BertPreTrainedModel):
+    def __init__(self, config, args):
+        super(BERT_Con, self).__init__(config)
+        self.args = args
+        self.num_labels = args.tot_num_labels
+        self.bert = BertModel(config)
+        self.dense = nn.Linear(config.hidden_size, args.feat_dim)
+        self.activation = activation_map[args.activation]
+        # self.dropout = nn.Dropout(config.hidden_dropout_prob)
+        # self.classifier = nn.Linear(args.feat_dim, args.tot_num_labels)
+        self.conloss = SupConLoss()
+        self.init_weights()
 
+    def forward(self, input_ids=None, token_type_ids=None, attention_mask=None, labels=None,
+                feature_ext=False, mode=None, loss_fct=None, use_con=False):
+        outputs = self.bert(
+            input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask, output_hidden_states=True)
+        encoded_layer_12 = outputs.hidden_states
+        
+        pooled_output = self.dense(encoded_layer_12[-1].mean(dim=1))
+        if hasattr(self.args, "wo_normalize"):
+            feature = pooled_output
+        else:
+            feature = pooled_output / torch.norm(pooled_output, 2, 1, keepdim=True)
+            
+        if feature_ext:
+            return feature
+        else:
+            logits = None
+            # logits = self.classifier(self.dropout(self.activation(feature)))
+            if mode == 'train':
+                # loss_ce = loss_fct(logits, labels)
+                loss_ce = None
+
+                if use_con:
+
+                    outputs = self.bert(
+                                input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask, output_hidden_states=True)
+                    encoded_layer_12 = outputs.hidden_states
+                    pooled_output_aug = self.dense(encoded_layer_12[-1].mean(dim=1))
+
+                    output_aug = torch.stack([pooled_output, pooled_output_aug], dim=1)
+                    loss_con = self.conloss(output_aug, labels, device=self.device)
+                    return loss_con
+                else:
+                    return loss_ce
+            else:
+                return pooled_output, logits

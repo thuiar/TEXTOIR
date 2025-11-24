@@ -9,6 +9,7 @@ from .MDF.manager import MDFManager
 from .ARPL.manager import ARPLManager
 from .KNNCL.manager import KNNCLManager
 from .ADB_llama.manager import ADBManager_llama
+from .EliDecide.manager import Manager as EliDecide
 
 method_map = {
                 'ADB': ADBManager, 
@@ -24,4 +25,5 @@ method_map = {
                 'ARPL': ARPLManager,
                 'KNNCL': KNNCLManager,
                 'DA-ADB_llama' : ADBManager_llama,
+                'EliDecide': EliDecide
             }

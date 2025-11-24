@@ -1,6 +1,6 @@
 import torch
 import logging
-from transformers import AdamW, get_linear_schedule_with_warmup
+from transformers import AdamW, get_linear_schedule_with_warmup, BertTokenizer
 from .utils import freeze_bert_parameters, freeze_bert_parameters_KCL
 from .__init__ import backbones_map
 
@@ -29,13 +29,14 @@ class ModelManager:
         
         return optimizer, scheduler
     
-    def set_model(self, args, pattern):
+    def set_model(self, args, pattern, **kwargs):
         backbone = backbones_map[args.backbone]
         args.device = self.device = torch.device('cuda:%d' % int(args.gpu_id) if torch.cuda.is_available() else 'cpu')
 
         if pattern == 'bert' or pattern == 'llama':
             if hasattr(backbone, 'from_pretrained'):
-                model = backbone.from_pretrained('bert-base-uncased', args = args)  
+                model = backbone.from_pretrained(args.bert_model, args = args, **kwargs)
+                model.tokenizer = BertTokenizer.from_pretrained(args.bert_model, do_lower_case=True)    
             else:
                 model = backbone(args)
                 
@@ -45,7 +46,7 @@ class ModelManager:
                     model = freeze_bert_parameters_KCL(model)
                 else: 
                     model = freeze_bert_parameters(model)
-        model.to(self.device)
+        model.to(args.device)
         
         return model
 

@@ -1,0 +1,11 @@
+F1-known,F1-open,F1,Acc,dataset,method,backbone,known_cls_ratio,labeled_ratio,loss,seed,train_epochs,created_time,comment
+78.6624,91.2046,79.2895,87.01,banking,EliDecide,bert_con,0.25,1.0,CrossEntropyLoss,0,100,2025-11-24-03-24-41,
+78.7779,89.8352,79.3307,85.39,banking,EliDecide,bert_con,0.25,1.0,CrossEntropyLoss,1,100,2025-11-24-03-37-27,
+72.3828,87.66,73.1467,82.47,banking,EliDecide,bert_con,0.25,1.0,CrossEntropyLoss,2,100,2025-11-24-03-50-42,
+76.9858,90.8603,77.6795,86.49,banking,EliDecide,bert_con,0.25,1.0,CrossEntropyLoss,3,100,2025-11-24-04-00-08,
+78.6757,90.905,79.2872,86.69,banking,EliDecide,bert_con,0.25,1.0,CrossEntropyLoss,4,100,2025-11-24-05-35-35,
+83.7374,84.5513,83.7583,83.8,banking,EliDecide,bert_con,0.5,1.0,CrossEntropyLoss,0,100,2025-11-24-05-58-34,
+85.5351,84.7222,85.5143,84.45,banking,EliDecide,bert_con,0.5,1.0,CrossEntropyLoss,1,100,2025-11-24-07-04-37,
+83.9612,82.5211,83.9243,82.34,banking,EliDecide,bert_con,0.5,1.0,CrossEntropyLoss,2,100,2025-11-24-07-34-25,
+81.3351,82.5376,81.3659,81.66,banking,EliDecide,bert_con,0.5,1.0,CrossEntropyLoss,3,100,2025-11-24-08-00-28,
+84.0649,82.6544,84.0287,82.44,banking,EliDecide,bert_con,0.5,1.0,CrossEntropyLoss,4,100,2025-11-24-08-32-20,

@@ -1,4 +1,4 @@
-from .bert import BERT, BERT_Norm, BERT_K_1_way, BERT_SEG, BERT_Disaware, BERT_DOC, BERT_MDF, BERT_MDF_Pretrain, BERT_KNNCL
+from .bert import BERT, BERT_Norm, BERT_K_1_way, BERT_SEG, BERT_Disaware, BERT_DOC, BERT_MDF, BERT_MDF_Pretrain, BERT_KNNCL, BERT_Con
 from .llama import LLAMA_lora_Disaware
 
 backbones_map = {
@@ -11,5 +11,6 @@ backbones_map = {
                     'bert_mdf': BERT_MDF,
                     'bert_mdf_pretrain': BERT_MDF_Pretrain,
                     'bert_knncl': BERT_KNNCL,
+                    'bert_con': BERT_Con,
                     'llama_disaware': LLAMA_lora_Disaware,
                 }
