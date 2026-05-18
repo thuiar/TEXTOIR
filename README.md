@@ -123,7 +123,10 @@ If this work is helpful, or you want to use the codes and results in this repo, 
 * [TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition](https://aclanthology.org/2021.acl-demo.20/)
 * [Learning Discriminative Representations and Decision Boundaries for Open Intent Detection](https://ieeexplore.ieee.org/document/10097558)
 * [A Clustering Framework for Unsupervised and Semi-supervised New Intent Discovery](https://ieeexplore.ieee.org/document/10349963)
-
+* [Ellipsoid-Based Decision Boundaries for Open Intent Classification](https://arxiv.org/abs/2511.16685)
+* [Discovering New Intents with Deep Aligned Clustering](https://arxiv.org/abs/2012.08987)
+* [Deep Open Intent Classification with Adaptive Decision Boundary](https://arxiv.org/abs/2012.10209)
+  
 ```
 @inproceedings{zhang-etal-2021-textoir,
     title = "{TEXTOIR}: An Integrated and Visualized Platform for Text Open Intent Recognition",
@@ -134,15 +137,6 @@ If this work is helpful, or you want to use the codes and results in this repo, 
     url = "https://aclanthology.org/2021.acl-demo.20",
     doi = "10.18653/v1/2021.acl-demo.20",
 }
-```
-```
-@inproceedings{EDB, 
-    title = {Ellipsoid-Based Decision Boundaries for Open Intent Classification},  
-    author = {Zou, Yuetian and Zhang, Hanlei and Xu, Hua and Li, Songze and Xiao, Long}, 
-    booktitle = "Proceedings of the 40th Annual AAAI Conference on Artificial Intelligence",  
-    pages = {35293–35301},
-    year = {2026}
-} 
 ```
 ```
 @article{DA-ADB, 
@@ -162,6 +156,15 @@ If this work is helpful, or you want to use the codes and results in this repo, 
   title={A Clustering Framework for Unsupervised and Semi-supervised New Intent Discovery}, 
   year={2023},
   doi={10.1109/TKDE.2023.3340732}
+} 
+```
+```
+@inproceedings{EDB, 
+    title = {Ellipsoid-Based Decision Boundaries for Open Intent Classification},  
+    author = {Zou, Yuetian and Zhang, Hanlei and Xu, Hua and Li, Songze and Xiao, Long}, 
+    booktitle = "Proceedings of the 40th Annual AAAI Conference on Artificial Intelligence",  
+    pages = {35293–35301},
+    year = {2026}
 } 
 ```
 ```
