@@ -136,7 +136,7 @@ If this work is helpful, or you want to use the codes and results in this repo, 
 }
 ```
 ```
-@article{EDB, 
+@inproceedings{EDB, 
     title = {Ellipsoid-Based Decision Boundaries for Open Intent Classification},  
     author = {Zou, Yuetian and Zhang, Hanlei and Xu, Hua and Li, Songze and Xiao, Long}, 
     booktitle = "Proceedings of the 40th Annual AAAI Conference on Artificial Intelligence",  
@@ -163,6 +163,24 @@ If this work is helpful, or you want to use the codes and results in this repo, 
   year={2023},
   doi={10.1109/TKDE.2023.3340732}
 } 
+```
+```
+@inproceedings{DeepAlign, 
+    title={Discovering New Intents with Deep Aligned Clustering},  
+    booktitle={Proceedings of the 35th AAAI Conference on Artificial Intelligence}, 
+    author={Zhang, Hanlei and Xu, Hua and Lin, Ting-En and Lyu, Rui}, 
+    year={2021}, 
+    pages={14365-14373}
+}
+```
+```
+@inproceedings{ADB, 
+    title={Deep Open Intent Classification with Adaptive Decision Boundary},  
+    booktitle={Proceedings of the 35th AAAI Conference on Artificial Intelligence}, 
+    author={Zhang, Hanlei and Xu, Hua and Lin, Ting-En}, 
+    year={2021}, 
+    pages={14374–14382}
+}
 ```
 
 
