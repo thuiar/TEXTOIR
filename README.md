@@ -13,6 +13,7 @@ Open Intent Recognition:
 
 | Date 	| Announcements 	|
 |-	|-	|
+| 3/2026  | 🎆 🎆 New paper and SOTA in Open Intent Detection. Refer to the directory [EDB](./open_intent_detection/examples/run_EliDecide.sh) for the codes. Read the paper -- [Ellipsoid-Based Decision Boundaries for Open Intent Classification (Published in AAAI 2026)](https://ojs.aaai.org/index.php/AAAI/article/view/40837).  |
 | 12/2023  | 🎆 🎆 New paper and SOTA in Open Intent Discovery. Refer to the directory [USNID](./open_intent_discovery/examples/run_semi_usnid.sh) for the codes. Read the paper -- [A Clustering Framework for Unsupervised and Semi-supervised New Intent Discovery (Published in IEEE TKDE 2023)](https://ieeexplore.ieee.org/document/10349963).  |
 | 04/2023  | 🎆 🎆 New paper and SOTA in Open Intent Detection. Refer to the directory [DA-ADB](./open_intent_detection/examples/run_DA-ADB.sh) for the codes. Read the paper -- [Learning Discriminative Representations and Decision Boundaries for Open Intent Detection (Published in IEEE/ACM TASLP 2023)](https://ieeexplore.ieee.org/document/10097558).  |
 | 09/2021 	| 🎆 🎆 The first integrated and visualized platform for text Open Intent Recognition TEXTOIR has been released. Refer to the directory [TEXTOIR-DEMO](https://github.com/thuiar/TEXTOIR-DEMO) for the demo codes. Read our paper [TEXTOIR: An Integrated and Visualized Platform for Text Open Intent Recognition (Published in ACL 2021)](https://aclanthology.org/2021.acl-demo.20.pdf).	|
@@ -48,6 +49,7 @@ Open Intent Recognition:
 | [ARPL*](./open_intent_detection/examples/run_ARPL.sh) | [Paper](https://ieeexplore.ieee.org/document/9521769) [Code](https://github.com/iCGY96/ARPL) | IEEE TPAMI 2022 |
 | [KNNCL](./open_intent_detection/examples/run_KNNCL.sh) | [Paper](https://aclanthology.org/2022.acl-long.352/) [Code](https://github.com/zyh190507/KnnContrastiveForOOD) | ACL 2022 |
 | [DA-ADB](./open_intent_detection/examples/run_DA-ADB.sh) | [Paper](https://ieeexplore.ieee.org/document/10097558) [Code](https://github.com/thuiar/TEXTOIR) | IEEE/ACM TASLP 2023 |
+| [EDB](./open_intent_detection/examples/run_EliDecide.sh) | [Paper](https://ojs.aaai.org/index.php/AAAI/article/view/40837) [Code](https://github.com/thuiar/TEXTOIR) | AAAI 2026 |
 
 ### New Intent Discovery
 
@@ -134,6 +136,15 @@ If this work is helpful, or you want to use the codes and results in this repo, 
 }
 ```
 ```
+@article{EDB, 
+    title = {Ellipsoid-Based Decision Boundaries for Open Intent Classification},  
+    author = {Zou, Yuetian and Zhang, Hanlei and Xu, Hua and Li, Songze and Xiao, Long}, 
+    booktitle = "Proceedings of the 40th Annual AAAI Conference on Artificial Intelligence",  
+    pages = {35293–35301},
+    year = {2026}
+} 
+```
+```
 @article{DA-ADB, 
     title = {Learning Discriminative Representations and Decision Boundaries for Open Intent Detection},  
     author = {Zhang, Hanlei and Xu, Hua and Zhao, Shaojie and Zhou, Qianrui}, 
@@ -157,7 +168,7 @@ If this work is helpful, or you want to use the codes and results in this repo, 
 
 ## Contributors
 
-[Hanlei Zhang](https://github.com/HanleiZhang), [Shaojie Zhao](https://github.com/MurraryZhao), [Xin Wang](https://github.com/mrFocusXin), [Ting-En Lin](https://github.com/tnlin), [Qianrui Zhou](https://github.com/zhougr18), [Huisheng Mao](https://github.com/FlameSky-S). 
+[Hanlei Zhang](https://github.com/HanleiZhang), [Shaojie Zhao](https://github.com/MurraryZhao), [Xin Wang](https://github.com/mrFocusXin), [Ting-En Lin](https://github.com/tnlin), [Qianrui Zhou](https://github.com/zhougr18), [Yuetian Zou](https://github.com/zyt1253679098), [Huisheng Mao](https://github.com/FlameSky-S). 
 
 ## Bugs or questions?
 
