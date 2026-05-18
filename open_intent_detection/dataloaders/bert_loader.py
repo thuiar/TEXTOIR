@@ -1,17 +1,21 @@
 import numpy as np
 import torch
-import os
-import csv
-import sys
 import logging
 from transformers import BertTokenizer
 from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler, TensorDataset)
+from .utils import InputFeatures, InputExample, get_examples, KCCLDataset
+import uuid
+import json
+import tqdm
+import os
 
 
 class BERT_Loader:
     def __init__(self, args, base_attrs, logger_name = 'Detection'):
         self.logger = logging.getLogger(logger_name)
+
         self.train_examples, self.train_labeled_examples, self.train_unlabeled_examples  = get_examples(args, base_attrs, 'train')
+
         self.logger.info("Number of labeled training samples = %s", str(len(self.train_labeled_examples)))
         self.logger.info("Number of unlabeled training samples = %s", str(len(self.train_unlabeled_examples)))
 
@@ -22,6 +26,7 @@ class BERT_Loader:
         self.logger.info("Number of testing samples = %s", str(len(self.test_examples)))
         self.base_attrs = base_attrs
         self.init_loader(args)
+        
 
     def init_loader(self, args):
         
@@ -29,45 +34,11 @@ class BERT_Loader:
         self.train_unlabeled_loader = get_loader(self.train_unlabeled_examples, args, self.base_attrs['label_list'], 'train_unlabeled', sampler_mode = 'sequential')
         self.eval_loader = get_loader(self.eval_examples, args, self.base_attrs['label_list'], 'eval', sampler_mode = 'sequential')
         self.test_loader = get_loader(self.test_examples, args, self.base_attrs['label_list'], 'test', sampler_mode = 'sequential')
+        if 'kccl_k' in args:
+            self.k_positive_dataloader = get_loader(self.train_labeled_examples, args, self.base_attrs['label_list'], 'k_positive', sampler_mode = 'random')
+
         self.num_train_examples = len(self.train_labeled_examples)
 
-def get_examples(args, base_attrs, mode):
-
-    processor = DatasetProcessor()
-    ori_examples = processor.get_examples(base_attrs['data_dir'], mode)
-    if mode == 'train':
-
-        labeled_examples, unlabeled_examples = [], []
-        for example in ori_examples:
-
-            if (example.label in base_attrs['known_label_list']) and (np.random.uniform(0, 1) <= args.labeled_ratio):
-                labeled_examples.append(example)
-            else:
-                example.label = base_attrs['unseen_label']
-                unlabeled_examples.append(example)
-
-        return ori_examples, labeled_examples, unlabeled_examples
-
-    elif mode == 'eval':
-
-        examples = []
-        for example in ori_examples:
-            if (example.label in base_attrs['known_label_list']):
-                examples.append(example)
-        
-        return examples
-    
-    elif mode == 'test':
-
-        examples = []
-        for example in ori_examples:
-            if (example.label in base_attrs['label_list']) and (example.label != base_attrs['unseen_label']):
-                examples.append(example)
-            else:
-                example.label = base_attrs['unseen_label']
-                examples.append(example)
-        
-        return examples
 
 def get_loader(examples, args, label_list, mode, sampler_mode = 'sequential'):
 
@@ -81,110 +52,26 @@ def get_loader(examples, args, label_list, mode, sampler_mode = 'sequential'):
         label_ids = torch.tensor([-1 for f in features], dtype=torch.long)
     else:
         label_ids = torch.tensor([f.label_id for f in features], dtype=torch.long)
-    datatensor = TensorDataset(input_ids, input_mask, segment_ids, label_ids)
+    if mode != 'k_positive':
+        datatensor = TensorDataset(input_ids, input_mask, segment_ids, label_ids)
+    else:
+        datatensor = KCCLDataset(input_ids, input_mask, segment_ids, label_ids, 0 if mode != 'k_positive' else args.kccl_k, 0 if mode != 'k_positive' else args.neg_num)
 
     if sampler_mode == 'random':
         sampler = RandomSampler(datatensor)
     elif sampler_mode == 'sequential':
         sampler = SequentialSampler(datatensor)
 
-    if mode == 'train_labeled':   
-        dataloader = DataLoader(datatensor, sampler = sampler, batch_size = args.train_batch_size)    
-
-    else:
-        if mode == 'train_unlabeled':
-            dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.train_batch_size)    
-        elif mode == 'eval':
-            dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.eval_batch_size)    
-        elif mode == 'test':
-            dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.test_batch_size)    
+    if mode in ('train_labeled', 'train_unlabeled', 'k_positive'):
+        dataloader = DataLoader(datatensor, sampler = sampler, batch_size = args.train_batch_size)
+    elif mode == 'eval':
+        dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.eval_batch_size)    
+    elif mode == 'test':
+        dataloader = DataLoader(datatensor, sampler=sampler, batch_size = args.test_batch_size)    
     
     return dataloader
 
-class InputExample(object):
-    """A single training/test example for simple sequence classification."""
 
-    def __init__(self, guid, text_a, text_b=None, label=None):
-        """Constructs a InputExample.
-
-        Args:
-            guid: Unique id for the example.
-            text_a: string. The untokenized text of the first sequence. For single
-            sequence tasks, only this sequence must be specified.
-            text_b: (Optional) string. The untokenized text of the second sequence.
-            Only must be specified for sequence pair tasks.
-            label: (Optional) string. The label of the example. This should be
-            specified for train and dev examples, but not for test examples.
-        """
-        self.guid = guid
-        self.text_a = text_a
-        self.text_b = text_b
-        self.label = label
-
-class InputFeatures(object):
-    """A single set of features of data."""
-
-    def __init__(self, input_ids, input_mask, segment_ids, label_id):
-        self.input_ids = input_ids
-        self.input_mask = input_mask
-        self.segment_ids = segment_ids
-        self.label_id = label_id
-
-class DataProcessor(object):
-    """Base class for data converters for sequence classification data sets."""
-
-    def get_train_examples(self, data_dir):
-        """Gets a collection of `InputExample`s for the train set."""
-        raise NotImplementedError()
-
-    def get_dev_examples(self, data_dir):
-        """Gets a collection of `InputExample`s for the dev set."""
-        raise NotImplementedError()
-
-    def get_labels(self):
-        """Gets the list of labels for this data set."""
-        raise NotImplementedError()
-
-    @classmethod
-    def _read_tsv(cls, input_file, quotechar=None):
-        """Reads a tab separated value file."""
-        with open(input_file, "r") as f:
-            reader = csv.reader(f, delimiter="\t", quotechar=quotechar)
-            lines = []
-            for line in reader:
-                if sys.version_info[0] == 2:
-                    line = list(unicode(cell, 'utf-8') for cell in line)
-                lines.append(line)
-            return lines
-
-class DatasetProcessor(DataProcessor):
-
-    def get_examples(self, data_dir, mode):
-        if mode == 'train':
-            return self._create_examples(
-                self._read_tsv(os.path.join(data_dir, "train.tsv")), "train")
-        elif mode == 'eval':
-            return self._create_examples(
-                self._read_tsv(os.path.join(data_dir, "dev.tsv")), "train")
-        elif mode == 'test':
-            return self._create_examples(
-                self._read_tsv(os.path.join(data_dir, "test.tsv")), "test")
-
-    def _create_examples(self, lines, set_type):
-        """Creates examples for the training and dev sets."""
-        examples = []
-        for (i, line) in enumerate(lines):
-            if i == 0:
-                continue
-            if len(line) != 2:
-                continue
-            guid = "%s-%s" % (set_type, i)
-            text_a = line[0]
-            label = line[1]
-
-            examples.append(
-                InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
-        return examples
 
 def convert_examples_to_features(examples, label_list, max_seq_length, tokenizer):
     """Loads a data file into a list of `InputBatch`s."""
@@ -195,10 +82,10 @@ def convert_examples_to_features(examples, label_list, max_seq_length, tokenizer
 
     features = []
     for (ex_index, example) in enumerate(examples):
-        tokens_a = tokenizer.tokenize(example.text_a)
+        tokens_a = tokenizer.tokenize(example.text_a if hasattr(example, 'text_a') else example)
 
         tokens_b = None
-        if example.text_b:
+        if hasattr(example, 'text_b') and example.text_b:
             tokens_b = tokenizer.tokenize(example.text_b)
             # Modifies `tokens_a` and `tokens_b` in place so that the total
             # length is less than the specified length.

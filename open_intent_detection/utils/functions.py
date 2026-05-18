@@ -77,8 +77,8 @@ def save_results(args, test_results):
     import datetime
     created_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
 
-    var = [args.dataset, args.method, args.backbone, args.known_cls_ratio, args.labeled_ratio, args.loss_fct, args.seed, args.num_train_epochs, created_time]
-    names = ['dataset', 'method', 'backbone', 'known_cls_ratio', 'labeled_ratio', 'loss', 'seed', 'train_epochs', 'created_time']
+    var = [args.dataset, args.method, args.backbone, args.known_cls_ratio, args.labeled_ratio, args.loss_fct, args.seed, args.num_train_epochs, created_time, '']
+    names = ['dataset', 'method', 'backbone', 'known_cls_ratio', 'labeled_ratio', 'loss', 'seed', 'train_epochs', 'created_time', 'comment']
     vars_dict = {k:v for k,v in zip(names, var) }
     results = dict(test_results,**vars_dict)
     keys = list(results.keys())
@@ -94,7 +94,7 @@ def save_results(args, test_results):
     else:
         df1 = pd.read_csv(results_path)
         new = pd.DataFrame(results,index=[1])
-        df1 = pd.concat([df1, new], ignore_index=True)
+        df1 = pd.concat([df1, new],ignore_index=True)
         df1.to_csv(results_path,index=False)
     data_diagram = pd.read_csv(results_path)
     
@@ -107,12 +107,13 @@ def class_count(labels):
         class_data_num.append(num)
     return class_data_num
 
-def centroids_cal(model, args, data, train_dataloader, device):
+def centroids_cal(model, args, data, train_dataloader, device, need_delta=False, need_main_axes=False):
     
-    model.eval()
     centroids = torch.zeros(data.num_labels, args.feat_dim).to(device)
+    delta = torch.zeros(data.num_labels).to(device)
+    total_features = [torch.empty(0).to(device) for _ in range(data.num_labels)]
     total_labels = torch.empty(0, dtype=torch.long).to(device)
-
+    num = [0 for _ in range(data.num_labels)]
     with torch.set_grad_enabled(False):
 
         for batch in tqdm(train_dataloader, desc="Calculate centroids"):
@@ -124,12 +125,47 @@ def centroids_cal(model, args, data, train_dataloader, device):
 
             for i in range(len(label_ids)):
                 label = label_ids[i]
-                centroids[label] += features[i]
-            
-    total_labels = total_labels.cpu().numpy()
-    centroids /= torch.tensor(class_count(total_labels)).float().unsqueeze(1).to(device)
+                num[label] += 1
+                if label != args.unseen_label_id:
+                    centroids[label] += features[i]
+                    total_features[label] = torch.cat((total_features[label], features[i].unsqueeze(0)))
+
     
-    return centroids
+    total_labels = total_labels.cpu().numpy()
+    centroids /= torch.tensor(num).float().unsqueeze(1).to(device)
+    # if device == torch.device("cuda:0"):
+    #     main_axes = [torch.argmin(torch.var(total_features[i], axis=0)) for i in range(data.num_labels)]
+    # else:
+    main_axes = [torch.argmax(torch.var(total_features[i], axis=0)) for i in range(data.num_labels)]
+
+    if need_delta:
+        dis = [[] for _ in range(data.num_labels)]
+        with torch.set_grad_enabled(False):
+
+            for batch in tqdm(train_dataloader, desc="Calculate deltas"):
+
+                batch = tuple(t.to(device) for t in batch)
+                input_ids, input_mask, segment_ids, label_ids = batch
+                features = model(input_ids, segment_ids, input_mask, feature_ext=True)
+
+                for i in range(len(label_ids)):
+                    label = label_ids[i]
+                    delta[label] += torch.norm(features[i] - centroids[label], 2, -1)
+                    dis[label].append(torch.norm(features[i] - centroids[label], 2, -1).item())
+
+        for i in range(data.num_labels):
+            # delta[i] = np.std(np.array(dis[i]))
+            # delta[i] = np.median(np.array(dis[i]))
+            delta[i] /= num[i]
+
+    if need_main_axes and need_delta:
+        return centroids, delta, main_axes
+    elif need_delta:
+        return centroids, delta
+    elif need_main_axes:
+        return centroids, main_axes
+    else:
+        return centroids
 
 def euclidean_metric(a, b):
     n = a.shape[0]
