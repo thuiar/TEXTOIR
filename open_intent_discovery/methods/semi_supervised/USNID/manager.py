@@ -219,9 +219,6 @@ class USNIDManager:
         feats = outputs['feats']
         y_true = outputs['y_true']
         
-        if args.cluster_num_factor > 1:
-            test_results['estimate_k'] = args.num_labels
-
         km = KMeans(n_clusters = self.num_labels, n_jobs = -1, random_state=args.seed, init = self.centroids.cpu().numpy()).fit(feats) 
         y_pred = km.labels_
 
@@ -238,6 +235,9 @@ class USNIDManager:
 
         test_results['y_true'] = y_true
         test_results['y_pred'] = y_pred
+
+        if args.cluster_num_factor > 1:
+            test_results['estimate_k'] = args.num_labels
 
         return test_results
 
